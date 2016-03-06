@@ -41,19 +41,29 @@ class Wildfire
     protected $tables = [];
 
     /**
-     * @param CI_DB      $db
+     * @param CI_DB      $database
      * @param CI_DB|null $query
      */
     public function __construct($database, $query = null)
     {
+        $config = [];
+
         $this->db = $database;
         $this->query = $query;
 
-        $config = [];
+        $config['default'] = [
+            'dbdriver' => $database->dbdriver,
+            'hostname' => $database->hostname,
+            'username' => $database->username,
+            'password' => $database->password,
+            'database' => $database->database
+        ];
 
-        require APPPATH . 'config/database.php';
+        if (empty($config['default']['hostname'])) {
+            $config['default']['hostname'] = $database->dsn;
+        }
 
-        $driver = new CodeIgniterDriver($db);
+        $driver = new CodeIgniterDriver($config);
         $this->describe = new Describe($driver);
     }
 
@@ -65,8 +75,6 @@ class Wildfire
      */
     public function as_dropdown($description = 'description')
     {
-        $info = $this->describe->getTable($this->table);
-
         $data = [];
         $id = $this->describe->getPrimaryKey($this->table);
 
@@ -107,12 +115,12 @@ class Wildfire
     }
 
     /**
-     * Return all rows from the specified table
-     *
-     * @param  array $delimiters
-     * @return object|boolean
+     * Return all rows from the specified table.
+     * 
+     * @param  string $table
+     * @return self
      */
-    public function get($table = '', $delimiters = [])
+    public function get($table = '')
     {
         if ($this->query == null) {
             $this->query = $this->db->get($table);
@@ -214,7 +222,7 @@ class Wildfire
      * 
      * @return array|object
      */
-    public function getQueryResult()
+    protected function getQueryResult()
     {
         $result = $this->query;
 

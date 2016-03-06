@@ -1,4 +1,4 @@
-# Spark Plug
+# Wildfire
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -19,14 +19,43 @@ $ composer require rougin/wildfire
 
 ## Usage
 
-``` php
-// Build your queries here
-$this->db->join('table_2', 'table_2.id = table_1.table_2_id');
+`models/User.php`
 
-// Instantiate Wildfire with the database class
+``` php
+class User extends CI_Model {}
+```
+
+### Using [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
+
+`controllers/Welcome.php`
+
+``` php
+$this->load->model('user');
+
+// Build your queries here
+$this->db->like('name', 'John Doe', 'both');
+
+// Instantiate Wildfire with the CI_DB class
 $wildfire = new Rougin\Wildfire\Wildfire($this->db);
 
-$data = $wildfire->get('table_1')->result();
+// Returns an array of User objects
+$users = $wildfire->get('user')->result();
+```
+
+### Using raw SQL query
+
+`controllers/Welcome.php`
+
+``` php
+$this->load->model('user');
+
+$query = $this->db->query('SELECT * FROM users');
+
+// Instantiate Wildfire with the database class and the query
+$wildfire = new Rougin\Wildfire\Wildfire($this->db, $query);
+
+// Returns an array of User objects
+$users = $wildfire->result();
 ```
 
 ## Change Log
