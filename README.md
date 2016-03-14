@@ -19,7 +19,7 @@ $ composer require rougin/wildfire
 
 ## Usage
 
-`models/User.php`
+**models/User.php**
 
 ``` php
 class User extends CI_Model {}
@@ -27,7 +27,7 @@ class User extends CI_Model {}
 
 ### Using [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
 
-`controllers/Welcome.php`
+**controllers/Welcome.php**
 
 ``` php
 $this->load->model('user');
