@@ -3,7 +3,7 @@
 namespace Rougin\Wildfire\Test;
 
 use Rougin\Wildfire\Wildfire;
-use Rougin\SparkPlug\SparkPlug;
+use Rougin\SparkPlug\Instance;
 
 use PHPUnit_Framework_TestCase;
 
@@ -15,6 +15,16 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     protected $ci;
 
     /**
+     * @var integer
+     */
+    protected $expectedRows = 10;
+
+    /**
+     * @var string
+     */
+    protected $table = 'post';
+
+    /**
      * Sets up the CodeIgniter application.
      *
      * @return void
@@ -23,10 +33,10 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     {
         $appPath = __DIR__ . '/TestApp';
 
-        $sparkPlug = new SparkPlug($GLOBALS, $_SERVER, $appPath);
-        $this->ci = $sparkPlug->getCodeIgniter();
+        $this->ci = Instance::create($appPath);
 
         $this->ci->load->database();
+        $this->ci->load->model($this->table);
         $this->ci->load->model('user');
     }
 
@@ -48,9 +58,9 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     public function testGetMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
-        $users = $wildfire->get('users')->result();
+        $posts = $wildfire->get($this->table)->result();
 
-        $this->assertEquals(10, count($users));
+        $this->assertEquals($this->expectedRows, count($posts));
     }
 
     /**
@@ -60,11 +70,11 @@ class WildfireTest extends PHPUnit_Framework_TestCase
      */
     public function testQueryMethod()
     {
-        $query = $this->ci->db->query('SELECT * FROM users');
+        $query = $this->ci->db->query('SELECT * FROM ' . $this->table);
         $wildfire = new Wildfire($this->ci->db, $query);
-        $users = $wildfire->result();
+        $posts = $wildfire->result();
 
-        $this->assertEquals(10, count($users));
+        $this->assertEquals($this->expectedRows, count($posts));
     }
 
     /**
@@ -75,9 +85,9 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     public function testAsDropdownMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
-        $users = $wildfire->get('users')->as_dropdown('name');
+        $posts = $wildfire->get($this->table)->as_dropdown();
 
-        $this->assertEquals(10, count($users));
+        $this->assertEquals($this->expectedRows, count($posts));
     }
 
     /**
@@ -89,9 +99,9 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     {
         $expectedId = 1;
         $wildfire = new Wildfire($this->ci->db);
-        $user = $wildfire->find('users', $expectedId);
+        $post = $wildfire->find($this->table, $expectedId);
 
-        $this->assertEquals($expectedId, $user->id);
+        $this->assertEquals($expectedId, $post->get_id());
     }
 
     /**
@@ -103,8 +113,8 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     {
         $expectedId = 11;
         $wildfire = new Wildfire($this->ci->db);
-        $user = $wildfire->find('users', $expectedId);
+        $post = $wildfire->find($this->table, $expectedId);
 
-        $this->assertEmpty($user);
+        $this->assertEmpty($post);
     }
 }

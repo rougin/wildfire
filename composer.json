@@ -26,7 +26,7 @@
         "phpunit/phpunit" : "4.*",
         "scrutinizer/ocular": "~1.1",
         "rougin/codeigniter": "^0.1.2",
-        "rougin/spark-plug": "^0.3.0"
+        "rougin/spark-plug": "^0.4.1"
     },
     "autoload": {
         "psr-4": {
