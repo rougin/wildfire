@@ -133,4 +133,21 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
         $this->assertCount(5, $posts);
     }
+
+    /**
+     * Tests Wildfire::set_query.
+     * 
+     * @return void
+     */
+    public function testSetQueryMethod()
+    {
+        $query = $this->ci->db->query('SELECT * FROM ' . $this->table);
+
+        $wildfire = new Wildfire($this->ci->db);
+        $wildfire->set_query($query);
+
+        $posts = $wildfire->result();
+
+        $this->assertCount($this->expectedRows, $posts);
+    }
 }
