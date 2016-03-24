@@ -60,7 +60,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
         $wildfire = new Wildfire($this->ci->db);
         $posts = $wildfire->get($this->table)->result();
 
-        $this->assertEquals($this->expectedRows, count($posts));
+        $this->assertCount($this->expectedRows, $posts);
     }
 
     /**
@@ -74,7 +74,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
         $wildfire = new Wildfire($this->ci->db, $query);
         $posts = $wildfire->result();
 
-        $this->assertEquals($this->expectedRows, count($posts));
+        $this->assertCount($this->expectedRows, $posts);
     }
 
     /**
@@ -87,7 +87,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
         $wildfire = new Wildfire($this->ci->db);
         $posts = $wildfire->get($this->table)->as_dropdown();
 
-        $this->assertEquals($this->expectedRows, count($posts));
+        $this->assertCount($this->expectedRows, $posts);
     }
 
     /**
@@ -116,5 +116,21 @@ class WildfireTest extends PHPUnit_Framework_TestCase
         $post = $wildfire->find($this->table, $expectedId);
 
         $this->assertEmpty($post);
+    }
+
+    /**
+     * Tests Wildfire without $this->db.
+     * 
+     * @return void
+     */
+    public function testWildfireWithoutConstructor()
+    {
+        $this->ci->db->limit(5);
+
+        $wildfire = new Wildfire;
+        $wildfire->set_database($this->ci->db);
+        $posts = $wildfire->get($this->table)->result();
+
+        $this->assertCount(5, $posts);
     }
 }
