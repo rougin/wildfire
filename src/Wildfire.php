@@ -16,8 +16,6 @@ use Rougin\Describe\Driver\CodeIgniterDriver;
  */
 class Wildfire
 {
-    use ResultTrait;
-
     /**
      * @var CI_DB
      */
