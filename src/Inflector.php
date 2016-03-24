@@ -68,6 +68,21 @@ class Inflector
     }
 
     /**
+     * Takes multiple words separated by spaces or underscores and camelizes them.
+     *
+     * @param  string $string
+     * @return string
+     */
+    public static function camelize($string)
+    {
+        $ucwords = ucwords(preg_replace('/[\s_]+/', ' ', $string));
+        $strReplace = str_replace(' ', '', $ucwords);
+        $subString = substr($strReplace, 1);
+
+        return strtolower($string[0]) . $subString;
+    }
+
+    /**
      * Checks if the given word has a plural version.
      * 
      * @param  string  $word
