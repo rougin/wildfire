@@ -27,7 +27,7 @@ class Wildfire
     protected $describe;
 
     /**
-     * @var CI_DB
+     * @var CI_DB_result
      */
     protected $query;
 
@@ -42,8 +42,8 @@ class Wildfire
     protected $tables = [];
 
     /**
-     * @param CI_DB|null $database
-     * @param CI_DB|null $query
+     * @param CI_DB|null        $database
+     * @param CI_DB_result|null $query
      */
     public function __construct($database = null, $query = null)
     {
@@ -182,6 +182,19 @@ class Wildfire
     public function setDatabase($database)
     {
         $this->db = $database;
+
+        return $this;
+    }
+
+    /**
+     * Sets the query result.
+     * 
+     * @param  CI_DB_result $query
+     * @return self
+     */
+    public function setQuery($query)
+    {
+        $this->query = $query;
 
         return $this;
     }
