@@ -42,8 +42,8 @@ class Wildfire
     protected $tables = [];
 
     /**
-     * @param CI_DB|null        $database
-     * @param CI_DB_result|null $query
+     * @param CI_DB|null $database
+     * @param CI_DB|null $query
      */
     public function __construct($database = null, $query = null)
     {
