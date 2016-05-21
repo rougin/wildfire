@@ -124,7 +124,7 @@ class Wildfire
     }
 
     /**
-     * Return all rows from the specified table.
+     * Returns all rows from the specified table.
      * 
      * @param  string $table
      * @return self
@@ -150,7 +150,7 @@ class Wildfire
     }
 
     /**
-     * Return the result
+     * Returns the result.
      * 
      * @return object
      */
@@ -200,7 +200,7 @@ class Wildfire
     }
 
     /**
-     * Create an object from the specified data
+     * Creates an object from the specified table and row.
      *
      * @param  string $table
      * @param  object $row
@@ -211,12 +211,12 @@ class Wildfire
         $newTable = ucfirst(Inflector::singular($table));
         $model = new $newTable;
 
-        if ( ! array_key_exists($table, $this->tables)) {
-            $tableInfo = $this->describe->getTable($table);
+        if ( ! array_key_exists($newTable, $this->tables)) {
+            $tableInfo = $this->describe->getTable($newTable);
 
-            $this->tables[$table] = $tableInfo;
+            $this->tables[$newTable] = $tableInfo;
         } else {
-            $tableInfo = $this->tables[$table];
+            $tableInfo = $this->tables[$newTable];
         }
 
         foreach ($row as $key => $value) {
