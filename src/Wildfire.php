@@ -20,23 +20,8 @@ class Wildfire
     use DatabaseTrait, DescribeTrait, ObjectTrait, ResultTrait;
 
     /**
-     * @var \Rougin\Describe\Describe
-     */
-    protected $describe;
-
-    /**
-     * @var \CI_DB_result
-     */
-    protected $query;
-
-    /**
-     * @var string
-     */
-    protected $table = '';
-
-    /**
-     * @param CI_DB|null        $database
-     * @param CI_DB_result|null $query
+     * @param \CI_DB|null        $database
+     * @param \CI_DB_result|null $query
      */
     public function __construct($database = null, $query = null)
     {
@@ -55,6 +40,7 @@ class Wildfire
     public function asDropdown($description = 'description')
     {
         $data = [];
+
         $id = $this->describe->getPrimaryKey($this->table);
 
         $result = $this->query->result();

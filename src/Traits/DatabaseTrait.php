@@ -9,8 +9,6 @@ use Rougin\SparkPlug\Instance;
  * 
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property \CI_DB_null $query
  */
 trait DatabaseTrait
 {
@@ -20,9 +18,14 @@ trait DatabaseTrait
     protected $db;
 
     /**
+     * @var \CI_DB_result
+     */
+    protected $query;
+
+    /**
      * Sets the database class.
      * 
-     * @param  CI_DB|null $database
+     * @param  \CI_DB|null $database
      * @return self
      */
     public function setDatabase($database = null)

@@ -9,10 +9,14 @@ namespace Rougin\Wildfire\Traits;
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
  * @property \CI_DB_null $query
- * @property string      $table
  */
 trait ResultTrait
 {
+    /**
+     * @var string
+     */
+    protected $table = '';
+
     /**
      * Creates an object from the specified table and row.
      *
