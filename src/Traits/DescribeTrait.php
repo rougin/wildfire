@@ -14,11 +14,6 @@ use Rougin\Describe\Driver\CodeIgniterDriver;
 trait DescribeTrait
 {
     /**
-     * @var \Rougin\Describe\Describe
-     */
-    protected $describe;
-
-    /**
      * Gets the Describe class based on the given database.
      * 
      * @param  CI_DB $database
