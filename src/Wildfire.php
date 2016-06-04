@@ -49,9 +49,10 @@ class Wildfire
     {
         $config = [];
 
-        if (empty($database)) {
-            $ci = Instance::create();
+        $ci = Instance::create();
+        $ci->load->helper('inflector');
 
+        if (empty($database)) {
             $ci->load->database();
 
             $database = $ci->db;
@@ -208,7 +209,7 @@ class Wildfire
      */
     protected function createObject($table, $row)
     {
-        $newTable = ucfirst(Inflector::singular($table));
+        $newTable = ucfirst(singular($table));
         $model = new $newTable;
 
         if ( ! array_key_exists($newTable, $this->tables)) {
@@ -241,7 +242,7 @@ class Wildfire
                 $delimiters = [ $foreignColumn => $value ];
                 $foreignData = $this->find($foreignTable, $delimiters);
 
-                $newColumn = Inflector::singular($foreignTable);
+                $newColumn = singular($foreignTable);
 
                 $model->$newColumn = $foreignData;
             }
@@ -274,7 +275,7 @@ class Wildfire
      * @return mixed
      */
     public function __call($method, $parameters) {
-        $method = Inflector::camelize($method);
+        $method = camelize($method);
         $result = $this;
 
         if (method_exists($this, $method)) {

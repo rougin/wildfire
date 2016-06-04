@@ -7,6 +7,9 @@ All notable changes to `Wildfire` will be documented in this file.
 ### Fixed
 - Issue in getting foreign tables
 
+### Removed
+- `Inflector` class
+
 ## [0.2.1](https://github.com/rougin/wildfire/compare/v0.2.0...v0.2.1) - 2016-05-14
 
 ### Changed
