@@ -4,6 +4,9 @@ All notable changes to `Wildfire` will be documented in this file.
 
 ## [Unreleased](https://github.com/rougin/wildfire/compare/v0.2.1...HEAD)
 
+### Added
+- Traits
+
 ### Fixed
 - Issue in getting foreign tables
 
