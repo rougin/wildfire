@@ -13,12 +13,12 @@ use Rougin\SparkPlug\Instance;
 trait DatabaseTrait
 {
     /**
-     * @var CI_DB
+     * @var \CI_DB
      */
     protected $db;
 
     /**
-     * @var CI_DB_result
+     * @var \CI_DB_result
      */
     protected $query;
 

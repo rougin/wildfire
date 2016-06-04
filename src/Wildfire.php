@@ -25,11 +25,6 @@ class Wildfire
     protected $table = '';
 
     /**
-     * @var array
-     */
-    protected $tables = [];
-
-    /**
      * @param CI_DB|null        $database
      * @param CI_DB_result|null $query
      */

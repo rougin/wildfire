@@ -11,6 +11,16 @@ namespace Rougin\Wildfire\Traits;
 trait ObjectTrait
 {
     /**
+     * @var \Rougin\Describe\Describe
+     */
+    protected $describe;
+
+    /**
+     * @var array
+     */
+    protected $tables = [];
+
+    /**
      * Creates an object from the specified table and row.
      *
      * @param  string $table
@@ -60,4 +70,14 @@ trait ObjectTrait
 
         return $model;
     }
+
+    /**
+     * Finds the row from the specified ID or with the list of delimiters from
+     * the specified table.
+     *
+     * @param  string         $table
+     * @param  array|integer  $delimiters
+     * @return object|boolean
+     */
+    abstract protected function find($table, $delimiters = []);
 }
