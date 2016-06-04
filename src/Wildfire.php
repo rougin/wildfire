@@ -2,9 +2,10 @@
 
 namespace Rougin\Wildfire;
 
-use Rougin\Describe\Describe;
-use Rougin\SparkPlug\Instance;
-use Rougin\Describe\Driver\CodeIgniterDriver;
+use Rougin\Wildfire\Traits\ObjectTrait;
+use Rougin\Wildfire\Traits\ResultTrait;
+use Rougin\Wildfire\Traits\DatabaseTrait;
+use Rougin\Wildfire\Traits\DescribeTrait;
 
 /**
  * Wildfire
@@ -16,20 +17,7 @@ use Rougin\Describe\Driver\CodeIgniterDriver;
  */
 class Wildfire
 {
-    /**
-     * @var CI_DB
-     */
-    protected $db;
-
-    /**
-     * @var \Rougin\Describe\Describe
-     */
-    protected $describe;
-
-    /**
-     * @var CI_DB_result
-     */
-    protected $query;
+    use DatabaseTrait, DescribeTrait, ObjectTrait, ResultTrait;
 
     /**
      * @var string
@@ -47,34 +35,10 @@ class Wildfire
      */
     public function __construct($database = null, $query = null)
     {
-        $config = [];
+        $this->setDatabase($database);
 
-        $ci = Instance::create();
-        $ci->load->helper('inflector');
-
-        if (empty($database)) {
-            $ci->load->database();
-
-            $database = $ci->db;
-        }
-
-        $this->db = $database;
+        $this->describe = $this->getDescribe($this->db);
         $this->query = $query;
-
-        $config['default'] = [
-            'dbdriver' => $database->dbdriver,
-            'hostname' => $database->hostname,
-            'username' => $database->username,
-            'password' => $database->password,
-            'database' => $database->database
-        ];
-
-        if (empty($config['default']['hostname'])) {
-            $config['default']['hostname'] = $database->dsn;
-        }
-
-        $driver = new CodeIgniterDriver($config);
-        $this->describe = new Describe($driver);
     }
 
     /**
@@ -148,123 +112,6 @@ class Wildfire
         }
 
         return $this;
-    }
-
-    /**
-     * Returns the result.
-     * 
-     * @return object
-     */
-    public function result()
-    {
-        $data = $this->getQueryResult();
-        $result = [];
-
-        if (empty($this->table)) {
-            $this->get();
-        }
-
-        foreach ($data as $row)
-        {
-            $object = $this->createObject($this->table, $row);
-
-            array_push($result, $object);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Sets the database class.
-     * 
-     * @param  CI_DB $database
-     * @return self
-     */
-    public function setDatabase($database)
-    {
-        $this->db = $database;
-
-        return $this;
-    }
-
-    /**
-     * Sets the query result.
-     * 
-     * @param  CI_DB_result $query
-     * @return self
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-
-        return $this;
-    }
-
-    /**
-     * Creates an object from the specified table and row.
-     *
-     * @param  string $table
-     * @param  object $row
-     * @return array
-     */
-    protected function createObject($table, $row)
-    {
-        $newTable = ucfirst(singular($table));
-        $model = new $newTable;
-
-        if ( ! array_key_exists($newTable, $this->tables)) {
-            $tableInfo = $this->describe->getTable($newTable);
-
-            $this->tables[$newTable] = $tableInfo;
-        } else {
-            $tableInfo = $this->tables[$newTable];
-        }
-
-        foreach ($row as $key => $value) {
-            foreach ($tableInfo as $column) {
-                if ($column->getField() != $key) {
-                    continue;
-                }
-
-                $model->$key = $value;
-            }
-        }
-
-        foreach ($row as $key => $value) {
-            foreach ($tableInfo as $column) {
-                if ($column->getField() != $key || ! $column->isForeignKey()) {
-                    continue;
-                }
-
-                $foreignColumn = $column->getReferencedField();
-                $foreignTable = $column->getReferencedTable();
-
-                $delimiters = [ $foreignColumn => $value ];
-                $foreignData = $this->find($foreignTable, $delimiters);
-
-                $newColumn = singular($foreignTable);
-
-                $model->$newColumn = $foreignData;
-            }
-        }
-
-        return $model;
-    }
-
-    /**
-     * Gets the data result from the specified query.
-     * 
-     * @return array|object
-     */
-    protected function getQueryResult()
-    {
-        $result = $this->query;
-
-        if (method_exists($this->query, 'result')) {
-            $result = $this->query->result();
-        }
-
-        return $result;
     }
 
     /**
