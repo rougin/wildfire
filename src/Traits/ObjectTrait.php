@@ -11,11 +11,6 @@ namespace Rougin\Wildfire\Traits;
 trait ObjectTrait
 {
     /**
-     * @var \Rougin\Describe\Describe
-     */
-    protected $describe;
-
-    /**
      * @var array
      */
     protected $tables = [];
