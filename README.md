@@ -32,7 +32,7 @@ CREATE TABLE "user" (
 );
 ```
 
-**models/User.php**
+#### models/User.php
 
 ``` php
 class User extends CI_Model {}
@@ -51,7 +51,7 @@ CREATE TABLE post (
 );
 ```
 
-**models/Post.php**
+#### models/Post.php
 
 ``` php
 class Post extends CI_Model {}
@@ -59,7 +59,7 @@ class Post extends CI_Model {}
 
 ### Using [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
 
-**controllers/Welcome.php**
+#### controllers/Welcome.php
 
 ``` php
 $this->load->model('post');
@@ -77,7 +77,7 @@ $posts = $wildfire->get('post')->result();
 
 ### Using raw SQL query
 
-**controllers/Welcome.php**
+#### controllers/Welcome.php
 
 ``` php
 $this->load->model('post');
@@ -112,14 +112,14 @@ $posts = $wildfire->find('post', [ 'name' => 'Foo Bar' ]);
 $posts = $wildfire->get('post')->as_dropdown('subject');
 ```
 
-### $wildfire->set_database($this->db)
+#### $wildfire->set_database($this->db)
 
 ``` php
 // Sets as the current database
 $wildfire->set_database($this->db);
 ```
 
-### $wildfire->set_query()
+#### $wildfire->set_query()
 
 ``` php
 // Sets as the current query
