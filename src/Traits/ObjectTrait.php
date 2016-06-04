@@ -44,18 +44,24 @@ trait ObjectTrait
                 }
 
                 $model->$key = $value;
+            }
+        }
 
-                if ($column->isForeignKey()) {
-                    $foreignColumn = $column->getReferencedField();
-                    $foreignTable = $column->getReferencedTable();
-
-                    $delimiters = [ $foreignColumn => $value ];
-                    $foreignData = $this->find($foreignTable, $delimiters);
-
-                    $newColumn = singular($foreignTable);
-
-                    $model->$newColumn = $foreignData;
+        foreach ($row as $key => $value) {
+            foreach ($tableInfo as $column) {
+                if ($column->getField() != $key || ! $column->isForeignKey()) {
+                    continue;
                 }
+
+                $foreignColumn = $column->getReferencedField();
+                $foreignTable = $column->getReferencedTable();
+
+                $delimiters = [ $foreignColumn => $value ];
+                $foreignData = $this->find($foreignTable, $delimiters);
+
+                $newColumn = singular($foreignTable);
+
+                $model->$newColumn = $foreignData;
             }
         }
 

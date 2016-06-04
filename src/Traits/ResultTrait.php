@@ -41,19 +41,34 @@ trait ResultTrait
      */
     public function result()
     {
-        $query = $this->query;
+        $data = $this->getQueryResult();
         $result = [];
-
-        if (method_exists($this->query, 'result')) {
-            $query = $this->query->result();
-        }
 
         if (empty($this->table)) {
             $this->get();
         }
 
-        foreach ($query as $row) {
-            array_push($result, $this->createObject($this->table, $row));
+        foreach ($data as $row)
+        {
+            $object = $this->createObject($this->table, $row);
+
+            array_push($result, $object);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets the data result from the specified query.
+     * 
+     * @return array|object
+     */
+    protected function getQueryResult()
+    {
+        $result = $this->query;
+
+        if (method_exists($this->query, 'result')) {
+            $result = $this->query->result();
         }
 
         return $result;
