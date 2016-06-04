@@ -9,6 +9,8 @@ use Rougin\SparkPlug\Instance;
  * 
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ *
+ * @property \CI_DB_null $query
  */
 trait DatabaseTrait
 {
@@ -44,7 +46,7 @@ trait DatabaseTrait
     /**
      * Sets the query result.
      * 
-     * @param  CI_DB_result $query
+     * @param  \CI_DB_result $query
      * @return self
      */
     public function setQuery($query)

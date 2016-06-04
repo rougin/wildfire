@@ -7,6 +7,8 @@ namespace Rougin\Wildfire\Traits;
  * 
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ *
+ * @property \Rougin\Describe\Describe $describe
  */
 trait ObjectTrait
 {

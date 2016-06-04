@@ -7,6 +7,9 @@ namespace Rougin\Wildfire\Traits;
  * 
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ *
+ * @property \CI_DB_null $query
+ * @property string      $table
  */
 trait ResultTrait
 {

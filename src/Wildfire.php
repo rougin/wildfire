@@ -20,6 +20,11 @@ class Wildfire
     use DatabaseTrait, DescribeTrait, ObjectTrait, ResultTrait;
 
     /**
+     * @var \Rougin\Describe\Describe
+     */
+    protected $describe;
+
+    /**
      * @var \CI_DB_result
      */
     protected $query;
