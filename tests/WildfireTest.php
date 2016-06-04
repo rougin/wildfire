@@ -61,7 +61,6 @@ class WildfireTest extends PHPUnit_Framework_TestCase
         $data = $wildfire->get($this->table)->result();
 
         $this->assertCount($this->expectedRows, $data);
-        $this->assertTrue(property_exists($data[0], 'user'));
     }
 
     /**
@@ -92,7 +91,6 @@ class WildfireTest extends PHPUnit_Framework_TestCase
         $data = $wildfire->result();
 
         $this->assertCount($this->expectedRows, $data);
-        $this->assertTrue(property_exists($data[0], 'user'));
     }
 
     /**
