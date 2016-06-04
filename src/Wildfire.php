@@ -32,27 +32,6 @@ class Wildfire
     }
 
     /**
-     * Lists all data in dropdown format.
-     *
-     * @param  string $description
-     * @return array
-     */
-    public function asDropdown($description = 'description')
-    {
-        $data = [];
-
-        $id = $this->describe->getPrimaryKey($this->table);
-
-        $result = $this->query->result();
-
-        foreach ($result as $row) {
-            $data[$row->$id] = ucwords($row->$description);
-        }
-
-        return $data;
-    }
-
-    /**
      * Finds the row from the specified ID or with the list of delimiters from
      * the specified table.
      *
@@ -62,6 +41,8 @@ class Wildfire
      */
     public function find($table, $delimiters = [])
     {
+        list($model, $table) = $this->getModel($table);
+
         if ( ! is_array($delimiters)) {
             $primaryKey = $this->describe->getPrimaryKey($table);
 
@@ -87,6 +68,8 @@ class Wildfire
      */
     public function get($table = '')
     {
+        list($model, $table) = $this->getModel($table);
+
         if ($this->query == null) {
             $this->query = $this->db->get($table);
         }

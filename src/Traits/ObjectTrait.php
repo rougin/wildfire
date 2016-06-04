@@ -26,8 +26,7 @@ trait ObjectTrait
      */
     protected function createObject($table, $row)
     {
-        $newTable = ucfirst(singular($table));
-        $model = new $newTable;
+        list($model, $newTable) = $this->getModel($table);
 
         if ( ! array_key_exists($newTable, $this->tables)) {
             $tableInfo = $this->describe->getTable($newTable);
@@ -44,24 +43,18 @@ trait ObjectTrait
                 }
 
                 $model->$key = $value;
-            }
-        }
 
-        foreach ($row as $key => $value) {
-            foreach ($tableInfo as $column) {
-                if ($column->getField() != $key || ! $column->isForeignKey()) {
-                    continue;
+                if ($column->isForeignKey()) {
+                    $foreignColumn = $column->getReferencedField();
+                    $foreignTable = $column->getReferencedTable();
+
+                    $delimiters = [ $foreignColumn => $value ];
+                    $foreignData = $this->find($foreignTable, $delimiters);
+
+                    $newColumn = singular($foreignTable);
+
+                    $model->$newColumn = $foreignData;
                 }
-
-                $foreignColumn = $column->getReferencedField();
-                $foreignTable = $column->getReferencedTable();
-
-                $delimiters = [ $foreignColumn => $value ];
-                $foreignData = $this->find($foreignTable, $delimiters);
-
-                $newColumn = singular($foreignTable);
-
-                $model->$newColumn = $foreignData;
             }
         }
 
@@ -77,4 +70,26 @@ trait ObjectTrait
      * @return object|boolean
      */
     abstract protected function find($table, $delimiters = []);
+
+    /**
+     * Gets the modal class of the said table.
+     * 
+     * @param  string|null $table
+     * @return array
+     */
+    protected function getModel($table = null)
+    {
+        if ($table == null) {
+            return [ null, '' ];
+        }
+
+        $newTable = ucfirst(singular($table));
+        $model = new $newTable;
+
+        if (property_exists($model, 'table')) {
+            $newTable = $model->table;
+        }
+
+        return [ $model, strtolower($newTable) ];
+    }
 }

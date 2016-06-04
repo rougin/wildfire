@@ -8,7 +8,8 @@ namespace Rougin\Wildfire\Traits;
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
- * @property \CI_DB_null $query
+ * @property \Rougin\Describe\Describe $describe
+ * @property \CI_DB_null               $query
  */
 trait ResultTrait
 {
@@ -16,6 +17,27 @@ trait ResultTrait
      * @var string
      */
     protected $table = '';
+
+    /**
+     * Lists all data in dropdown format.
+     *
+     * @param  string $description
+     * @return array
+     */
+    public function asDropdown($description = 'description')
+    {
+        $data = [];
+
+        $id = $this->describe->getPrimaryKey($this->table);
+
+        $result = $this->query->result();
+
+        foreach ($result as $row) {
+            $data[$row->$id] = ucwords($row->$description);
+        }
+
+        return $data;
+    }
 
     /**
      * Creates an object from the specified table and row.
@@ -42,6 +64,7 @@ trait ResultTrait
     public function result()
     {
         $data = $this->getQueryResult();
+
         $result = [];
 
         if (empty($this->table)) {

@@ -58,9 +58,26 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     public function testGetMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
-        $posts = $wildfire->get($this->table)->result();
+        $data = $wildfire->get($this->table)->result();
 
-        $this->assertCount($this->expectedRows, $posts);
+        $this->assertCount($this->expectedRows, $data);
+        $this->assertTrue(property_exists($data[0], 'user'));
+    }
+
+    /**
+     * Tests Wildfire::get method with a different table name.
+     * 
+     * @return void
+     */
+    public function testGetMethodWithDifferentTableName()
+    {
+        $this->ci->load->model('comment');
+
+        $wildfire = new Wildfire($this->ci->db);
+
+        $data = $wildfire->get('comment')->result();
+
+        $this->assertCount($this->expectedRows, $data);
     }
 
     /**
@@ -72,9 +89,10 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     {
         $query = $this->ci->db->query('SELECT * FROM ' . $this->table);
         $wildfire = new Wildfire($this->ci->db, $query);
-        $posts = $wildfire->result();
+        $data = $wildfire->result();
 
-        $this->assertCount($this->expectedRows, $posts);
+        $this->assertCount($this->expectedRows, $data);
+        $this->assertTrue(property_exists($data[0], 'user'));
     }
 
     /**
@@ -85,9 +103,9 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     public function testAsDropdownMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
-        $posts = $wildfire->get($this->table)->as_dropdown();
+        $data = $wildfire->get($this->table)->as_dropdown();
 
-        $this->assertCount($this->expectedRows, $posts);
+        $this->assertCount($this->expectedRows, $data);
     }
 
     /**
@@ -129,9 +147,9 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
         $wildfire = new Wildfire;
         $wildfire->set_database($this->ci->db);
-        $posts = $wildfire->get($this->table)->result();
+        $data = $wildfire->get($this->table)->result();
 
-        $this->assertCount(5, $posts);
+        $this->assertCount(5, $data);
     }
 
     /**
@@ -146,8 +164,8 @@ class WildfireTest extends PHPUnit_Framework_TestCase
         $wildfire = new Wildfire($this->ci->db);
         $wildfire->set_query($query);
 
-        $posts = $wildfire->result();
+        $data = $wildfire->result();
 
-        $this->assertCount($this->expectedRows, $posts);
+        $this->assertCount($this->expectedRows, $data);
     }
 }

@@ -19,10 +19,42 @@ $ composer require rougin/wildfire
 
 ## Usage
 
+### Tables (in SQLite)
+
+#### User
+
+``` sql
+CREATE TABLE "user" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "name" TEXT NOT NULL,
+    "age" INTEGER NOT NULL,
+    "gender" TEXT NOT NULL
+);
+```
+
 **models/User.php**
 
 ``` php
 class User extends CI_Model {}
+```
+
+#### Post
+
+``` sql
+CREATE TABLE post (
+    id INTEGER PRIMARY KEY,
+    subject TEXT NOT NULL,
+    message TEXT NOT NULL,
+    user_id INTEGER,
+    description TEXT NULL,
+    FOREIGN KEY(user_id) REFERENCES user(id)
+);
+```
+
+**models/Post.php**
+
+``` php
+class Post extends CI_Model {}
 ```
 
 ### Using [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
@@ -30,32 +62,83 @@ class User extends CI_Model {}
 **controllers/Welcome.php**
 
 ``` php
+$this->load->model('post');
 $this->load->model('user');
 
 // Build your queries here
-$this->db->like('name', 'John Doe', 'both');
+$this->db->like('subject', 'Foo Bar', 'both');
 
 // Instantiate Wildfire with the CI_DB class
 $wildfire = new Rougin\Wildfire\Wildfire($this->db);
 
-// Returns an array of User objects
-$users = $wildfire->get('user')->result();
+// Returns an array of Post objects with a User object per Post object
+$posts = $wildfire->get('post')->result();
 ```
 
 ### Using raw SQL query
 
-`controllers/Welcome.php`
+**controllers/Welcome.php**
 
 ``` php
+$this->load->model('post');
 $this->load->model('user');
 
-$query = $this->db->query('SELECT * FROM users');
+$query = $this->db->query('SELECT * FROM posts');
 
 // Instantiate Wildfire with the database class and the query
 $wildfire = new Rougin\Wildfire\Wildfire($this->db, $query);
 
-// Returns an array of User objects
-$users = $wildfire->result();
+// Returns an array of Post objects with a User object per Post object
+$posts = $wildfire->result();
+```
+
+### Methods
+
+#### $wildfire->find($table, $delimiters = [])
+
+``` php
+// Returns a post with an ID of 1.
+$posts = $wildfire->find('post', 1);
+
+// Returns a post from the provided delimiters.
+$posts = $wildfire->find('post', [ 'name' => 'Foo Bar' ]);
+```
+
+#### $wildfire->get($table = '')->as_dropdown($description = 'description')
+
+``` php
+// Returns a list of posts that can be used in form_dropdown().
+// $description means what column will be used to display.
+$posts = $wildfire->get('post')->as_dropdown('subject');
+```
+
+### $wildfire->set_database($this->db)
+
+``` php
+// Sets as the current database
+$wildfire->set_database($this->db);
+```
+
+### $wildfire->set_query()
+
+``` php
+// Sets as the current query
+$wildfire->set_query('SELECT * FROM posts');
+```
+
+### Model Conventions
+
+``` php
+class Post extends CI_Model {
+
+    /**
+     * The table associated with the model.
+     *  
+     * @var string
+     */
+    public $table = 'post';
+
+}
 ```
 
 ## Change Log
