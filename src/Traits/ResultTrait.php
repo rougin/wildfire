@@ -11,16 +11,6 @@ namespace Rougin\Wildfire\Traits;
 trait ResultTrait
 {
     /**
-     * @var \CI_DB_result
-     */
-    protected $query;
-
-    /**
-     * @var string
-     */
-    protected $table = '';
-
-    /**
      * Creates an object from the specified table and row.
      *
      * @param  string $table

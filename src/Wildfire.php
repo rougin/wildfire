@@ -20,6 +20,11 @@ class Wildfire
     use DatabaseTrait, DescribeTrait, ObjectTrait, ResultTrait;
 
     /**
+     * @var \CI_DB_result
+     */
+    protected $query;
+
+    /**
      * @var string
      */
     protected $table = '';

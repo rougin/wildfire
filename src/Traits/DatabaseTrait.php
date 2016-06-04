@@ -18,11 +18,6 @@ trait DatabaseTrait
     protected $db;
 
     /**
-     * @var \CI_DB_result
-     */
-    protected $query;
-
-    /**
      * Sets the database class.
      * 
      * @param  CI_DB|null $database
