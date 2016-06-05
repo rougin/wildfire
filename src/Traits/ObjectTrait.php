@@ -44,7 +44,7 @@ trait ObjectTrait
         foreach ($tableInfo as $column) {
             $key = $column->getField();
 
-            if ( ! empty($columns) && ! isset($model->columns[$key])) {
+            if ( ! empty($columns) && ! in_array($key, $model->columns)) {
                 continue;
             }
 
