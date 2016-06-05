@@ -44,7 +44,7 @@ trait ObjectTrait
         foreach ($tableInfo as $column) {
             $key = $column->getField();
 
-            if ( ! empty($columns) && ! isset($modal->columns[$key])) {
+            if ( ! empty($columns) && ! isset($model->columns[$key])) {
                 continue;
             }
 
@@ -91,7 +91,7 @@ trait ObjectTrait
     }
 
     /**
-     * Gets the modal class of the said table.
+     * Gets the model class of the said table.
      * 
      * @param  string|null $table
      * @return array
