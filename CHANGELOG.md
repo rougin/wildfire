@@ -2,7 +2,7 @@
 
 All notable changes to `Wildfire` will be documented in this file.
 
-## [Unreleased](https://github.com/rougin/wildfire/compare/v0.2.1...HEAD)
+## [0.3.0](https://github.com/rougin/wildfire/compare/v0.2.1...v0.3.0)
 
 ### Added
 - Traits
