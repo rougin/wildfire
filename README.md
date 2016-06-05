@@ -83,7 +83,7 @@ $posts = $wildfire->get('post')->result();
 $this->load->model('post');
 $this->load->model('user');
 
-$query = $this->db->query('SELECT * FROM posts');
+$query = $this->db->query('SELECT * FROM post');
 
 // Instantiate Wildfire with the database class and the query
 $wildfire = new Rougin\Wildfire\Wildfire($this->db, $query);
