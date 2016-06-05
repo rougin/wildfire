@@ -138,6 +138,20 @@ class Post extends CI_Model {
      */
     public $table = 'post';
 
+    /**
+     * Columns that will be displayed.
+     * If not set, it will get the columns from the database table.
+     *  
+     * @var array
+     */
+    public $columns = array(
+        'id',
+        'subject',
+        'message',
+        'user_id',
+        'description',
+    );
+
 }
 ```
 

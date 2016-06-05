@@ -7,6 +7,7 @@ All notable changes to `Wildfire` will be documented in this file.
 ### Added
 - Traits
 - `table` for manually specifying the table associated with the Model
+- `columns` for manually specifying the columns to be displayed
 
 ### Fixed
 - Issue in getting foreign tables

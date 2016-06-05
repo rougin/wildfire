@@ -2,6 +2,9 @@
 
 namespace Rougin\Wildfire\Traits;
 
+use CI_Model;
+use Rougin\Describe\Column;
+
 /**
  * Object Trait
  * 
@@ -32,31 +35,22 @@ trait ObjectTrait
             $tableInfo = $this->describe->getTable($newTable);
 
             $this->tables[$newTable] = $tableInfo;
-        }
-
-        if (isset($this->tables[$newTable])) {
+        } else {
             $tableInfo = $this->tables[$newTable];
         }
 
+        $columns = property_exists($model, 'columns') ? $model->columns : [];
+
         foreach ($tableInfo as $column) {
-            if ( ! property_exists($row, $column->getField())) {
+            $key = $column->getField();
+
+            if ( ! empty($columns) && ! isset($modal->columns[$key])) {
                 continue;
             }
 
-            $key = $column->getField();
-
             $model->$key = $row->$key;
 
-            if ($column->isForeignKey()) {
-                $foreignColumn = $column->getReferencedField();
-                $foreignTable = $column->getReferencedTable();
-
-                $delimiters = [ $foreignColumn => $model->$key ];
-                $foreignData = $this->find($foreignTable, $delimiters);
-                $newColumn = $this->getTableName($foreignTable);
-
-                $model->$newColumn = $foreignData;
-            }
+            $this->setForeignField($model, $column);
         }
 
         return $model;
@@ -71,6 +65,30 @@ trait ObjectTrait
      * @return object|boolean
      */
     abstract protected function find($table, $delimiters = []);
+
+    /**
+     * Sets the foreign field of the column, if any.
+     * 
+     * @param  \CI_Model               $model
+     * @param  \Rougin\Describe\Column $column
+     * @return void
+     */
+    protected function setForeignField(CI_Model $model, Column $column)
+    {
+        if ( ! $column->isForeignKey()) {
+            return;
+        }
+
+        $key = $column->getField();
+        $foreignColumn = $column->getReferencedField();
+        $foreignTable = $column->getReferencedTable();
+
+        $delimiters = [ $foreignColumn => $model->$key ];
+        $foreignData = $this->find($foreignTable, $delimiters);
+        $newColumn = $this->getTableName($foreignTable);
+
+        $model->$newColumn = $foreignData;
+    }
 
     /**
      * Gets the modal class of the said table.
