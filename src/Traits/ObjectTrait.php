@@ -32,29 +32,30 @@ trait ObjectTrait
             $tableInfo = $this->describe->getTable($newTable);
 
             $this->tables[$newTable] = $tableInfo;
-        } else {
+        }
+
+        if (isset($this->tables[$newTable])) {
             $tableInfo = $this->tables[$newTable];
         }
 
-        foreach ($row as $key => $value) {
-            foreach ($tableInfo as $column) {
-                if ($column->getField() != $key) {
-                    continue;
-                }
+        foreach ($tableInfo as $column) {
+            if ( ! property_exists($row, $column->getField())) {
+                continue;
+            }
 
-                $model->$key = $value;
+            $key = $column->getField();
 
-                if ($column->isForeignKey()) {
-                    $foreignColumn = $column->getReferencedField();
-                    $foreignTable = $column->getReferencedTable();
+            $model->$key = $row->$key;
 
-                    $delimiters = [ $foreignColumn => $value ];
-                    $foreignData = $this->find($foreignTable, $delimiters);
+            if ($column->isForeignKey()) {
+                $foreignColumn = $column->getReferencedField();
+                $foreignTable = $column->getReferencedTable();
 
-                    $newColumn = $this->getTableName($foreignTable);
+                $delimiters = [ $foreignColumn => $model->$key ];
+                $foreignData = $this->find($foreignTable, $delimiters);
+                $newColumn = $this->getTableName($foreignTable);
 
-                    $model->$newColumn = $foreignData;
-                }
+                $model->$newColumn = $foreignData;
             }
         }
 
