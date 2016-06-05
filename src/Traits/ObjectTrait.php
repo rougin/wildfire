@@ -51,7 +51,7 @@ trait ObjectTrait
                     $delimiters = [ $foreignColumn => $value ];
                     $foreignData = $this->find($foreignTable, $delimiters);
 
-                    $newColumn = singular($foreignTable);
+                    $newColumn = $this->getTableName($foreignTable);
 
                     $model->$newColumn = $foreignData;
                 }
@@ -83,7 +83,7 @@ trait ObjectTrait
             return [ null, '' ];
         }
 
-        $newTable = ucfirst(singular($table));
+        $newTable = $this->getTableName($table);
         $model = new $newTable;
 
         if (property_exists($model, 'table')) {
@@ -92,4 +92,12 @@ trait ObjectTrait
 
         return [ $model, strtolower($newTable) ];
     }
+
+    /**
+     * Parses the table name from Describe class.
+     * 
+     * @param  string $table
+     * @return string
+     */
+    abstract protected function getTableName($table);
 }

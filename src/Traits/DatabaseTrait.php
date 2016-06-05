@@ -23,6 +23,20 @@ trait DatabaseTrait
     protected $query;
 
     /**
+     * Parses the table name from Describe class.
+     * 
+     * @param  string $table
+     * @return string
+     */
+    protected function getTableName($table)
+    {
+        $table = ucfirst(singular($table));
+        $array = explode('.', $table);
+
+        return isset($array[1]) ? $array[1] : $table;
+    }
+
+    /**
      * Sets the database class.
      * 
      * @param  \CI_DB|null $database
