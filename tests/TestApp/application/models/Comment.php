@@ -1,6 +1,6 @@
 <?php
 
-class Comment extends CI_Model {
+class Comment extends Rougin\Wildfire\Wildfire {
 
 	public $table = 'comments';
 

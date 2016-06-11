@@ -23,13 +23,14 @@ trait ObjectTrait
     /**
      * Creates an object from the specified table and row.
      *
-     * @param  string $table
-     * @param  object $row
+     * @param  string  $table
+     * @param  object  $row
+     * @param  boolean $isForeignKey
      * @return array
      */
-    protected function createObject($table, $row)
+    protected function createObject($table, $row, $isForeignKey = false)
     {
-        list($model, $newTable) = $this->getModel($table);
+        list($model, $newTable) = $this->getModel($table, $isForeignKey);
 
         if ( ! array_key_exists($newTable, $this->tables)) {
             $tableInfo = $this->describe->getTable($newTable);
@@ -62,9 +63,10 @@ trait ObjectTrait
      *
      * @param  string         $table
      * @param  array|integer  $delimiters
+     * @param  boolean        $isForeignKey
      * @return object|boolean
      */
-    abstract protected function find($table, $delimiters = []);
+    abstract protected function find($table, $delimiters = [], $isForeignKey = false);
 
     /**
      * Sets the foreign field of the column, if any.
@@ -84,8 +86,8 @@ trait ObjectTrait
         $foreignTable = $column->getReferencedTable();
 
         $delimiters = [ $foreignColumn => $model->$key ];
-        $foreignData = $this->find($foreignTable, $delimiters);
-        $newColumn = $this->getTableName($foreignTable);
+        $foreignData = $this->find($foreignTable, $delimiters, true);
+        $newColumn = $this->getTableName($foreignTable, true);
 
         $model->$newColumn = $foreignData;
     }
@@ -94,15 +96,16 @@ trait ObjectTrait
      * Gets the model class of the said table.
      * 
      * @param  string|null $table
+     * @param  boolean     $isForeignKey
      * @return array
      */
-    protected function getModel($table = null)
+    protected function getModel($table = null, $isForeignKey = false)
     {
-        if ($table == null) {
+        if ($table == null && $this->table == null) {
             return [ null, '' ];
         }
 
-        $newTable = $this->getTableName($table);
+        $newTable = $this->getTableName($table, $isForeignKey);
         $model = new $newTable;
 
         if (property_exists($model, 'table')) {
@@ -115,8 +118,9 @@ trait ObjectTrait
     /**
      * Parses the table name from Describe class.
      * 
-     * @param  string $table
+     * @param  string  $table
+     * @param  boolean $isForeignKey
      * @return string
      */
-    abstract protected function getTableName($table);
+    abstract protected function getTableName($table, $isForeignKey = false);
 }

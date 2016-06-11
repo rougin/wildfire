@@ -25,11 +25,16 @@ trait DatabaseTrait
     /**
      * Parses the table name from Describe class.
      * 
-     * @param  string $table
+     * @param  string  $table
+     * @param  boolean $isForeignKey
      * @return string
      */
-    protected function getTableName($table)
+    protected function getTableName($table, $isForeignKey = false)
     {
+        if ( ! $isForeignKey && $this->table) {
+            $table = $this->table;
+        }
+
         $table = ucfirst(singular($table));
         $array = explode('.', $table);
 
