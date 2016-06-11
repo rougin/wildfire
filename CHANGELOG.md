@@ -2,6 +2,11 @@
 
 All notable changes to `Wildfire` will be documented in this file.
 
+## [Unreleased](https://github.com/rougin/wildfire/compare/v0.3.0...HEAD)
+
+### Added
+- `Wildfire` as `CI_Model`
+
 ## [0.3.0](https://github.com/rougin/wildfire/compare/v0.2.1...v0.3.0) - 2016-06-05
 
 ### Added

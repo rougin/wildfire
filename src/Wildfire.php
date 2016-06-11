@@ -2,6 +2,8 @@
 
 namespace Rougin\Wildfire;
 
+use CI_Model;
+
 use Rougin\Wildfire\Traits\ObjectTrait;
 use Rougin\Wildfire\Traits\ResultTrait;
 use Rougin\Wildfire\Traits\DatabaseTrait;
@@ -15,7 +17,7 @@ use Rougin\Wildfire\Traits\DescribeTrait;
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class Wildfire
+class Wildfire extends CI_Model
 {
     use DatabaseTrait, DescribeTrait, ObjectTrait, ResultTrait;
 
@@ -37,11 +39,12 @@ class Wildfire
      *
      * @param  string         $table
      * @param  array|integer  $delimiters
+     * @param  boolean        $isForeignKey
      * @return object|boolean
      */
-    public function find($table, $delimiters = [])
+    public function find($table, $delimiters = [], $isForeignKey = false)
     {
-        list($model, $table) = $this->getModel($table);
+        list($model, $table) = $this->getModel($table, $isForeignKey);
 
         if ( ! is_array($delimiters)) {
             $primaryKey = $this->describe->getPrimaryKey($table);
@@ -54,7 +57,7 @@ class Wildfire
         $query = $this->db->get($table);
 
         if ($query->num_rows() > 0) {
-            return $this->createObject($table, $query->row());
+            return $this->createObject($table, $query->row(), $isForeignKey);
         }
 
         return false;

@@ -42,11 +42,12 @@ trait ResultTrait
     /**
      * Creates an object from the specified table and row.
      *
-     * @param  string $table
-     * @param  object $row
+     * @param  string  $table
+     * @param  object  $row
+     * @param  boolean $isForeignKey
      * @return array
      */
-    abstract protected function createObject($table, $row);
+    abstract protected function createObject($table, $row, $isForeignKey = false);
 
     /**
      * Returns all rows from the specified table.
@@ -92,6 +93,10 @@ trait ResultTrait
 
         if (method_exists($this->query, 'result')) {
             $result = $this->query->result();
+        }
+
+        if ($this->table) {
+            $this->get($this->table);
         }
 
         return $result;
