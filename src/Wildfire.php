@@ -13,7 +13,7 @@ use Rougin\Wildfire\Traits\DescribeTrait;
  * Wildfire
  *
  * Yet another wrapper for CodeIgniter's Query Builder Class.
- * 
+ *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
@@ -46,7 +46,7 @@ class Wildfire extends CI_Model
     {
         list($model, $table) = $this->getModel($table, $isForeignKey);
 
-        if ( ! is_array($delimiters)) {
+        if (! is_array($delimiters)) {
             $primaryKey = $this->describe->getPrimaryKey($table);
 
             $delimiters = [ $primaryKey => $delimiters ];
@@ -65,7 +65,7 @@ class Wildfire extends CI_Model
 
     /**
      * Returns all rows from the specified table.
-     * 
+     *
      * @param  string $table
      * @return self
      */
@@ -93,12 +93,13 @@ class Wildfire extends CI_Model
 
     /**
      * Calls methods from this class in underscore case.
-     * 
+     *
      * @param  string $method
      * @param  mixed  $parameters
      * @return mixed
      */
-    public function __call($method, $parameters) {
+    public function __call($method, $parameters)
+    {
         $method = camelize($method);
         $result = $this;
 

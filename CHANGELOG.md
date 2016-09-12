@@ -2,10 +2,11 @@
 
 All notable changes to `Wildfire` will be documented in this file.
 
-## [Unreleased](https://github.com/rougin/wildfire/compare/v0.3.0...HEAD)
+## [0.3.1](https://github.com/rougin/wildfire/compare/v0.3.0...v0.3.1) - 2016-09-12
 
 ### Added
 - `Wildfire` as `CI_Model`
+- StyleCI for conforming code to PSR standards
 
 ## [0.3.0](https://github.com/rougin/wildfire/compare/v0.2.1...v0.3.0) - 2016-06-05
 

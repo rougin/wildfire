@@ -4,7 +4,7 @@ namespace Rougin\Wildfire\Traits;
 
 /**
  * Result Trait
- * 
+ *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
@@ -51,7 +51,7 @@ trait ResultTrait
 
     /**
      * Returns all rows from the specified table.
-     * 
+     *
      * @param  string $table
      * @return self
      */
@@ -59,7 +59,7 @@ trait ResultTrait
 
     /**
      * Returns the result.
-     * 
+     *
      * @return object
      */
     public function result()
@@ -72,8 +72,7 @@ trait ResultTrait
             $this->get();
         }
 
-        foreach ($data as $row)
-        {
+        foreach ($data as $row) {
             $object = $this->createObject($this->table, $row);
 
             array_push($result, $object);
@@ -84,7 +83,7 @@ trait ResultTrait
 
     /**
      * Gets the data result from the specified query.
-     * 
+     *
      * @return array|object
      */
     protected function getQueryResult()

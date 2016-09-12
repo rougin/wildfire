@@ -6,7 +6,7 @@ use Rougin\SparkPlug\Instance;
 
 /**
  * Database Trait
- * 
+ *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
@@ -24,14 +24,14 @@ trait DatabaseTrait
 
     /**
      * Parses the table name from Describe class.
-     * 
+     *
      * @param  string  $table
      * @param  boolean $isForeignKey
      * @return string
      */
     protected function getTableName($table, $isForeignKey = false)
     {
-        if ( ! $isForeignKey && $this->table) {
+        if (! $isForeignKey && $this->table) {
             $table = $this->table;
         }
 
@@ -43,7 +43,7 @@ trait DatabaseTrait
 
     /**
      * Sets the database class.
-     * 
+     *
      * @param  \CI_DB|null $database
      * @return self
      */
@@ -67,7 +67,7 @@ trait DatabaseTrait
 
     /**
      * Sets the query result.
-     * 
+     *
      * @param  \CI_DB_result $query
      * @return self
      */
