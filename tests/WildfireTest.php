@@ -42,7 +42,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Checks if the CodeIgniter instance is successfully retrieved.
-     * 
+     *
      * @return void
      */
     public function testCodeIgniterInstance()
@@ -52,7 +52,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Wildfire::get method.
-     * 
+     *
      * @return void
      */
     public function testGetMethod()
@@ -65,7 +65,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Wildfire::get method with a different table name.
-     * 
+     *
      * @return void
      */
     public function testGetMethodWithDifferentTableName()
@@ -81,7 +81,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests the library using a query.
-     * 
+     *
      * @return void
      */
     public function testQueryMethod()
@@ -95,7 +95,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Wildfire::as_dropdown method.
-     * 
+     *
      * @return void
      */
     public function testAsDropdownMethod()
@@ -108,7 +108,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Wildfire::as_dropdown method.
-     * 
+     *
      * @return void
      */
     public function testFindMethod()
@@ -122,7 +122,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Wildfire::as_dropdown method with an error.
-     * 
+     *
      * @return void
      */
     public function testFindMethodError()
@@ -136,7 +136,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Wildfire without $this->db.
-     * 
+     *
      * @return void
      */
     public function testWildfireWithoutConstructor()
@@ -152,7 +152,7 @@ class WildfireTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Wildfire::set_query.
-     * 
+     *
      * @return void
      */
     public function testSetQueryMethod()

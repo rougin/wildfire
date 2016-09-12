@@ -7,7 +7,7 @@ use Rougin\Describe\Driver\CodeIgniterDriver;
 
 /**
  * Describe Trait
- * 
+ *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
@@ -20,7 +20,7 @@ trait DescribeTrait
 
     /**
      * Gets the Describe class based on the given database.
-     * 
+     *
      * @param  \CI_DB $database
      * @return \Rougin\Describe\Describe
      */

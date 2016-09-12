@@ -7,7 +7,7 @@ use Rougin\Describe\Column;
 
 /**
  * Object Trait
- * 
+ *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
@@ -32,7 +32,7 @@ trait ObjectTrait
     {
         list($model, $newTable) = $this->getModel($table, $isForeignKey);
 
-        if ( ! array_key_exists($newTable, $this->tables)) {
+        if (! array_key_exists($newTable, $this->tables)) {
             $tableInfo = $this->describe->getTable($newTable);
 
             $this->tables[$newTable] = $tableInfo;
@@ -45,7 +45,7 @@ trait ObjectTrait
         foreach ($tableInfo as $column) {
             $key = $column->getField();
 
-            if ( ! empty($columns) && ! in_array($key, $model->columns)) {
+            if (! empty($columns) && ! in_array($key, $model->columns)) {
                 continue;
             }
 
@@ -70,14 +70,14 @@ trait ObjectTrait
 
     /**
      * Sets the foreign field of the column, if any.
-     * 
+     *
      * @param  \CI_Model               $model
      * @param  \Rougin\Describe\Column $column
      * @return void
      */
     protected function setForeignField(CI_Model $model, Column $column)
     {
-        if ( ! $column->isForeignKey()) {
+        if (! $column->isForeignKey()) {
             return;
         }
 
@@ -94,7 +94,7 @@ trait ObjectTrait
 
     /**
      * Gets the model class of the said table.
-     * 
+     *
      * @param  string|null $table
      * @param  boolean     $isForeignKey
      * @return array
@@ -117,7 +117,7 @@ trait ObjectTrait
 
     /**
      * Parses the table name from Describe class.
-     * 
+     *
      * @param  string  $table
      * @param  boolean $isForeignKey
      * @return string
