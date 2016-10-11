@@ -50,7 +50,6 @@ trait DatabaseTrait
     public function setDatabase($database = null)
     {
         $ci = Instance::create();
-
         $ci->load->helper('inflector');
 
         if (empty($database)) {
