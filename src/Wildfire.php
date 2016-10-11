@@ -2,8 +2,6 @@
 
 namespace Rougin\Wildfire;
 
-use CI_Model;
-
 use Rougin\Wildfire\Traits\ObjectTrait;
 use Rougin\Wildfire\Traits\ResultTrait;
 use Rougin\Wildfire\Traits\DatabaseTrait;
@@ -17,7 +15,7 @@ use Rougin\Wildfire\Traits\DescribeTrait;
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class Wildfire extends CI_Model
+class Wildfire
 {
     use DatabaseTrait, DescribeTrait, ObjectTrait, ResultTrait;
 
@@ -34,30 +32,54 @@ class Wildfire extends CI_Model
     }
 
     /**
+     * Deletes the data from the specified table by the given delimiters.
+     *
+     * @param  string|object $table
+     * @param  integer|array $delimiters
+     * @return mixed
+     */
+    public function delete($table, $delimiters)
+    {
+        $tableName = ($table instanceof CodeigniterModel) ? $table->getTableName() : $table;
+
+        if (is_integer($delimiters)) {
+            $delimiters = [ $this->describe->getPrimaryKey($tableName) => $delimiters ];
+        }
+
+        $this->db->where($delimiters);
+
+        return $this->db->delete($tableName);
+    }
+
+    /**
      * Finds the row from the specified ID or with the list of delimiters from
      * the specified table.
      *
-     * @param  string         $table
+     * @param  object|string  $table
      * @param  array|integer  $delimiters
      * @param  boolean        $isForeignKey
      * @return object|boolean
      */
     public function find($table, $delimiters = [], $isForeignKey = false)
     {
-        list($model, $table) = $this->getModel($table, $isForeignKey);
+        list($model, $tableName) = $this->getModel($table, $isForeignKey);
 
         if (! is_array($delimiters)) {
-            $primaryKey = $this->describe->getPrimaryKey($table);
+            $primaryKey = $this->describe->getPrimaryKey($tableName);
 
             $delimiters = [ $primaryKey => $delimiters ];
         }
 
         $this->db->where($delimiters);
 
-        $query = $this->db->get($table);
+        $query = $this->db->get($tableName);
 
         if ($query->num_rows() > 0) {
-            return $this->createObject($table, $query->row(), $isForeignKey);
+            if ($table == $model) {
+                $tableName = $model;
+            }
+
+            return $this->createObject($tableName, $query->row(), $isForeignKey);
         }
 
         return false;
@@ -66,18 +88,22 @@ class Wildfire extends CI_Model
     /**
      * Returns all rows from the specified table.
      *
-     * @param  string $table
+     * @param  object|string $table
      * @return self
      */
     public function get($table = '')
     {
-        list($model, $table) = $this->getModel($table);
+        list($model, $tableName) = $this->getModel($table);
 
         if ($this->query == null) {
-            $this->query = $this->db->get($table);
+            $this->query = $this->db->get($tableName);
         }
 
-        $this->table = $table;
+        $this->table = $tableName;
+
+        if ($table == $model) {
+            $this->table = $model;
+        }
 
         // Guess the specified table from the query
         if (empty($table)) {

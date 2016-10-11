@@ -28,7 +28,13 @@ trait ResultTrait
     {
         $data = [];
 
-        $id = $this->describe->getPrimaryKey($this->table);
+        $tableName = $this->table;
+
+        if ($tableName instanceof \Rougin\Wildfire\CodeigniterModel) {
+            $tableName = $this->table->getTableName();
+        }
+
+        $id = $this->describe->getPrimaryKey($tableName);
 
         $result = $this->query->result();
 
@@ -37,6 +43,16 @@ trait ResultTrait
         }
 
         return $data;
+    }
+
+    /**
+     * Returns the total number of rows from the result.
+     *
+     * @return integer
+     */
+    public function count()
+    {
+        return $this->query->count_all_results();
     }
 
     /**
@@ -92,10 +108,6 @@ trait ResultTrait
 
         if (method_exists($this->query, 'result')) {
             $result = $this->query->result();
-        }
-
-        if ($this->table) {
-            $this->get($this->table);
         }
 
         return $result;
