@@ -17,7 +17,7 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $table = 'comment';
+    protected $table = 'comments';
 
     /**
      * Sets up the CodeIgniter application.
@@ -30,41 +30,67 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
 
         $this->ci = \Rougin\SparkPlug\Instance::create($appPath);
 
-        $this->ci->load->database();
-        $this->ci->load->model($this->table);
+        $this->ci->load->helper('inflector');
+
+        $this->ci->load->model(singular($this->table), '', TRUE);
     }
 
     /**
-     * Checks if the CodeIgniter instance is successfully retrieved.
-     *
-     * @return void
-     */
-    public function testCodeIgniterInstance()
-    {
-        $this->assertInstanceOf('CI_Controller', $this->ci);
-    }
-
-    /**
-     * Tests Wildfire::get method.
+     * Tests CodeigniterModel::get method.
      *
      * @return void
      */
     public function testGetMethod()
     {
-        $this->assertCount($this->expectedRows, $this->ci->comment->all());
+        $this->assertTrue(count($this->ci->comment->all()) > 0);
     }
 
     /**
-     * Tests Wildfire::find method.
+     * Tests CodeigniterModel::find method.
      *
      * @return void
      */
     public function testFindMethod()
     {
-        $expectedId = 1;
+        $expectedId   = 2;
+        $expectedName = 'm5yq';
 
         $comment = $this->ci->comment->find($expectedId);
 
-        $this->assertEquals($expectedId, $comment->id);
+        $this->assertEquals($expectedName, $comment->name);
+    }
+
+    /**
+     * Tests the hidden columns array.
+     *
+     * @return void
+     */
+    public function testHiddenColumns()
+    {
+        $expectedId = 2;
+
+        $comment = $this->ci->comment->find($expectedId);
+
+        $this->assertFalse(property_exists($comment, 'id'));
+    }
+
+    /**
+     * Tests CodeigniterModel::delete method.
+     *
+     * @return void
+     */
+    public function testDeleteMethod()
+    {
+        $data = [ 'name' => 'test', 'message' => 'test' ];
+
+        $this->ci->db->insert($this->table, $data);
+
+        $id = $this->ci->db->insert_id();
+
+        $this->ci->comment->delete($id);
+
+        $comment = $this->ci->comment->find($id);
+
+        $this->assertTrue(empty($comment));
     }
 }

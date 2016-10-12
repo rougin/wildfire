@@ -41,6 +41,7 @@ trait ObjectTrait
         }
 
         $columns = [];
+        $hidden  = [];
 
         if (method_exists($model, 'getColumns')) {
             $columns = $model->getColumns();
@@ -49,10 +50,18 @@ trait ObjectTrait
             $columns = $model->columns;
         }
 
+        // NOTE: To be removed in v1.0.0 (if condition only)
+        if (method_exists($model, 'getHiddenColumns')) {
+            $hidden = $model->getHiddenColumns();
+        }
+
         foreach ($tableInfo as $column) {
             $key = $column->getField();
 
-            if (! empty($columns) && ! in_array($key, $model->columns)) {
+            $inHiddenColumns = ! empty($hidden) && in_array($key, $hidden);
+            $inColumns       = ! empty($columns) && ! in_array($key, $columns);
+
+            if ($inColumns || $inHiddenColumns) {
                 continue;
             }
 
@@ -88,13 +97,13 @@ trait ObjectTrait
             return;
         }
 
-        $key = $column->getField();
+        $columnName    = $column->getField();
         $foreignColumn = $column->getReferencedField();
-        $foreignTable = $column->getReferencedTable();
+        $foreignTable  = $column->getReferencedTable();
 
-        $delimiters = [ $foreignColumn => $model->$key ];
+        $delimiters  = [ $foreignColumn => $model->$columnName ];
         $foreignData = $this->find($foreignTable, $delimiters, true);
-        $newColumn = $this->getTableName($foreignTable, true);
+        $newColumn   = $this->getTableName($foreignTable, true);
 
         $model->$newColumn = $foreignData;
     }

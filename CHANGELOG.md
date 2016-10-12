@@ -2,6 +2,13 @@
 
 All notable changes to `Wildfire` will be documented in this file.
 
+## [0.4.0](https://github.com/rougin/wildfire/compare/v0.3.0...v0.4.0) - CURRENT_DATE
+
+### Added
+- `CodeigniterModel` that extends to `CI_Model`
+- `$hidden` for hiding columns
+- `Wildfire::delete`
+
 ## [0.3.1](https://github.com/rougin/wildfire/compare/v0.3.0...v0.3.1) - 2016-09-12
 
 ### Added

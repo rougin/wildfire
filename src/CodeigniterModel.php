@@ -44,7 +44,9 @@ class CodeigniterModel extends \CI_Model
      */
     public function delete($id)
     {
-        return $this->wildfire->delete($this->getTableName(), $id);
+        $this->db->where($this->getPrimaryKey(), $id);
+
+        return $this->db->delete($this->getTableName());
     }
 
     /**
@@ -94,8 +96,8 @@ class CodeigniterModel extends \CI_Model
         $result = $this;
 
         if (method_exists($this, $method)) {
-            $class = [$this, $method];
-            
+            $class = [ $this, $method ];
+
             $result = call_user_func_array($class, $parameters);
         }
 

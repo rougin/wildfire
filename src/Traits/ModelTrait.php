@@ -27,6 +27,13 @@ trait ModelTrait
     protected $hidden = [ 'password' ];
 
     /**
+     * Model's default primary key or unique identifier.
+     *
+     * @var string
+     */
+    protected $primary_key = 'id';
+
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -51,6 +58,16 @@ trait ModelTrait
     public function getHiddenColumns()
     {
         return $this->hidden;
+    }
+
+    /**
+     * Gets the specified primary key of the model.
+     *
+     * @return string
+     */
+    public function getPrimaryKey()
+    {
+        return $this->primary_key;
     }
 
     /**

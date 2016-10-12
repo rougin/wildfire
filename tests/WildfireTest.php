@@ -38,16 +38,6 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Checks if the CodeIgniter instance is successfully retrieved.
-     *
-     * @return void
-     */
-    public function testCodeIgniterInstance()
-    {
-        $this->assertInstanceOf('CI_Controller', $this->ci);
-    }
-
-    /**
      * Tests Wildfire::get method.
      *
      * @return void
