@@ -117,7 +117,7 @@ trait ObjectTrait
 
         if (method_exists($model, 'getTableName')) {
             $newTable = $model->getTableName();
-        } else if (property_exists($model, 'table')) {
+        } elseif (property_exists($model, 'table')) {
             // NOTE: To be removed in v1.0.0
             $newTable = $model->table;
         }

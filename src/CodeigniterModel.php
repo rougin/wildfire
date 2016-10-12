@@ -10,6 +10,20 @@ namespace Rougin\Wildfire;
  */
 class CodeigniterModel extends \CI_Model
 {
+    use Traits\ModelTrait;
+
+    /**
+     * @var \Rougin\Wildfire\Wildfire
+     */
+    protected $wildfire;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->wildfire = new Wildfire($this->db);
+    }
+
     /**
      * Returns all of the models from the database.
      *
@@ -28,7 +42,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function delete($id)
     {
-        return $this->_wildfire->delete($this, $id);
+        return $this->wildfire->delete($this->getTableName(), $id);
     }
 
     /**
@@ -39,7 +53,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function find($id)
     {
-        return $this->_wildfire->find($this, $id);
+        return $this->wildfire->find($this->getTableName(), $id);
     }
 
     /**
@@ -62,7 +76,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function get()
     {
-        return $this->_wildfire->get($this);
+        return $this->wildfire->get($this->getTableName());
     }
 
     /**

@@ -2,8 +2,6 @@
 
 namespace Rougin\Wildfire;
 
-use Rougin\Wildfire\Wildfire;
-
 class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,7 +17,7 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $table = 'post';
+    protected $table = 'comment';
 
     /**
      * Sets up the CodeIgniter application.
@@ -32,9 +30,8 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
 
         $this->ci = \Rougin\SparkPlug\Instance::create($appPath);
 
-        // $this->ci->load->database();
-        // $this->ci->load->model($this->table);
-        // $this->ci->load->model('user');
+        $this->ci->load->database();
+        $this->ci->load->model($this->table);
     }
 
     /**
@@ -54,112 +51,20 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethod()
     {
-        // $data = $wildfire->get($this->table)->result();
-
-        // $this->assertCount($this->expectedRows, $data);
+        $this->assertCount($this->expectedRows, $this->ci->comment->all());
     }
 
     /**
-     * Tests Wildfire::get method with a different table name.
-     *
-     * @return void
-     */
-    public function testGetMethodWithDifferentTableName()
-    {
-        // $this->ci->load->model('comment');
-
-        // $wildfire = new Wildfire($this->ci->db);
-
-        // $data = $wildfire->get('comment')->result();
-
-        // $this->assertCount($this->expectedRows, $data);
-    }
-
-    /**
-     * Tests the library using a query.
-     *
-     * @return void
-     */
-    public function testQueryMethod()
-    {
-        // $query = $this->ci->db->query('SELECT * FROM ' . $this->table);
-        // $wildfire = new Wildfire($this->ci->db, $query);
-        // $data = $wildfire->result();
-
-        // $this->assertCount($this->expectedRows, $data);
-    }
-
-    /**
-     * Tests Wildfire::as_dropdown method.
-     *
-     * @return void
-     */
-    public function testAsDropdownMethod()
-    {
-        // $wildfire = new Wildfire($this->ci->db);
-        // $data = $wildfire->get($this->table)->as_dropdown();
-
-        // $this->assertCount($this->expectedRows, $data);
-    }
-
-    /**
-     * Tests Wildfire::as_dropdown method.
+     * Tests Wildfire::find method.
      *
      * @return void
      */
     public function testFindMethod()
     {
-        // $expectedId = 1;
-        // $wildfire = new Wildfire($this->ci->db);
-        // $post = $wildfire->find($this->table, $expectedId);
+        $expectedId = 1;
 
-        // $this->assertEquals($expectedId, $post->get_id());
-    }
+        $comment = $this->ci->comment->find($expectedId);
 
-    /**
-     * Tests Wildfire::as_dropdown method with an error.
-     *
-     * @return void
-     */
-    public function testFindMethodError()
-    {
-        // $expectedId = 11;
-        // $wildfire = new Wildfire($this->ci->db);
-        // $post = $wildfire->find($this->table, $expectedId);
-
-        // $this->assertEmpty($post);
-    }
-
-    /**
-     * Tests Wildfire without $this->db.
-     *
-     * @return void
-     */
-    public function testWildfireWithoutConstructor()
-    {
-        // $this->ci->db->limit(5);
-
-        // $wildfire = new Wildfire;
-        // $wildfire->set_database($this->ci->db);
-        // $data = $wildfire->get($this->table)->result();
-
-        // $this->assertCount(5, $data);
-    }
-
-    /**
-     * Tests Wildfire::set_query.
-     *
-     * @return void
-     */
-    public function testSetQueryMethod()
-    {
-        // $query = $this->ci->db->query('SELECT * FROM ' . $this->table);
-
-        // $wildfire = new Wildfire($this->ci->db);
-        // $wildfire->set_query($query);
-
-        // $data = $wildfire->result();
-
-        // $this->assertCount($this->expectedRows, $data);
+        $this->assertEquals($expectedId, $comment->id);
     }
 }
