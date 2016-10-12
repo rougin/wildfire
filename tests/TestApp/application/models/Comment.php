@@ -1,8 +1,6 @@
 <?php
 
-class Comment extends Rougin\Wildfire\Wildfire
+class Comment extends Rougin\Wildfire\CodeigniterModel
 {
-    public $table = 'comments';
-
-    public $columns = array( 'name' );
+    use Rougin\Wildfire\Traits\ModelTrait;
 }

@@ -35,7 +35,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rougin\\Wildfire\\Test\\": "tests"
+            "Rougin\\Wildfire\\": "tests"
         }
     },
     "scripts": {
@@ -47,7 +47,7 @@
         }
     },
     "suggest": {
-        "rougin/codeigniter": "Yet another way to install CodeIgniter via Composer",
+        "rougin/codeigniter": "Installs CodeIgniter core through Composer",
         "rougin/combustor": "A tool for speeding up workflow in CodeIgniter",
         "rougin/refinery": "\"Ready-to-eat\" migrations for CodeIgniter"
     }

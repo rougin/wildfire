@@ -2,7 +2,6 @@
 
 class Post extends CI_Model
 {
-
     /**
      * Gets the ID.
      *

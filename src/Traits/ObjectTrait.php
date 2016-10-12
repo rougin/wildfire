@@ -40,7 +40,14 @@ trait ObjectTrait
             $tableInfo = $this->tables[$newTable];
         }
 
-        $columns = property_exists($model, 'columns') ? $model->columns : [];
+        $columns = [];
+
+        if (method_exists($model, 'getColumns')) {
+            $columns = $model->getColumns();
+        } elseif (property_exists($model, 'columns')) {
+            // NOTE: To be removed in v1.0.0
+            $columns = $model->columns;
+        }
 
         foreach ($tableInfo as $column) {
             $key = $column->getField();
@@ -108,7 +115,10 @@ trait ObjectTrait
         $newTable = $this->getTableName($table, $isForeignKey);
         $model = new $newTable;
 
-        if (property_exists($model, 'table')) {
+        if (method_exists($model, 'getTableName')) {
+            $newTable = $model->getTableName();
+        } else if (property_exists($model, 'table')) {
+            // NOTE: To be removed in v1.0.0
             $newTable = $model->table;
         }
 
