@@ -33,7 +33,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function all()
     {
-        return $this->findBy([]);
+        return $this->find_by([]);
     }
 
     /**
@@ -66,7 +66,7 @@ class CodeigniterModel extends \CI_Model
      * @param  array $delimiters
      * @return mixed
      */
-    public function findBy(array $delimiters)
+    public function find_by(array $delimiters)
     {
         $this->db->where($delimiters);
 
@@ -81,26 +81,5 @@ class CodeigniterModel extends \CI_Model
     public function get()
     {
         return $this->wildfire->get($this->getTableName());
-    }
-
-    /**
-     * Calls methods from this class in underscore case.
-     *
-     * @param  string $method
-     * @param  mixed  $parameters
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        $method = camelize($method);
-        $result = $this;
-
-        if (method_exists($this, $method)) {
-            $class = [ $this, $method ];
-
-            $result = call_user_func_array($class, $parameters);
-        }
-
-        return $result;
     }
 }
