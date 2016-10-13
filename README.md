@@ -21,10 +21,10 @@ $ composer require rougin/wildfire
 
 ### Tables (in SQLite)
 
-#### User
+#### Users table
 
 ``` sql
-CREATE TABLE "user" (
+CREATE TABLE "users" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     "name" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
@@ -32,38 +32,37 @@ CREATE TABLE "user" (
 );
 ```
 
-#### models/User.php
+#### application/models/User.php
 
 ``` php
-class User extends CI_Model {}
+class User extends \Rougin\Wildfire\CodeigniterModel {}
 ```
 
-#### Post
+#### Posts table
 
 ``` sql
-CREATE TABLE post (
+CREATE TABLE posts (
     id INTEGER PRIMARY KEY,
     subject TEXT NOT NULL,
     message TEXT NOT NULL,
     user_id INTEGER,
     description TEXT NULL,
-    FOREIGN KEY(user_id) REFERENCES user(id)
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );
 ```
 
-#### models/Post.php
+#### application/models/Post.php
 
 ``` php
-class Post extends CI_Model {}
+class Post extends \Rougin\Wildfire\CodeigniterModel {}
 ```
 
 ### Using [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
 
-#### controllers/Welcome.php
+#### application/controllers/Welcome.php
 
 ``` php
-$this->load->model('post');
-$this->load->model('user');
+$this->load->model('post')->model('user');
 
 // Build your queries here
 $this->db->like('subject', 'Foo Bar', 'both');
@@ -77,11 +76,10 @@ $posts = $wildfire->get('post')->result();
 
 ### Using raw SQL query
 
-#### controllers/Welcome.php
+#### application/controllers/Welcome.php
 
 ``` php
-$this->load->model('post');
-$this->load->model('user');
+$this->load->model('post')->model('user');
 
 $query = $this->db->query('SELECT * FROM post');
 
@@ -90,6 +88,17 @@ $wildfire = new Rougin\Wildfire\Wildfire($this->db, $query);
 
 // Returns an array of Post objects with a User object per Post object
 $posts = $wildfire->result();
+```
+
+### Using `Rougin\Wildfire\CodeigniterModel`
+
+#### application/controllers/Welcome.php
+
+``` php
+$this->load->model('post');
+
+// Returns an array of Post objects
+$posts = $this->post->all();
 ```
 
 ### Methods
@@ -126,14 +135,40 @@ $wildfire->set_database($this->db);
 $wildfire->set_query('SELECT * FROM posts');
 ```
 
+### Using `Rougin\Wildfire\CodeigniterModel`
+
+#### $this->model->find($id)
+
+``` php
+// Returns a post with an ID of 1.
+$posts = $this->post->find(1);
+```
+
+#### $this->model->find_by(array $delimiters = [])
+
+``` php
+// Returns a post from the provided delimiters.
+$posts = $this->post->find_by([ 'name' => 'Foo Bar' ]);
+```
+
+#### $this->model->get()->as_dropdown($description = 'description')
+
+``` php
+// Returns a list of posts that can be used in form_dropdown().
+// $description means what column will be used to display.
+$posts = $this->post->get()->as_dropdown('subject');
+```
+
 ### Model Conventions
+
+#### Extends from `CI_Model` (deprecated as of `v0.4.0`)
 
 ``` php
 class Post extends CI_Model {
 
     /**
      * The table associated with the model.
-     *  
+     *
      * @var string
      */
     public $table = 'post';
@@ -141,7 +176,7 @@ class Post extends CI_Model {
     /**
      * Columns that will be displayed.
      * If not set, it will get the columns from the database table.
-     *  
+     *
      * @var array
      */
     public $columns = array(
@@ -151,6 +186,43 @@ class Post extends CI_Model {
         'user_id',
         'description',
     );
+
+}
+```
+
+#### Extends from `Rougin\Wildfire\CodeigniterModel`
+
+``` php
+class Post extends \Rougin\Wildfire\CodeigniterModel {
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'post';
+
+    /**
+     * Columns that will be displayed.
+     * If not set, it will get the columns from the database table.
+     *
+     * @var array
+     */
+    protected $columns = array(
+        'id',
+        'subject',
+        'message',
+        'user_id',
+        'description',
+    );
+
+    /**
+     * Columns that will be hidden in the display.
+     * If not set, it will hide a "password" column if it exists.
+     *
+     * @var array
+     */
+    protected $hidden = array('datetime_created', 'datetime_updated');
 
 }
 ```

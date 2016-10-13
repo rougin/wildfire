@@ -1,13 +1,10 @@
 <?php
 
-namespace Rougin\Wildfire\Test;
+namespace Rougin\Wildfire;
 
 use Rougin\Wildfire\Wildfire;
-use Rougin\SparkPlug\Instance;
 
-use PHPUnit_Framework_TestCase;
-
-class WildfireTest extends PHPUnit_Framework_TestCase
+class WildfireTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \CI_Controller
@@ -33,21 +30,11 @@ class WildfireTest extends PHPUnit_Framework_TestCase
     {
         $appPath = __DIR__ . '/TestApp';
 
-        $this->ci = Instance::create($appPath);
+        $this->ci = \Rougin\SparkPlug\Instance::create($appPath);
 
         $this->ci->load->database();
         $this->ci->load->model($this->table);
         $this->ci->load->model('user');
-    }
-
-    /**
-     * Checks if the CodeIgniter instance is successfully retrieved.
-     *
-     * @return void
-     */
-    public function testCodeIgniterInstance()
-    {
-        $this->assertInstanceOf('CI_Controller', $this->ci);
     }
 
     /**

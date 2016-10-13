@@ -1,8 +1,12 @@
 <?php
 
-class Comment extends Rougin\Wildfire\Wildfire
+class Comment extends Rougin\Wildfire\CodeigniterModel
 {
-    public $table = 'comments';
-
-    public $columns = array( 'name' );
+    /**
+     * Columns that will be hidden in the display.
+     * If not set, it will hide a "password" column if it exists.
+     *
+     * @var array
+     */
+    protected $hidden = array('id');
 }
