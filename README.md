@@ -24,7 +24,7 @@ $ composer require rougin/wildfire
 #### Users table
 
 ``` sql
-CREATE TABLE "users" (
+CREATE TABLE "user" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     "name" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
@@ -35,13 +35,13 @@ CREATE TABLE "users" (
 #### application/models/User.php
 
 ``` php
-class User extends \Rougin\Wildfire\CodeigniterModel {}
+class User extends CI_Model {}
 ```
 
 #### Posts table
 
 ``` sql
-CREATE TABLE posts (
+CREATE TABLE post (
     id INTEGER PRIMARY KEY,
     subject TEXT NOT NULL,
     message TEXT NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE posts (
 #### application/models/Post.php
 
 ``` php
-class Post extends \Rougin\Wildfire\CodeigniterModel {}
+class Post extends CI_Model {}
 ```
 
 ### Using [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
@@ -97,7 +97,7 @@ $posts = $wildfire->result();
 ``` php
 $this->load->model('post');
 
-// Returns an array of Post objects
+// Returns an array of Post objects with a User object per Post object
 $posts = $this->post->all();
 ```
 

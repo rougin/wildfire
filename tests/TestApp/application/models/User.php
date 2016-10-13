@@ -1,6 +1,6 @@
 <?php
 
-class User extends CI_Model
+class User extends Rougin\Wildfire\CodeigniterModel
 {
     /**
      * Columns that will be displayed.
@@ -8,5 +8,12 @@ class User extends CI_Model
      *
      * @var array
      */
-    public $columns = array('name');
+    protected $columns = array('name');
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'user';
 }

@@ -8,7 +8,14 @@ class Post extends CI_Model
      *
      * @var array
      */
-    public $columns = array('id', 'name');
+    public $columns = array('id', 'name', 'user_id');
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    public $table = 'post';
 
     /**
      * Gets the ID.
