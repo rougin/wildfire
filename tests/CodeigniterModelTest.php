@@ -42,7 +42,7 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethod()
     {
-        $this->assertEquals($this->expectedRows - 1, $this->ci->comment->all());
+        $this->assertCount($this->expectedRows - 1, $this->ci->comment->all());
     }
 
     /**

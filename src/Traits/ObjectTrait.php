@@ -42,7 +42,7 @@ trait ObjectTrait
             $tableInfo = $this->tables[$newTable];
         }
 
-        $parameters = $this->getModelProperties($model);
+        $properties = $this->getModelProperties($model);
 
         foreach ($tableInfo as $column) {
             $key = $column->getField();
