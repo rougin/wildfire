@@ -2,8 +2,9 @@
 
 namespace Rougin\Wildfire\Traits;
 
-use CI_Model;
 use Rougin\Describe\Column;
+
+use Rougin\Wildfire\CodeigniterModel;
 
 /**
  * Object Trait
@@ -12,6 +13,7 @@ use Rougin\Describe\Column;
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
  * @property \Rougin\Describe\Describe $describe
+ * @property string                    $table
  */
 trait ObjectTrait
 {
@@ -40,26 +42,13 @@ trait ObjectTrait
             $tableInfo = $this->tables[$newTable];
         }
 
-        $columns = [];
-        $hidden  = [];
-
-        if (method_exists($model, 'getColumns')) {
-            $columns = $model->getColumns();
-        } elseif (property_exists($model, 'columns')) {
-            // NOTE: To be removed in v1.0.0
-            $columns = $model->columns;
-        }
-
-        // NOTE: To be removed in v1.0.0 (if condition only)
-        if (method_exists($model, 'getHiddenColumns')) {
-            $hidden = $model->getHiddenColumns();
-        }
+        $parameters = $this->getModelProperties($model);
 
         foreach ($tableInfo as $column) {
             $key = $column->getField();
 
-            $inHiddenColumns = ! empty($hidden) && in_array($key, $hidden);
-            $inColumns       = ! empty($columns) && ! in_array($key, $columns);
+            $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
+            $inColumns       = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
 
             if ($inColumns || $inHiddenColumns) {
                 continue;
@@ -85,13 +74,38 @@ trait ObjectTrait
     abstract protected function find($table, $delimiters = [], $isForeignKey = false);
 
     /**
+     * Returns the values from the model's properties.
+     *
+     * @param  \Rougin\Wildfire\CodeigniterModel $model
+     * @return array
+     */
+    protected function getModelProperties(CodeigniterModel $model)
+    {
+        $properties = [ 'column' => [], 'hidden' => [] ];
+
+        if (method_exists($model, 'getColumns')) {
+            $properties['columns'] = $model->getColumns();
+        } elseif (property_exists($model, 'columns')) {
+            // NOTE: To be removed in v1.0.0
+            $properties['columns'] = $model->columns;
+        }
+
+        // NOTE: To be removed in v1.0.0 (if condition only)
+        if (method_exists($model, 'getHiddenColumns')) {
+            $properties['hidden'] = $model->getHiddenColumns();
+        }
+
+        return $properties;
+    }
+
+    /**
      * Sets the foreign field of the column, if any.
      *
      * @param  \CI_Model               $model
      * @param  \Rougin\Describe\Column $column
      * @return void
      */
-    protected function setForeignField(CI_Model $model, Column $column)
+    protected function setForeignField(\CI_Model $model, Column $column)
     {
         if (! $column->isForeignKey()) {
             return;
@@ -117,21 +131,21 @@ trait ObjectTrait
      */
     protected function getModel($table = null, $isForeignKey = false)
     {
-        if ($table == null && $this->table == null) {
+        if (empty($table) && empty($this->table)) {
             return [ null, '' ];
         }
 
         $newTable = $this->getTableName($table, $isForeignKey);
-        $model = new $newTable;
+        $newModel = new $newTable;
 
-        if (method_exists($model, 'getTableName')) {
-            $newTable = $model->getTableName();
-        } elseif (property_exists($model, 'table')) {
+        if (method_exists($newModel, 'getTableName')) {
+            $newTable = $newModel->getTableName();
+        } elseif (property_exists($newModel, 'table')) {
             // NOTE: To be removed in v1.0.0
-            $newTable = $model->table;
+            $newTable = $newModel->table;
         }
 
-        return [ $model, strtolower($newTable) ];
+        return [ $newModel, strtolower($newTable) ];
     }
 
     /**

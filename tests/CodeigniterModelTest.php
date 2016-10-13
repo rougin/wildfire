@@ -32,7 +32,7 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
 
         $this->ci->load->helper('inflector');
 
-        $this->ci->load->model(singular($this->table), '', TRUE);
+        $this->ci->load->model(singular($this->table), '', true);
     }
 
     /**
@@ -42,7 +42,7 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethod()
     {
-        $this->assertTrue(count($this->ci->comment->all()) > 0);
+        $this->assertEquals($this->expectedRows - 1, $this->ci->comment->all());
     }
 
     /**
