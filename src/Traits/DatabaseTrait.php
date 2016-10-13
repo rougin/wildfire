@@ -9,6 +9,8 @@ use Rougin\SparkPlug\Instance;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ *
+ * @property string $table
  */
 trait DatabaseTrait
 {
@@ -50,6 +52,7 @@ trait DatabaseTrait
     public function setDatabase($database = null)
     {
         $ci = Instance::create();
+
         $ci->load->helper('inflector');
 
         if (empty($database)) {
