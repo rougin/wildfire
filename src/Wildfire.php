@@ -2,13 +2,6 @@
 
 namespace Rougin\Wildfire;
 
-use CI_Model;
-
-use Rougin\Wildfire\Traits\ObjectTrait;
-use Rougin\Wildfire\Traits\ResultTrait;
-use Rougin\Wildfire\Traits\DatabaseTrait;
-use Rougin\Wildfire\Traits\DescribeTrait;
-
 /**
  * Wildfire
  *
@@ -17,9 +10,9 @@ use Rougin\Wildfire\Traits\DescribeTrait;
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class Wildfire extends CI_Model
+class Wildfire extends \CI_Model
 {
-    use DatabaseTrait, DescribeTrait, ObjectTrait, ResultTrait;
+    use Traits\DatabaseTrait, Traits\DescribeTrait, Traits\ObjectTrait, Traits\ResultTrait;
 
     /**
      * @param \CI_DB|null        $database
@@ -30,7 +23,7 @@ class Wildfire extends CI_Model
         $this->setDatabase($database);
 
         $this->describe = $this->getDescribe($this->db);
-        $this->query = $query;
+        $this->query    = $query;
     }
 
     /**
