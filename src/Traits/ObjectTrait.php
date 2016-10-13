@@ -76,10 +76,10 @@ trait ObjectTrait
     /**
      * Returns the values from the model's properties.
      *
-     * @param  \Rougin\Wildfire\CodeigniterModel $model
+     * @param  \CI_Model $model
      * @return array
      */
-    protected function getModelProperties(CodeigniterModel $model)
+    protected function getModelProperties(\CI_Model $model)
     {
         $properties = [ 'column' => [], 'hidden' => [] ];
 
