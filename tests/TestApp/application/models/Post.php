@@ -8,7 +8,7 @@ class Post extends CI_Model
      *
      * @var array
      */
-    public $columns = array('name');
+    public $columns = array('id', 'name');
 
     /**
      * Gets the ID.
