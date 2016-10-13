@@ -37,7 +37,7 @@ class Wildfire extends \CI_Model
      */
     public function find($table, $delimiters = [], $isForeignKey = false)
     {
-        list($model, $table) = $this->getModel($table, $isForeignKey);
+        list($table) = $this->getModel($table, $isForeignKey);
 
         if (! is_array($delimiters)) {
             $primaryKey = $this->describe->getPrimaryKey($table);
@@ -64,7 +64,7 @@ class Wildfire extends \CI_Model
      */
     public function get($table = '')
     {
-        list($model, $table) = $this->getModel($table);
+        list($table) = $this->getModel($table);
 
         if ($this->query == null) {
             $this->query = $this->db->get($table);

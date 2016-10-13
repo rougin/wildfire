@@ -32,7 +32,7 @@ trait ObjectTrait
      */
     protected function createObject($table, $row, $isForeignKey = false)
     {
-        list($model, $newTable) = $this->getModel($table, $isForeignKey);
+        list($newTable, $model) = $this->getModel($table, $isForeignKey);
 
         if (! array_key_exists($newTable, $this->tables)) {
             $tableInfo = $this->describe->getTable($newTable);
@@ -132,7 +132,7 @@ trait ObjectTrait
     protected function getModel($table = null, $isForeignKey = false)
     {
         if (empty($table) && empty($this->table)) {
-            return [ null, '' ];
+            return [ '', null ];
         }
 
         $newTable = $this->getTableName($table, $isForeignKey);
@@ -145,7 +145,7 @@ trait ObjectTrait
             $newTable = $newModel->table;
         }
 
-        return [ $newModel, strtolower($newTable) ];
+        return [ strtolower($newTable), $newModel ];
     }
 
     /**
