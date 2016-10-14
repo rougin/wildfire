@@ -43,6 +43,7 @@ trait ObjectTrait
         }
 
         $properties = $this->getModelProperties($model);
+        $properties = $this->getRelationshipProperties($model, $properties);
 
         foreach ($tableInfo as $column) {
             $key = $column->getField();
@@ -56,7 +57,7 @@ trait ObjectTrait
 
             $model->$key = $row->$key;
 
-            $this->setForeignField($model, $column);
+            $this->setForeignField($model, $column, $properties);
         }
 
         return $model;
@@ -99,13 +100,55 @@ trait ObjectTrait
     }
 
     /**
+     * Returns the values from the model's properties.
+     *
+     * @param  \CI_Model|\Rougin\Wildfire\CodeigniterModel $model
+     * @param  array                                       $properties
+     * @return array
+     */
+    public function getRelationshipProperties($model, array $properties)
+    {
+        if (method_exists($model, 'getBelongsToRelationships')) {
+            $properties['belongs_to'] = $model->getBelongsToRelationships();
+        }
+
+        if (method_exists($model, 'getRelationships')) {
+            $properties['with'] = $model->getRelationships();
+        }
+
+        $belongsTo = [];
+
+        if (isset($properties['with']) && isset($properties['belongs_to'])) {
+            foreach ($properties['belongs_to'] as $item) {
+                if (! in_array($item, $properties['with'])) {
+                    continue;
+                }
+
+                $model = new $item;
+
+                if (method_exists($model, 'getTableName')) {
+                    array_push($belongsTo, $model->getTableName());
+                } elseif (property_exists($model, 'table')) {
+                    // NOTE: To be removed in v1.0.0
+                    array_push($belongsTo, $model->table);
+                }
+            }
+        }
+
+        $properties['belongs_to'] = $belongsTo;
+
+        return $properties;
+    }
+
+    /**
      * Sets the foreign field of the column, if any.
      *
      * @param  \CI_Model               $model
      * @param  \Rougin\Describe\Column $column
+     * @param  array                   $properties
      * @return void
      */
-    protected function setForeignField(\CI_Model $model, Column $column)
+    protected function setForeignField(\CI_Model $model, Column $column, array $properties)
     {
         if (! $column->isForeignKey()) {
             return;
@@ -115,17 +158,19 @@ trait ObjectTrait
         $foreignColumn = $column->getReferencedField();
         $foreignTable  = $column->getReferencedTable();
 
-        $delimiters  = [ $foreignColumn => $model->$columnName ];
-        $foreignData = $this->find($foreignTable, $delimiters, true);
-        $newColumn   = $this->getTableName($foreignTable, true);
+        if (in_array($foreignTable, $properties['belongs_to'])) {
+            $delimiters  = [ $foreignColumn => $model->$columnName ];
+            $foreignData = $this->find($foreignTable, $delimiters, true);
+            $newColumn   = $this->getTableName($foreignTable, true);
 
-        $model->$newColumn = $foreignData;
+            $model->$newColumn = $foreignData;
+        }
     }
 
     /**
      * Gets the model class of the said table.
      *
-     * @param  string|null $table
+     * @param  string|object|null $table
      * @param  boolean     $isForeignKey
      * @return array
      */
@@ -135,8 +180,12 @@ trait ObjectTrait
             return [ '', null ];
         }
 
-        $newTable = $this->getTableName($table, $isForeignKey);
-        $newModel = new $newTable;
+        $newModel = $table;
+
+        if (! $table instanceof \CI_Model) {
+            $newTable = $this->getTableName($table, $isForeignKey);
+            $newModel = new $newTable;
+        }
 
         if (method_exists($newModel, 'getTableName')) {
             $newTable = $newModel->getTableName();

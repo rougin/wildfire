@@ -97,7 +97,7 @@ $posts = $wildfire->result();
 ``` php
 $this->load->model('post');
 
-// Returns an array of Post objects with a User object per Post object
+// Returns an array of Post objects
 $posts = $this->post->all();
 ```
 

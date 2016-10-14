@@ -33,14 +33,29 @@ trait DatabaseTrait
      */
     protected function getTableName($table, $isForeignKey = false)
     {
-        if (! $isForeignKey && $this->table) {
-            $table = $this->table;
+        $tableName = '';
+
+        if ($table instanceof \CI_Model) {
+            if (method_exists($newModel, 'getTableName')) {
+                $tableName = $newModel->getTableName();
+            } elseif (property_exists($newModel, 'table')) {
+                // NOTE: To be removed in v1.0.0
+                $tableName = $newModel->table;
+            }
         }
 
-        $table = ucfirst(singular($table));
-        $array = explode('.', $table);
+        if (! $isForeignKey && $this->table) {
+            $tableName = $this->table;
+        }
 
-        return isset($array[1]) ? $array[1] : $table;
+        if (is_string($table)) {
+            $tableName = $table;
+        }
+
+        $tableName = ucfirst(singular($tableName));
+        $array = explode('.', $tableName);
+
+        return isset($array[1]) ? $array[1] : $tableName;
     }
 
     /**

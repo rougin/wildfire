@@ -59,18 +59,22 @@ class Wildfire extends \CI_Model
     /**
      * Returns all rows from the specified table.
      *
-     * @param  string $table
+     * @param  string|object $table
      * @return self
      */
     public function get($table = '')
     {
-        list($table) = $this->getModel($table);
+        list($tableName, $model) = $this->getModel($table);
 
         if ($this->query == null) {
-            $this->query = $this->db->get($table);
+            $this->query = $this->db->get($tableName);
         }
 
-        $this->table = $table;
+        if ($model == $table) {
+            $this->table = $model;
+        } else {
+            $this->table = $tableName;
+        }
 
         // Guess the specified table from the query
         if (empty($table)) {
