@@ -33,14 +33,14 @@ trait DatabaseTrait
      */
     protected function getTableName($table, $isForeignKey = false)
     {
-        $tableName = null;
+        $tableName = $table;
 
         if (! $isForeignKey && $this->table) {
             $tableName = $this->table;
-        }
 
-        if (is_string($table)) {
-            $tableName = $table;
+            if (is_object($this->table)) {
+                $tableName = $this->table->getTableName();
+            }
         }
 
         $tableName = ucfirst(singular($tableName));

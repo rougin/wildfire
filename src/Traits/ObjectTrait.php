@@ -25,9 +25,9 @@ trait ObjectTrait
     /**
      * Creates an object from the specified table and row.
      *
-     * @param  string  $table
-     * @param  object  $row
-     * @param  boolean $isForeignKey
+     * @param  string|\\Rougin\Wildfire\CodeigniterModel $table
+     * @param  object                                    $row
+     * @param  boolean                                   $isForeignKey
      * @return array
      */
     protected function createObject($table, $row, $isForeignKey = false)
