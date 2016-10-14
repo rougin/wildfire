@@ -59,11 +59,22 @@ class Wildfire extends \CI_Model
     /**
      * Returns all rows from the specified table.
      *
-     * @param  string|\CI_Model|\Rougin\Wildfire\CodeigniterModel $table
+     * @param  mixed $table
      * @return self
      */
     public function get($table = '')
     {
+        // Guess the specified table from the query
+        if (empty($table)) {
+            $query = $this->db->last_query();
+
+            preg_match('/\bfrom\b\s*(\w+)/i', $query, $matches);
+
+            $this->table = $table = $matches[1];
+
+            return $this;
+        }
+
         list($tableName, $model) = $this->getModel($table);
 
         if ($this->query == null) {
@@ -74,15 +85,6 @@ class Wildfire extends \CI_Model
             $this->table = $model;
         } else {
             $this->table = $tableName;
-        }
-
-        // Guess the specified table from the query
-        if (empty($table)) {
-            $query = $this->db->last_query();
-
-            preg_match('/\bfrom\b\s*(\w+)/i', $query, $matches);
-
-            $this->table = $matches[1];
         }
 
         return $this;

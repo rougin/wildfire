@@ -35,7 +35,7 @@ trait ObjectTrait
         list($tableName, $model) = $this->getModel($table, $isForeignKey);
 
         $properties = $this->getModelProperties($model);
-        $properties = $this->getRelationshipProperties($model, $properties);
+        $properties = $this->getModelRelationshipProperties($model, $properties);
         $tableInfo  = $this->getTableInformation($tableName);
 
         foreach ($tableInfo as $column) {
@@ -79,16 +79,12 @@ trait ObjectTrait
     /**
      * Gets the model class of the said table.
      *
-     * @param  \Rougin\Wildfire\CodeigniterModel|string|null $table
-     * @param  boolean                                       $isForeignKey
+     * @param  \Rougin\Wildfire\CodeigniterModel|string $table
+     * @param  boolean                                  $isForeignKey
      * @return array
      */
-    protected function getModel($table = null, $isForeignKey = false)
+    protected function getModel($table, $isForeignKey = false)
     {
-        if (empty($table) && empty($this->table)) {
-            return [ '', null ];
-        }
-
         $newModel = $table;
 
         if (! is_object($table)) {
@@ -104,7 +100,7 @@ trait ObjectTrait
     /**
      * Returns the values from the model's properties.
      *
-     * @param  \CI_Model|\Rougin\Wildfire\CodeigniterModel $model
+     * @param  object $model
      * @return array
      */
     protected function getModelProperties($model)
@@ -130,7 +126,7 @@ trait ObjectTrait
      * Gets the table name specified in the model.
      * NOTE: To be removed in v1.0.0
      *
-     * @param  string|null|object $model
+     * @param  object $model
      * @return string
      */
     protected function getModelTableName($model)
@@ -149,11 +145,11 @@ trait ObjectTrait
     /**
      * Returns the values from the model's properties.
      *
-     * @param  \CI_Model|\Rougin\Wildfire\CodeigniterModel $model
-     * @param  array                                       $properties
+     * @param  object $model
+     * @param  array  $properties
      * @return array
      */
-    public function getRelationshipProperties($model, array $properties)
+    public function getModelRelationshipProperties($model, array $properties)
     {
         if (method_exists($model, 'getBelongsToRelationships')) {
             $properties['belongs_to'] = $model->getBelongsToRelationships();
