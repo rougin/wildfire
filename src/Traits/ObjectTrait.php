@@ -174,8 +174,8 @@ trait ObjectTrait
     /**
      * Gets the model class of the said table.
      *
-     * @param  string|\CI_Model|null $table
-     * @param  boolean               $isForeignKey
+     * @param  string|\Rougin\Wildfire\CodeigniterModel|null $table
+     * @param  boolean                                       $isForeignKey
      * @return array
      */
     protected function getModel($table = null, $isForeignKey = false)

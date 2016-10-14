@@ -59,7 +59,7 @@ class Wildfire extends \CI_Model
     /**
      * Returns all rows from the specified table.
      *
-     * @param  string|object $table
+     * @param  string|\CI_Model $table
      * @return self
      */
     public function get($table = '')
