@@ -25,25 +25,22 @@ trait ObjectTrait
     /**
      * Creates an object from the specified table and row.
      *
-     * @param  string|\\Rougin\Wildfire\CodeigniterModel $table
-     * @param  object                                    $row
-     * @param  boolean                                   $isForeignKey
+     * @param  string|\Rougin\Wildfire\CodeigniterModel $table
+     * @param  object                                   $row
+     * @param  boolean                                  $isForeignKey
      * @return array
      */
     protected function createObject($table, $row, $isForeignKey = false)
     {
-        list($newTable, $model) = $this->getModel($table, $isForeignKey);
+        list($tableName, $model) = $this->getModel($table, $isForeignKey);
 
-        if (! array_key_exists($newTable, $this->tables)) {
-            $tableInfo = $this->describe->getTable($newTable);
-
-            $this->tables[$newTable] = $tableInfo;
-        } else {
-            $tableInfo = $this->tables[$newTable];
+        if (! $model instanceof \CI_Model) {
+            return $model;
         }
 
         $properties = $this->getModelProperties($model);
         $properties = $this->getRelationshipProperties($model, $properties);
+        $tableInfo  = $this->getTableInformation($tableName);
 
         foreach ($tableInfo as $column) {
             $key = $column->getField();
@@ -75,6 +72,41 @@ trait ObjectTrait
     abstract protected function find($table, $delimiters = [], $isForeignKey = false);
 
     /**
+     * Parses the table name from Describe class.
+     *
+     * @param  string  $table
+     * @param  boolean $isForeignKey
+     * @return string
+     */
+    abstract protected function getClassTableName($table, $isForeignKey = false);
+
+    /**
+     * Gets the model class of the said table.
+     *
+     * @param  \Rougin\Wildfire\CodeigniterModel|string|null $table
+     * @param  boolean                                       $isForeignKey
+     * @return array
+     */
+    protected function getModel($table = null, $isForeignKey = false)
+    {
+        if (empty($table) && empty($this->table)) {
+            return [ '', null ];
+        }
+
+        $newModel = $table;
+        $newTable = '';
+
+        if (! is_object($table)) {
+            $newTable = $this->getClassTableName($table, $isForeignKey);
+            $newModel = new $newTable;
+        }
+
+        $newTable = $this->getModelTableName($newModel);
+
+        return [ strtolower($newTable), $newModel ];
+    }
+
+    /**
      * Returns the values from the model's properties.
      *
      * @param  \CI_Model|\Rougin\Wildfire\CodeigniterModel $model
@@ -97,6 +129,26 @@ trait ObjectTrait
         }
 
         return $properties;
+    }
+
+    /**
+     * Gets the table name specified in the model.
+     * NOTE: To be removed in v1.0.0
+     *
+     * @param  \CI_Model $model
+     * @return string
+     */
+    protected function getModelTableName($model)
+    {
+        if (method_exists($model, 'getTableName')) {
+            return $model->getTableName();
+        }
+
+        if (property_exists($model, 'table')) {
+            return $model->table;
+        }
+
+        return '';
     }
 
     /**
@@ -130,18 +182,32 @@ trait ObjectTrait
 
                 $model = new $item;
 
-                if (method_exists($model, 'getTableName')) {
-                    array_push($belongsTo, $model->getTableName());
-                } elseif (property_exists($model, 'table')) {
-                    // NOTE: To be removed in v1.0.0
-                    array_push($belongsTo, $model->table);
-                }
+                array_push($belongsTo, $this->getModelTableName($model));
             }
         }
 
         $properties['belongs_to'] = $belongsTo;
 
         return $properties;
+    }
+
+    /**
+     * Returns the database information of the specified table.
+     *
+     * @param  string $tableName
+     * @return string
+     */
+    public function getTableInformation($tableName)
+    {
+        if (! array_key_exists($tableName, $this->tables)) {
+            $tableInfo = $this->describe->getTable($tableName);
+
+            $this->tables[$tableName] = $tableInfo;
+
+            return $tableInfo;
+        }
+
+        return $this->tables[$tableName];
     }
 
     /**
@@ -165,49 +231,9 @@ trait ObjectTrait
         if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters  = [ $foreignColumn => $model->$columnName ];
             $foreignData = $this->find($foreignTable, $delimiters, true);
-            $newColumn   = $this->getTableName($foreignTable, true);
+            $newColumn   = $this->getClassTableName($foreignTable, true);
 
             $model->$newColumn = $foreignData;
         }
     }
-
-    /**
-     * Gets the model class of the said table.
-     *
-     * @param  string|\Rougin\Wildfire\CodeigniterModel|null $table
-     * @param  boolean                                       $isForeignKey
-     * @return array
-     */
-    protected function getModel($table = null, $isForeignKey = false)
-    {
-        if (empty($table) && empty($this->table)) {
-            return [ '', null ];
-        }
-
-        $newModel = $table;
-        $newTable = '';
-
-        if (! is_object($table)) {
-            $newTable = $this->getTableName($table, $isForeignKey);
-            $newModel = new $newTable;
-        }
-
-        if (method_exists($newModel, 'getTableName')) {
-            $newTable = $newModel->getTableName();
-        } elseif (property_exists($newModel, 'table')) {
-            // NOTE: To be removed in v1.0.0
-            $newTable = $newModel->table;
-        }
-
-        return [ strtolower($newTable), $newModel ];
-    }
-
-    /**
-     * Parses the table name from Describe class.
-     *
-     * @param  string  $table
-     * @param  boolean $isForeignKey
-     * @return string
-     */
-    abstract protected function getTableName($table, $isForeignKey = false);
 }

@@ -31,7 +31,7 @@ trait DatabaseTrait
      * @param  boolean $isForeignKey
      * @return string
      */
-    protected function getTableName($table, $isForeignKey = false)
+    protected function getClassTableName($table, $isForeignKey = false)
     {
         $tableName = $table;
 
@@ -43,10 +43,10 @@ trait DatabaseTrait
             }
         }
 
-        $tableName = ucfirst(singular($tableName));
-        $array = explode('.', $tableName);
+        $tableName  = ucfirst(singular($tableName));
+        $tableNames = explode('.', $tableName);
 
-        return isset($array[1]) ? $array[1] : $tableName;
+        return isset($tableNames[1]) ? $tableNames[1] : $tableName;
     }
 
     /**
