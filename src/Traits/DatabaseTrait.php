@@ -27,8 +27,8 @@ trait DatabaseTrait
     /**
      * Parses the table name from Describe class.
      *
-     * @param  string  $table
-     * @param  boolean $isForeignKey
+     * @param  string|\CI_Model $table
+     * @param  boolean          $isForeignKey
      * @return string
      */
     protected function getTableName($table, $isForeignKey = false)
@@ -36,11 +36,11 @@ trait DatabaseTrait
         $tableName = '';
 
         if ($table instanceof \CI_Model) {
-            if (method_exists($newModel, 'getTableName')) {
-                $tableName = $newModel->getTableName();
-            } elseif (property_exists($newModel, 'table')) {
+            if (method_exists($table, 'getTableName')) {
+                $tableName = $table->getTableName();
+            } elseif (property_exists($table, 'table')) {
                 // NOTE: To be removed in v1.0.0
-                $tableName = $newModel->table;
+                $tableName = $table->table;
             }
         }
 

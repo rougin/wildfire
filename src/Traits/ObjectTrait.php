@@ -174,8 +174,8 @@ trait ObjectTrait
     /**
      * Gets the model class of the said table.
      *
-     * @param  string|object|null $table
-     * @param  boolean     $isForeignKey
+     * @param  string|\CI_Model|null $table
+     * @param  boolean               $isForeignKey
      * @return array
      */
     protected function getModel($table = null, $isForeignKey = false)
@@ -185,8 +185,9 @@ trait ObjectTrait
         }
 
         $newModel = $table;
+        $newTable = '';
 
-        if (! $table instanceof \CI_Model) {
+        if (! is_object($table)) {
             $newTable = $this->getTableName($table, $isForeignKey);
             $newModel = new $newTable;
         }
