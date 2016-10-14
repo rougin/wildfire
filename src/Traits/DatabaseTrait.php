@@ -31,16 +31,22 @@ trait DatabaseTrait
      * @param  boolean $isForeignKey
      * @return string
      */
-    protected function getTableName($table, $isForeignKey = false)
+    protected function getClassTableName($table, $isForeignKey = false)
     {
+        $tableName = $table;
+
         if (! $isForeignKey && $this->table) {
-            $table = $this->table;
+            $tableName = $this->table;
+
+            if (is_object($this->table)) {
+                $tableName = $this->table->getTableName();
+            }
         }
 
-        $table = ucfirst(singular($table));
-        $array = explode('.', $table);
+        $tableName  = ucfirst(singular($tableName));
+        $tableNames = explode('.', $tableName);
 
-        return isset($array[1]) ? $array[1] : $table;
+        return isset($tableNames[1]) ? $tableNames[1] : $tableName;
     }
 
     /**

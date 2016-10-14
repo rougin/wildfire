@@ -75,6 +75,20 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests CodeigniterModel::with method.
+     *
+     * @return void
+     */
+    public function testWithMethod()
+    {
+        $this->ci->load->model('post', '', true);
+
+        $comments = $this->ci->post->with('user')->all();
+
+        $this->assertInstanceOf('User', $comments[0]->user);
+    }
+
+    /**
      * Tests CodeigniterModel::delete method.
      *
      * @return void
