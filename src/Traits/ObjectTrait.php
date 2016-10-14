@@ -34,10 +34,6 @@ trait ObjectTrait
     {
         list($tableName, $model) = $this->getModel($table, $isForeignKey);
 
-        if (! $model instanceof \CI_Model) {
-            return $model;
-        }
-
         $properties = $this->getModelProperties($model);
         $properties = $this->getRelationshipProperties($model, $properties);
         $tableInfo  = $this->getTableInformation($tableName);
@@ -96,8 +92,8 @@ trait ObjectTrait
         $newModel = $table;
 
         if (! is_object($table)) {
-            $newTable = $this->getClassTableName($table, $isForeignKey);
-            $newModel = new $newTable;
+            $tableName = $this->getClassTableName($table, $isForeignKey);
+            $newModel  = new $tableName;
         }
 
         $newTable = $this->getModelTableName($newModel);
