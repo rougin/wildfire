@@ -124,6 +124,10 @@ trait ObjectTrait
                     continue;
                 }
 
+                $ci = \Rougin\SparkPlug\Instance::create();
+
+                $ci->load->model($item);
+
                 $model = new $item;
 
                 if (method_exists($model, 'getTableName')) {

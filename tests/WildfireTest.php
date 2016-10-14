@@ -63,7 +63,7 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
 
         $data = $wildfire->get('comment')->result();
 
-        $this->assertCount($this->expectedRows - 1, $data);
+        $this->assertCount($this->expectedRows, $data);
     }
 
     /**
