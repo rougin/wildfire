@@ -37,10 +37,14 @@ class Wildfire extends \CI_Model
      */
     public function find($tableName, $delimiters = [], $isForeignKey = false)
     {
-        list($tableName) = $this->getModel($tableName, $isForeignKey);
+        list($tableName, $model) = $this->getModel($tableName, $isForeignKey);
 
         if (! is_array($delimiters) || empty($delimiters)) {
-            $primaryKey = $this->describe->getPrimaryKey($tableName);
+            if (method_exists($model, 'getPrimaryKey')) {
+                $primaryKey = $model->getPrimaryKey();
+            } else {
+                $primaryKey = $this->describe->getPrimaryKey($tableName);
+            }
 
             $delimiters = [ $primaryKey => $delimiters ];
         }
