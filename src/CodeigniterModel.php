@@ -80,6 +80,6 @@ class CodeigniterModel extends \CI_Model
      */
     public function get()
     {
-        return $this->wildfire->get($this->getTableName());
+        return $this->wildfire->get($this);
     }
 }
