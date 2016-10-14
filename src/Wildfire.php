@@ -30,27 +30,27 @@ class Wildfire extends \CI_Model
      * Finds the row from the specified ID or with the list of delimiters from
      * the specified table.
      *
-     * @param  string         $table
+     * @param  string         $tableName
      * @param  array|integer  $delimiters
      * @param  boolean        $isForeignKey
      * @return object|boolean
      */
-    public function find($table, $delimiters = [], $isForeignKey = false)
+    public function find($tableName, $delimiters = [], $isForeignKey = false)
     {
-        list($table) = $this->getModel($table, $isForeignKey);
+        list($tableName) = $this->getModel($tableName, $isForeignKey);
 
-        if (! is_array($delimiters)) {
-            $primaryKey = $this->describe->getPrimaryKey($table);
+        if (! is_array($delimiters) || empty($delimiters)) {
+            $primaryKey = $this->describe->getPrimaryKey($tableName);
 
             $delimiters = [ $primaryKey => $delimiters ];
         }
 
         $this->db->where($delimiters);
 
-        $query = $this->db->get($table);
+        $query = $this->db->get($tableName);
 
         if ($query->num_rows() > 0) {
-            return $this->createObject($table, $query->row(), $isForeignKey);
+            return $this->createObject($tableName, $query->row(), $isForeignKey);
         }
 
         return false;

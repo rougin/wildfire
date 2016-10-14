@@ -94,7 +94,6 @@ trait ObjectTrait
         }
 
         $newModel = $table;
-        $newTable = '';
 
         if (! is_object($table)) {
             $newTable = $this->getClassTableName($table, $isForeignKey);
@@ -135,7 +134,7 @@ trait ObjectTrait
      * Gets the table name specified in the model.
      * NOTE: To be removed in v1.0.0
      *
-     * @param  \CI_Model $model
+     * @param  string|null|object $model
      * @return string
      */
     protected function getModelTableName($model)
@@ -195,7 +194,7 @@ trait ObjectTrait
      * Returns the database information of the specified table.
      *
      * @param  string $tableName
-     * @return string
+     * @return array
      */
     public function getTableInformation($tableName)
     {
