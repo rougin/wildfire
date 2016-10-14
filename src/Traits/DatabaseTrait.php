@@ -27,17 +27,13 @@ trait DatabaseTrait
     /**
      * Parses the table name from Describe class.
      *
-     * @param  string|\Rougin\Wildfire\CodeigniterModel $table
-     * @param  boolean                                  $isForeignKey
+     * @param  string  $table
+     * @param  boolean $isForeignKey
      * @return string
      */
     protected function getTableName($table, $isForeignKey = false)
     {
-        $tableName = '';
-
-        if ($table instanceof \Rougin\Wildfire\CodeigniterModel) {
-            $tableName = $table->getTableName();
-        }
+        $tableName = null;
 
         if (! $isForeignKey && $this->table) {
             $tableName = $this->table;
