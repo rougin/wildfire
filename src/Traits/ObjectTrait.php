@@ -5,6 +5,7 @@ namespace Rougin\Wildfire\Traits;
 use Rougin\Describe\Column;
 
 use Rougin\Wildfire\CodeigniterModel;
+use Rougin\Wildfire\Helpers\ModelHelper;
 
 /**
  * Object Trait
@@ -34,15 +35,20 @@ trait ObjectTrait
     {
         list($tableName, $model) = $this->getModel($table, $isForeignKey);
 
-        $properties = $this->getModelProperties($model);
-        $properties = $this->getModelRelationshipProperties($model, $properties);
-        $tableInfo  = $this->getTableInformation($tableName);
+        $properties = [];
+
+        if ($model instanceof CodeigniterModel) {
+            $properties = $model->getProperties();
+            $properties = $model->getRelationshipProperties($properties);
+        }
+
+        $tableInfo = $this->getTableInformation($tableName);
 
         foreach ($tableInfo as $column) {
             $key = $column->getField();
 
+            $inColumns = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
             $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
-            $inColumns       = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
 
             if ($inColumns || $inHiddenColumns) {
                 continue;
@@ -92,94 +98,9 @@ trait ObjectTrait
             $newModel  = new $tableName;
         }
 
-        $newTable = $this->getModelTableName($newModel);
+        $newTable = ModelHelper::getTableName($newModel);
 
         return [ strtolower($newTable), $newModel ];
-    }
-
-    /**
-     * Returns the values from the model's properties.
-     *
-     * @param  object $model
-     * @return array
-     */
-    protected function getModelProperties($model)
-    {
-        $properties = [ 'column' => [], 'hidden' => [] ];
-
-        if (method_exists($model, 'getColumns')) {
-            $properties['columns'] = $model->getColumns();
-        } elseif (property_exists($model, 'columns')) {
-            // NOTE: To be removed in v1.0.0
-            $properties['columns'] = $model->columns;
-        }
-
-        // NOTE: To be removed in v1.0.0 (if condition only)
-        if (method_exists($model, 'getHiddenColumns')) {
-            $properties['hidden'] = $model->getHiddenColumns();
-        }
-
-        return $properties;
-    }
-
-    /**
-     * Gets the table name specified in the model.
-     * NOTE: To be removed in v1.0.0
-     *
-     * @param  object $model
-     * @return string
-     */
-    protected function getModelTableName($model)
-    {
-        if (method_exists($model, 'getTableName')) {
-            return $model->getTableName();
-        }
-
-        if (property_exists($model, 'table')) {
-            return $model->table;
-        }
-
-        return '';
-    }
-
-    /**
-     * Returns the values from the model's properties.
-     *
-     * @param  object $model
-     * @param  array  $properties
-     * @return array
-     */
-    public function getModelRelationshipProperties($model, array $properties)
-    {
-        if (method_exists($model, 'getBelongsToRelationships')) {
-            $properties['belongs_to'] = $model->getBelongsToRelationships();
-        }
-
-        if (method_exists($model, 'getRelationships')) {
-            $properties['with'] = $model->getRelationships();
-        }
-
-        $belongsTo = [];
-
-        if (isset($properties['with']) && isset($properties['belongs_to'])) {
-            foreach ($properties['belongs_to'] as $item) {
-                if (! in_array($item, $properties['with'])) {
-                    continue;
-                }
-
-                $ci = \Rougin\SparkPlug\Instance::create();
-
-                $ci->load->model($item);
-
-                $model = new $item;
-
-                array_push($belongsTo, $this->getModelTableName($model));
-            }
-        }
-
-        $properties['belongs_to'] = $belongsTo;
-
-        return $properties;
     }
 
     /**
