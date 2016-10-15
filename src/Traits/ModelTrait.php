@@ -41,26 +41,6 @@ trait ModelTrait
     protected $table = '';
 
     /**
-     * Returns the specified columns of the model.
-     *
-     * @return array
-     */
-    public function getColumns()
-    {
-        return $this->columns;
-    }
-
-    /**
-     * Returns the specified hidden columns of the model.
-     *
-     * @return array
-     */
-    public function getHiddenColumns()
-    {
-        return $this->hidden;
-    }
-
-    /**
      * Gets the specified primary key of the model.
      *
      * @return string
@@ -68,6 +48,21 @@ trait ModelTrait
     public function getPrimaryKey()
     {
         return $this->primary_key;
+    }
+
+    /**
+     * Returns the values from the model's properties.
+     *
+     * @return array
+     */
+    public function getProperties()
+    {
+        $properties = [];
+
+        $properties['columns'] = $this->columns;
+        $properties['hidden']  = $this->hidden;
+
+        return $properties;
     }
 
     /**

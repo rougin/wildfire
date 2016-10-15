@@ -9,8 +9,6 @@ use Rougin\SparkPlug\Instance;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property string $table
  */
 trait DatabaseTrait
 {
@@ -23,31 +21,6 @@ trait DatabaseTrait
      * @var \CI_DB_result
      */
     protected $query;
-
-    /**
-     * Parses the table name from Describe class.
-     *
-     * @param  string  $table
-     * @param  boolean $isForeignKey
-     * @return string
-     */
-    protected function getClassTableName($table, $isForeignKey = false)
-    {
-        $tableName = $table;
-
-        if (! $isForeignKey && $this->table) {
-            $tableName = $this->table;
-
-            if (is_object($this->table)) {
-                $tableName = $this->table->getTableName();
-            }
-        }
-
-        $tableName  = ucfirst(singular($tableName));
-        $tableNames = explode('.', $tableName);
-
-        return isset($tableNames[1]) ? $tableNames[1] : $tableName;
-    }
 
     /**
      * Sets the database class.
