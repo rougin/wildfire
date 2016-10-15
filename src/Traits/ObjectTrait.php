@@ -44,20 +44,7 @@ trait ObjectTrait
 
         $tableInfo = $this->getTableInformation($tableName);
 
-        foreach ($tableInfo as $column) {
-            $key = $column->getField();
-
-            $inColumns = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
-            $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
-
-            if ($inColumns || $inHiddenColumns) {
-                continue;
-            }
-
-            $model->$key = $row->$key;
-
-            $this->setForeignField($model, $column, $properties);
-        }
+        $this->setModelValues($model, $row, $properties, $tableInfo);
 
         return $model;
     }
@@ -76,8 +63,8 @@ trait ObjectTrait
     /**
      * Gets the model class of the said table.
      *
-     * @param  \Rougin\Wildfire\CodeigniterModel|string $table
-     * @param  boolean                                  $isForeignKey
+     * @param  string|object $table
+     * @param  boolean       $isForeignKey
      * @return array
      */
     protected function getModel($table, $isForeignKey = false)
@@ -127,7 +114,8 @@ trait ObjectTrait
             return;
         }
 
-        $columnName    = $column->getField();
+        $columnName = $column->getField();
+
         $foreignColumn = $column->getReferencedField();
         $foreignTable  = $column->getReferencedTable();
 
@@ -137,6 +125,33 @@ trait ObjectTrait
             $newColumn   = TableHelper::getModelName($foreignTable, $this->table, true);
 
             $model->$newColumn = $foreignData;
+        }
+    }
+
+    /**
+     * Sets the model values based on the result row.
+     *
+     * @param  \CI_Model &$model
+     * @param  object    $row
+     * @param  array     $properties
+     * @param  array     $tableInformation
+     * @return void
+     */
+    protected function setModelValues(&$model, $row, $properties, $tableInformation)
+    {
+        foreach ($tableInformation as $column) {
+            $key = $column->getField();
+
+            $inColumns = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
+            $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
+
+            if ($inColumns || $inHiddenColumns) {
+                continue;
+            }
+
+            $model->$key = $row->$key;
+
+            $this->setForeignField($model, $column, $properties);
         }
     }
 }
