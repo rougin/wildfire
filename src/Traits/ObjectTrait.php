@@ -5,7 +5,7 @@ namespace Rougin\Wildfire\Traits;
 use Rougin\Describe\Column;
 
 use Rougin\Wildfire\CodeigniterModel;
-use Rougin\Wildfire\Helpers\ModelHelper;
+use Rougin\Wildfire\Helpers\TableHelper;
 
 /**
  * Object Trait
@@ -74,15 +74,6 @@ trait ObjectTrait
     abstract protected function find($table, $delimiters = [], $isForeignKey = false);
 
     /**
-     * Parses the table name from Describe class.
-     *
-     * @param  string  $table
-     * @param  boolean $isForeignKey
-     * @return string
-     */
-    abstract protected function getClassTableName($table, $isForeignKey = false);
-
-    /**
      * Gets the model class of the said table.
      *
      * @param  \Rougin\Wildfire\CodeigniterModel|string $table
@@ -94,11 +85,11 @@ trait ObjectTrait
         $newModel = $table;
 
         if (! is_object($table)) {
-            $tableName = $this->getClassTableName($table, $isForeignKey);
-            $newModel  = new $tableName;
+            $modelName = TableHelper::getModelName($table, $this->table, $isForeignKey);
+            $newModel  = new $modelName;
         }
 
-        $newTable = ModelHelper::getTableName($newModel);
+        $newTable = TableHelper::getNameFromModel($newModel);
 
         return [ strtolower($newTable), $newModel ];
     }
@@ -143,7 +134,7 @@ trait ObjectTrait
         if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters  = [ $foreignColumn => $model->$columnName ];
             $foreignData = $this->find($foreignTable, $delimiters, true);
-            $newColumn   = $this->getClassTableName($foreignTable, true);
+            $newColumn   = TableHelper::getModelName($foreignTable, $this->table, true);
 
             $model->$newColumn = $foreignData;
         }

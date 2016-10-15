@@ -4,7 +4,7 @@ namespace Rougin\Wildfire\Traits;
 
 use Rougin\SparkPlug\Instance;
 
-use Rougin\Wildfire\Helpers\ModelHelper;
+use Rougin\Wildfire\Helpers\TableHelper;
 
 /**
  * Relationship Trait
@@ -27,16 +27,6 @@ trait RelationshipTrait
     private $_with = [];
 
     /**
-     * Returns "belongs to" relationships.
-     *
-     * @return
-     */
-    public function getBelongsToRelationships()
-    {
-        return $this->belongs_to;
-    }
-
-    /**
      * Returns the values from the model's properties.
      *
      * @param  array $properties
@@ -57,22 +47,12 @@ trait RelationshipTrait
                 $ci->load->model($item);
             }
 
-            array_push($belongsTo, ModelHelper::getTableName(new $item));
+            array_push($belongsTo, TableHelper::getNameFromModel(new $item));
         }
 
         $properties['belongs_to'] = $belongsTo;
 
         return $properties;
-    }
-
-    /**
-     * Gets the defined relationships.
-     *
-     * @return
-     */
-    public function getRelationships()
-    {
-        return $this->_with;
     }
 
     /**
