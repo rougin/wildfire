@@ -41,9 +41,7 @@ trait RelationshipTrait
         foreach ($this->belongs_to as $item) {
             if (! in_array($item, $this->_with)) {
                 continue;
-            }
-
-            if (! isset($ci->$item)) {
+            } elseif (! isset($ci->$item)) {
                 $ci->load->model($item);
             }
 

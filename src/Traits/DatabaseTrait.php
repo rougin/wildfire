@@ -9,8 +9,6 @@ use Rougin\SparkPlug\Instance;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property string $table
  */
 trait DatabaseTrait
 {

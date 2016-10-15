@@ -1,32 +1,27 @@
 <?php
 
-namespace Rougin\Wildfire\Traits;
+namespace Rougin\Wildfire\Helpers;
 
 use Rougin\Describe\Describe;
 use Rougin\Describe\Driver\CodeIgniterDriver;
 
 /**
- * Describe Trait
+ * Describe Helper
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-trait DescribeTrait
+class DescribeHelper
 {
-    /**
-     * @var \Rougin\Describe\Describe
-     */
-    protected $describe;
-
     /**
      * Gets the Describe class based on the given database.
      *
      * @param  \CI_DB $database
      * @return \Rougin\Describe\Describe
      */
-    protected function getDescribe($database)
-    {
-        $config = [
+	public static function createInstance($database)
+	{
+		$config = [
             'default' => [
                 'dbdriver' => $database->dbdriver,
                 'hostname' => $database->hostname,
@@ -43,5 +38,5 @@ trait DescribeTrait
         $driver = new CodeIgniterDriver($config);
 
         return new Describe($driver);
-    }
+	}
 }

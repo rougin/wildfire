@@ -120,11 +120,10 @@ trait ObjectTrait
         $foreignTable  = $column->getReferencedTable();
 
         if (in_array($foreignTable, $properties['belongs_to'])) {
-            $delimiters  = [ $foreignColumn => $model->$columnName ];
-            $foreignData = $this->find($foreignTable, $delimiters, true);
-            $newColumn   = TableHelper::getModelName($foreignTable, $this->table, true);
+            $delimiters = [ $foreignColumn => $model->$columnName ];
+            $tableName  = TableHelper::getModelName($foreignTable, $this->table, true);
 
-            $model->$newColumn = $foreignData;
+            $model->$tableName = $this->find($foreignTable, $delimiters, true);
         }
     }
 
