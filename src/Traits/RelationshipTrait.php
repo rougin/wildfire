@@ -2,43 +2,59 @@
 
 namespace Rougin\Wildfire\Traits;
 
+use Rougin\SparkPlug\Instance;
+
+use Rougin\Wildfire\Helpers\TableHelper;
+
 /**
  * Relationship Trait
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property array $belongs_to
  */
 trait RelationshipTrait
 {
+    /**
+     * Defines an inverse one-to-one or many relationship.
+     *
+     * @var array
+     */
+    protected $belongs_to = [];
+
     /**
      * @var array
      */
     private $_with = [];
 
     /**
-     * Returns "belongs to" relationships.
+     * Returns the values from the model's properties.
      *
-     * @return
+     * @param  array $properties
+     * @return array
      */
-    public function getBelongsToRelationships()
+    public function getRelationshipProperties(array $properties)
     {
-        return $this->belongs_to;
+        $belongsTo = [];
+
+        $ci = Instance::create();
+
+        foreach ($this->belongs_to as $item) {
+            if (! in_array($item, $this->_with)) {
+                continue;
+            } elseif (! isset($ci->$item)) {
+                $ci->load->model($item);
+            }
+
+            array_push($belongsTo, TableHelper::getNameFromModel(new $item));
+        }
+
+        $properties['belongs_to'] = $belongsTo;
+
+        return $properties;
     }
 
     /**
-     * Gets the defined relationships.
-     *
-     * @return
-     */
-    public function getRelationships()
-    {
-        return $this->_with;
-    }
-
-    /**
-     * Adds a relationship/s to the model.
+     * Adds relationship/s to the model.
      *
      * @param  string|array $relationships
      * @return self

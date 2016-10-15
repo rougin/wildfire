@@ -2,6 +2,8 @@
 
 namespace Rougin\Wildfire;
 
+use Rougin\Wildfire\Helpers\DescribeHelper;
+
 /**
  * Wildfire
  *
@@ -12,7 +14,12 @@ namespace Rougin\Wildfire;
  */
 class Wildfire extends \CI_Model
 {
-    use Traits\DatabaseTrait, Traits\DescribeTrait, Traits\ObjectTrait, Traits\ResultTrait;
+    use Traits\DatabaseTrait, Traits\ObjectTrait, Traits\ResultTrait;
+
+    /**
+     * @var \Rougin\Describe\Describe
+     */
+    protected $describe;
 
     /**
      * @param \CI_DB|null        $database
@@ -22,7 +29,7 @@ class Wildfire extends \CI_Model
     {
         $this->setDatabase($database);
 
-        $this->describe = $this->getDescribe($this->db);
+        $this->describe = DescribeHelper::createInstance($this->db);
         $this->query    = $query;
     }
 

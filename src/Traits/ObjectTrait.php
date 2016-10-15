@@ -5,6 +5,7 @@ namespace Rougin\Wildfire\Traits;
 use Rougin\Describe\Column;
 
 use Rougin\Wildfire\CodeigniterModel;
+use Rougin\Wildfire\Helpers\TableHelper;
 
 /**
  * Object Trait
@@ -34,24 +35,16 @@ trait ObjectTrait
     {
         list($tableName, $model) = $this->getModel($table, $isForeignKey);
 
-        $properties = $this->getModelProperties($model);
-        $properties = $this->getModelRelationshipProperties($model, $properties);
-        $tableInfo  = $this->getTableInformation($tableName);
+        $properties = [];
 
-        foreach ($tableInfo as $column) {
-            $key = $column->getField();
-
-            $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
-            $inColumns       = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
-
-            if ($inColumns || $inHiddenColumns) {
-                continue;
-            }
-
-            $model->$key = $row->$key;
-
-            $this->setForeignField($model, $column, $properties);
+        if ($model instanceof CodeigniterModel) {
+            $properties = $model->getProperties();
+            $properties = $model->getRelationshipProperties($properties);
         }
+
+        $tableInfo = $this->getTableInformation($tableName);
+
+        $this->setModelValues($model, $row, $properties, $tableInfo);
 
         return $model;
     }
@@ -68,118 +61,22 @@ trait ObjectTrait
     abstract protected function find($table, $delimiters = [], $isForeignKey = false);
 
     /**
-     * Parses the table name from Describe class.
-     *
-     * @param  string  $table
-     * @param  boolean $isForeignKey
-     * @return string
-     */
-    abstract protected function getClassTableName($table, $isForeignKey = false);
-
-    /**
      * Gets the model class of the said table.
      *
-     * @param  \Rougin\Wildfire\CodeigniterModel|string $table
-     * @param  boolean                                  $isForeignKey
+     * @param  string|object $table
+     * @param  boolean       $isForeignKey
      * @return array
      */
     protected function getModel($table, $isForeignKey = false)
     {
-        $newModel = $table;
-
-        if (! is_object($table)) {
-            $tableName = $this->getClassTableName($table, $isForeignKey);
-            $newModel  = new $tableName;
+        if (is_object($table)) {
+            return [ TableHelper::getNameFromModel($table), $table ];
         }
 
-        $newTable = $this->getModelTableName($newModel);
+        $modelName = TableHelper::getModelName($table, $this->table, $isForeignKey);
+        $newModel  = new $modelName;
 
-        return [ strtolower($newTable), $newModel ];
-    }
-
-    /**
-     * Returns the values from the model's properties.
-     *
-     * @param  object $model
-     * @return array
-     */
-    protected function getModelProperties($model)
-    {
-        $properties = [ 'column' => [], 'hidden' => [] ];
-
-        if (method_exists($model, 'getColumns')) {
-            $properties['columns'] = $model->getColumns();
-        } elseif (property_exists($model, 'columns')) {
-            // NOTE: To be removed in v1.0.0
-            $properties['columns'] = $model->columns;
-        }
-
-        // NOTE: To be removed in v1.0.0 (if condition only)
-        if (method_exists($model, 'getHiddenColumns')) {
-            $properties['hidden'] = $model->getHiddenColumns();
-        }
-
-        return $properties;
-    }
-
-    /**
-     * Gets the table name specified in the model.
-     * NOTE: To be removed in v1.0.0
-     *
-     * @param  object $model
-     * @return string
-     */
-    protected function getModelTableName($model)
-    {
-        if (method_exists($model, 'getTableName')) {
-            return $model->getTableName();
-        }
-
-        if (property_exists($model, 'table')) {
-            return $model->table;
-        }
-
-        return '';
-    }
-
-    /**
-     * Returns the values from the model's properties.
-     *
-     * @param  object $model
-     * @param  array  $properties
-     * @return array
-     */
-    public function getModelRelationshipProperties($model, array $properties)
-    {
-        if (method_exists($model, 'getBelongsToRelationships')) {
-            $properties['belongs_to'] = $model->getBelongsToRelationships();
-        }
-
-        if (method_exists($model, 'getRelationships')) {
-            $properties['with'] = $model->getRelationships();
-        }
-
-        $belongsTo = [];
-
-        if (isset($properties['with']) && isset($properties['belongs_to'])) {
-            foreach ($properties['belongs_to'] as $item) {
-                if (! in_array($item, $properties['with'])) {
-                    continue;
-                }
-
-                $ci = \Rougin\SparkPlug\Instance::create();
-
-                $ci->load->model($item);
-
-                $model = new $item;
-
-                array_push($belongsTo, $this->getModelTableName($model));
-            }
-        }
-
-        $properties['belongs_to'] = $belongsTo;
-
-        return $properties;
+        return [ TableHelper::getNameFromModel($newModel), $newModel ];
     }
 
     /**
@@ -215,16 +112,43 @@ trait ObjectTrait
             return;
         }
 
-        $columnName    = $column->getField();
+        $columnName = $column->getField();
+
         $foreignColumn = $column->getReferencedField();
         $foreignTable  = $column->getReferencedTable();
 
         if (in_array($foreignTable, $properties['belongs_to'])) {
-            $delimiters  = [ $foreignColumn => $model->$columnName ];
-            $foreignData = $this->find($foreignTable, $delimiters, true);
-            $newColumn   = $this->getClassTableName($foreignTable, true);
+            $delimiters = [ $foreignColumn => $model->$columnName ];
+            $tableName  = TableHelper::getModelName($foreignTable, $this->table, true);
 
-            $model->$newColumn = $foreignData;
+            $model->$tableName = $this->find($foreignTable, $delimiters, true);
+        }
+    }
+
+    /**
+     * Sets the model values based on the result row.
+     *
+     * @param  \CI_Model &$model
+     * @param  object    $row
+     * @param  array     $properties
+     * @param  array     $tableInformation
+     * @return void
+     */
+    protected function setModelValues(&$model, $row, $properties, $tableInformation)
+    {
+        foreach ($tableInformation as $column) {
+            $key = $column->getField();
+
+            $inColumns = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
+            $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
+
+            if ($inColumns || $inHiddenColumns) {
+                continue;
+            }
+
+            $model->$key = $row->$key;
+
+            $this->setForeignField($model, $column, $properties);
         }
     }
 }
