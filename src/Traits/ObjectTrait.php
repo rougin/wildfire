@@ -69,16 +69,14 @@ trait ObjectTrait
      */
     protected function getModel($table, $isForeignKey = false)
     {
-        $newModel = $table;
-
-        if (! is_object($table)) {
-            $modelName = TableHelper::getModelName($table, $this->table, $isForeignKey);
-            $newModel  = new $modelName;
+        if (is_object($table)) {
+            return [ TableHelper::getNameFromModel($table), $table ];
         }
 
-        $newTable = TableHelper::getNameFromModel($newModel);
+        $modelName = TableHelper::getModelName($table, $this->table, $isForeignKey);
+        $newModel  = new $modelName;
 
-        return [ strtolower($newTable), $newModel ];
+        return [ TableHelper::getNameFromModel($newModel), $newModel ];
     }
 
     /**

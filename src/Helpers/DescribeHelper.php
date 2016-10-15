@@ -19,9 +19,9 @@ class DescribeHelper
      * @param  \CI_DB $database
      * @return \Rougin\Describe\Describe
      */
-	public static function createInstance($database)
-	{
-		$config = [
+    public static function createInstance($database)
+    {
+        $config = [
             'default' => [
                 'dbdriver' => $database->dbdriver,
                 'hostname' => $database->hostname,
@@ -38,5 +38,5 @@ class DescribeHelper
         $driver = new CodeIgniterDriver($config);
 
         return new Describe($driver);
-	}
+    }
 }
