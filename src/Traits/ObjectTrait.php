@@ -5,6 +5,7 @@ namespace Rougin\Wildfire\Traits;
 use Rougin\Describe\Column;
 
 use Rougin\Wildfire\CodeigniterModel;
+use Rougin\Wildfire\Helpers\ModelHelper;
 use Rougin\Wildfire\Helpers\TableHelper;
 
 /**
@@ -19,21 +20,15 @@ use Rougin\Wildfire\Helpers\TableHelper;
 trait ObjectTrait
 {
     /**
-     * @var array
-     */
-    protected $tables = [];
-
-    /**
      * Creates an object from the specified table and row.
      *
      * @param  string|\Rougin\Wildfire\CodeigniterModel $table
      * @param  object                                   $row
-     * @param  boolean                                  $isForeignKey
      * @return array
      */
-    protected function createObject($table, $row, $isForeignKey = false)
+    protected function createObject($table, $row)
     {
-        list($tableName, $model) = $this->getModel($table, $isForeignKey);
+        list($tableName, $model) = ModelHelper::createInstance($table);
 
         $properties = [];
 
@@ -42,9 +37,9 @@ trait ObjectTrait
             $properties = $model->getRelationshipProperties($properties);
         }
 
-        $tableInfo = $this->getTableInformation($tableName);
+        $tableInfo = $this->describe->getTable($tableName);
 
-        $this->setModelValues($model, $row, $properties, $tableInfo);
+        $this->setModelFields($model, $row, $properties, $tableInfo);
 
         return $model;
     }
@@ -55,48 +50,9 @@ trait ObjectTrait
      *
      * @param  string         $table
      * @param  array|integer  $delimiters
-     * @param  boolean        $isForeignKey
      * @return object|boolean
      */
-    abstract protected function find($table, $delimiters = [], $isForeignKey = false);
-
-    /**
-     * Gets the model class of the said table.
-     *
-     * @param  string|object $table
-     * @param  boolean       $isForeignKey
-     * @return array
-     */
-    protected function getModel($table, $isForeignKey = false)
-    {
-        if (is_object($table)) {
-            return [ TableHelper::getNameFromModel($table), $table ];
-        }
-
-        $modelName = TableHelper::getModelName($table, $this->table, $isForeignKey);
-        $newModel  = new $modelName;
-
-        return [ TableHelper::getNameFromModel($newModel), $newModel ];
-    }
-
-    /**
-     * Returns the database information of the specified table.
-     *
-     * @param  string $tableName
-     * @return array
-     */
-    public function getTableInformation($tableName)
-    {
-        if (! array_key_exists($tableName, $this->tables)) {
-            $tableInfo = $this->describe->getTable($tableName);
-
-            $this->tables[$tableName] = $tableInfo;
-
-            return $tableInfo;
-        }
-
-        return $this->tables[$tableName];
-    }
+    abstract protected function find($table, $delimiters = []);
 
     /**
      * Sets the foreign field of the column, if any.
@@ -119,9 +75,9 @@ trait ObjectTrait
 
         if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters = [ $foreignColumn => $model->$columnName ];
-            $tableName  = TableHelper::getModelName($foreignTable, $this->table, true);
+            $tableName  = TableHelper::getModelName($foreignTable);
 
-            $model->$tableName = $this->find($foreignTable, $delimiters, true);
+            $model->$tableName = $this->find($foreignTable, $delimiters);
         }
     }
 
@@ -134,7 +90,7 @@ trait ObjectTrait
      * @param  array     $tableInformation
      * @return void
      */
-    protected function setModelValues(&$model, $row, $properties, $tableInformation)
+    protected function setModelFields(&$model, $row, $properties, $tableInformation)
     {
         foreach ($tableInformation as $column) {
             $key = $column->getField();

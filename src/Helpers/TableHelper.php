@@ -13,22 +13,12 @@ class TableHelper
     /**
      * Parses the table name from Describe class.
      *
-     * @param  string  $table
-     * @param  mixed   $currentTable
-     * @param  boolean $isForeignKey
+     * @param  string $table
      * @return string
      */
-    public static function getModelName($table, $currentTable, $isForeignKey = false)
+    public static function getModelName($table)
     {
         $tableName = $table;
-
-        if (! $isForeignKey && $currentTable) {
-            $tableName = $currentTable;
-
-            if (is_object($currentTable)) {
-                $tableName = $currentTable->getTableName();
-            }
-        }
 
         $tableName  = ucfirst(singular($tableName));
         $tableNames = explode('.', $tableName);
