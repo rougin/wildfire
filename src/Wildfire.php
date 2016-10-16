@@ -44,8 +44,6 @@ class Wildfire extends \CI_Model
      */
     public function find($tableName, $delimiters = [])
     {
-        list($tableName, $model) = ModelHelper::createInstance($tableName);
-
         if (is_integer($delimiters)) {
             $primaryKey = $this->describe->getPrimaryKey($tableName);
 
