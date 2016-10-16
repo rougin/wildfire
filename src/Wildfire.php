@@ -75,7 +75,7 @@ class Wildfire extends \CI_Model
 
             preg_match('/\bfrom\b\s*(\w+)/i', $query, $matches);
 
-            $this->table = $table = $matches[1];
+            $this->table = $matches[1];
 
             return $this;
         }
