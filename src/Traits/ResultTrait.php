@@ -42,12 +42,11 @@ trait ResultTrait
     /**
      * Creates an object from the specified table and row.
      *
-     * @param  string  $table
-     * @param  object  $row
-     * @param  boolean $isForeignKey
+     * @param  string $table
+     * @param  object $row
      * @return array
      */
-    abstract protected function createObject($table, $row, $isForeignKey = false);
+    abstract protected function createObject($table, $row);
 
     /**
      * Returns all rows from the specified table.

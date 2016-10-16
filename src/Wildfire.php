@@ -2,6 +2,7 @@
 
 namespace Rougin\Wildfire;
 
+use Rougin\Wildfire\Helpers\ModelHelper;
 use Rougin\Wildfire\Helpers\DescribeHelper;
 
 /**
@@ -39,19 +40,14 @@ class Wildfire extends \CI_Model
      *
      * @param  string         $tableName
      * @param  array|integer  $delimiters
-     * @param  boolean        $isForeignKey
      * @return object|boolean
      */
-    public function find($tableName, $delimiters = [], $isForeignKey = false)
+    public function find($tableName, $delimiters = [])
     {
-        list($tableName, $model) = $this->getModel($tableName, $isForeignKey);
+        list($tableName, $model) = ModelHelper::createInstance($tableName);
 
-        if (! is_array($delimiters) || empty($delimiters)) {
-            if (method_exists($model, 'getPrimaryKey')) {
-                $primaryKey = $model->getPrimaryKey();
-            } else {
-                $primaryKey = $this->describe->getPrimaryKey($tableName);
-            }
+        if (is_integer($delimiters)) {
+            $primaryKey = $this->describe->getPrimaryKey($tableName);
 
             $delimiters = [ $primaryKey => $delimiters ];
         }
@@ -61,7 +57,7 @@ class Wildfire extends \CI_Model
         $query = $this->db->get($tableName);
 
         if ($query->num_rows() > 0) {
-            return $this->createObject($tableName, $query->row(), $isForeignKey);
+            return $this->createObject($tableName, $query->row());
         }
 
         return false;
@@ -86,7 +82,9 @@ class Wildfire extends \CI_Model
             return $this;
         }
 
-        list($tableName, $model) = $this->getModel($table);
+        list($tableName, $model) = ModelHelper::createInstance($table);
+
+        $this->table = $tableName;
 
         if ($this->query == null) {
             $this->query = $this->db->get($tableName);
@@ -94,8 +92,6 @@ class Wildfire extends \CI_Model
 
         if ($model == $table) {
             $this->table = $model;
-        } else {
-            $this->table = $tableName;
         }
 
         return $this;
