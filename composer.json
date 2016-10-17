@@ -43,12 +43,12 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.4-dev"
+            "dev-master": "0.5-dev"
         }
     },
     "suggest": {
         "rougin/codeigniter": "Installs CodeIgniter core through Composer",
-        "rougin/combustor": "A tool for speeding up workflow in CodeIgniter",
+        "rougin/combustor": "Lets you generate controllers, models, and views from database tables for CodeIgniter",
         "rougin/refinery": "\"Ready-to-eat\" migrations for CodeIgniter"
     }
 }
