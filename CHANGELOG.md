@@ -6,6 +6,7 @@ All notable changes to `Wildfire` will be documented in this file.
 
 ### Added
 - `CodeigniterModel` that extends to `CI_Model`
+- `$belongs_to` for one-to-one relationships
 - `$hidden` for hiding columns
 
 ## [0.3.1](https://github.com/rougin/wildfire/compare/v0.3.0...v0.3.1) - 2016-09-12
