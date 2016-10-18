@@ -50,11 +50,9 @@ class Wildfire extends \CI_Model
             $delimiters = [ $primaryKey => $delimiters ];
         }
 
-        $this->db->where($delimiters);
+        $query = $this->db->get_where($tableName, $delimiters);
 
-        $query = $this->db->get($tableName);
-
-        if ($query->num_rows() > 0 && ! empty($query->row())) {
+        if ($query->num_rows() > 0 && $query->row()) {
             return $this->createObject($tableName, $query->row());
         }
 
