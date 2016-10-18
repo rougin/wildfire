@@ -113,7 +113,7 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateMethod()
     {
-        $expectedId = 2;
+        $expectedId = 3;
 
         $data = [ 'name' => 'test', 'message' => 'test' ];
 

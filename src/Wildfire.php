@@ -54,7 +54,7 @@ class Wildfire extends \CI_Model
 
         $query = $this->db->get($tableName);
 
-        if ($query->num_rows() > 0) {
+        if ($query->num_rows() > 0 && ! empty($query->row())) {
             return $this->createObject($tableName, $query->row());
         }
 
