@@ -82,4 +82,32 @@ class CodeigniterModel extends \CI_Model
     {
         return $this->wildfire->get($this);
     }
+
+    /**
+     * Inserts a new row into the table.
+     *
+     * @param  array $data
+     * @return integer
+     */
+    public function insert(array $data)
+    {
+        $this->db->insert($this->getTableName(), $data);
+
+        return $this->db->insert_id();
+    }
+
+    /**
+     * Updates the selected row from the table.
+     *
+     * @param  integer $id
+     * @param  array   $data
+     * @return boolean
+     */
+    public function update($id, array $data)
+    {
+        $this->db->where($this->getPrimaryKey(), $id);
+        $this->db->set($data);
+
+        return $this->db->update($this->getTableName());
+    }
 }

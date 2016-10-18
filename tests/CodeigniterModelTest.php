@@ -97,14 +97,30 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
     {
         $data = [ 'name' => 'test', 'message' => 'test' ];
 
-        $this->ci->db->insert($this->table, $data);
-
-        $id = $this->ci->db->insert_id();
+        $id = $this->ci->comment->insert($data);
 
         $this->ci->comment->delete($id);
 
         $comment = $this->ci->comment->find($id);
 
         $this->assertTrue(empty($comment));
+    }
+
+    /**
+     * Tests CodeigniterModel::update method.
+     *
+     * @return void
+     */
+    public function testUpdateMethod()
+    {
+        $expectedId = 2;
+
+        $data = [ 'name' => 'test', 'message' => 'test' ];
+
+        $this->ci->comment->update($expectedId, $data);
+
+        $comment = $this->ci->comment->find($expectedId);
+
+        $this->assertEquals($data['name'], $comment->name);
     }
 }
