@@ -11,16 +11,11 @@ use Rougin\Wildfire\Helpers\TableHelper;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ *
+ * @property array $belongs_to
  */
 trait RelationshipTrait
 {
-    /**
-     * Defines an inverse one-to-one or many relationship.
-     *
-     * @var array
-     */
-    protected $belongs_to = [];
-
     /**
      * @var array
      */

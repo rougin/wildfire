@@ -34,7 +34,10 @@ trait ObjectTrait
 
         if ($model instanceof CodeigniterModel) {
             $properties = $model->getProperties();
-            $properties = $model->getRelationshipProperties($properties);
+
+            if (method_exists($model, 'getRelationshipProperties')) {
+                $properties = $model->getRelationshipProperties($properties);
+            }
         }
 
         $tableInfo = $this->describe->getTable($tableName);

@@ -12,7 +12,7 @@ namespace Rougin\Wildfire;
  */
 class CodeigniterModel extends \CI_Model
 {
-    use Traits\ModelTrait, Traits\RelationshipTrait;
+    use Traits\ModelTrait;
 
     /**
      * @var \Rougin\Wildfire\Wildfire
