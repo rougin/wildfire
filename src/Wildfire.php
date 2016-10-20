@@ -17,7 +17,7 @@ class Wildfire extends \CI_Model
     use Traits\DatabaseTrait, Traits\ObjectTrait, Traits\ResultTrait;
 
     /**
-     * @param \CI_DB|\CI_DB_driver|null $database
+     * @param \CI_DB_query_builder|null $database
      * @param \CI_DB_result|null        $query
      */
     public function __construct($database = null, $query = null)
