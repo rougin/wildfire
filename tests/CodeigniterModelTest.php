@@ -123,4 +123,17 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($data['name'], $comment->name);
     }
+
+    /**
+     * Tests CodeigniterModel::validation method.
+     *
+     * @return void
+     */
+    public function testValidateMethod()
+    {
+        $expected  = [ 'name' => 'The Name field is required.' ];
+        $validated = $this->ci->comment->validate([ 'message' => 'test' ]);
+
+        $this->assertEquals($expected, $this->ci->comment->validation_errors());
+    }
 }

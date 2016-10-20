@@ -8,6 +8,7 @@ All notable changes to `Wildfire` will be documented in this file.
 - `CodeigniterModel` that extends to `CI_Model`
 - `$belongs_to` for one-to-one relationships
 - `$hidden` for hiding columns
+- `ValidateTrait` for validating data using CodeIgniter's `Form_validation` class
 
 ## [0.3.1](https://github.com/rougin/wildfire/compare/v0.3.0...v0.3.1) - 2016-09-12
 
