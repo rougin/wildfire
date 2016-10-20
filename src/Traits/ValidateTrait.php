@@ -8,7 +8,9 @@ namespace Rougin\Wildfire\Traits;
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
- * @property array $validation_rules
+ * @property array               $validation_rules
+ * @property \CI_Form_validation $form_validation
+ * @property \CI_Loader          $load
  */
 trait ValidateTrait
 {
