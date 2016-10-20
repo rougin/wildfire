@@ -8,7 +8,7 @@ namespace Rougin\Wildfire;
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
- * @property \CI_DB_query_builder $db
+ * @property \CI_DB|\CI_DB_query_builder $db
  */
 class CodeigniterModel extends \CI_Model
 {
