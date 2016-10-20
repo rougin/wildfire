@@ -16,7 +16,7 @@ class DescribeHelper
     /**
      * Gets the Describe class based on the given database.
      *
-     * @param  \CI_DB $database
+     * @param  \CI_DB_driver|\CI_DB_query_builder $database
      * @return \Rougin\Describe\Describe
      */
     public static function createInstance($database)

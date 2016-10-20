@@ -15,7 +15,7 @@ use Rougin\Wildfire\Helpers\DescribeHelper;
 trait DatabaseTrait
 {
     /**
-     * @var \CI_DB|null
+     * @var \CI_DB_driver|\CI_DB_query_builder|null
      */
     protected $db;
 
@@ -32,7 +32,7 @@ trait DatabaseTrait
     /**
      * Sets the database class.
      *
-     * @param  \CI_DB $database
+     * @param  \CI_DB_driver|\CI_DB_query_builder $database
      * @return self
      */
     public function setDatabase($database)
