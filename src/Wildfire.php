@@ -3,7 +3,6 @@
 namespace Rougin\Wildfire;
 
 use Rougin\Wildfire\Helpers\ModelHelper;
-use Rougin\Wildfire\Helpers\DescribeHelper;
 
 /**
  * Wildfire
@@ -18,20 +17,16 @@ class Wildfire extends \CI_Model
     use Traits\DatabaseTrait, Traits\ObjectTrait, Traits\ResultTrait;
 
     /**
-     * @var \Rougin\Describe\Describe
-     */
-    protected $describe;
-
-    /**
      * @param \CI_DB|null        $database
      * @param \CI_DB_result|null $query
      */
     public function __construct($database = null, $query = null)
     {
-        $this->setDatabase($database);
+        if (! empty($database)) {
+            $this->setDatabase($database);
+        }
 
-        $this->describe = DescribeHelper::createInstance($this->db);
-        $this->query    = $query;
+        $this->query = $query;
     }
 
     /**
@@ -50,7 +45,9 @@ class Wildfire extends \CI_Model
             $delimiters = [ $primaryKey => $delimiters ];
         }
 
-        $query = $this->db->get_where($tableName, $delimiters);
+        $this->db->where($delimiters);
+
+        $query = $this->db->get($tableName);
 
         if ($query->num_rows() > 0 && $query->row()) {
             return $this->createObject($tableName, $query->row());
