@@ -4,6 +4,8 @@ namespace Rougin\Wildfire\Traits;
 
 use Rougin\SparkPlug\Instance;
 
+use Rougin\Wildfire\Helpers\DescribeHelper;
+
 /**
  * Database Trait
  *
@@ -13,9 +15,14 @@ use Rougin\SparkPlug\Instance;
 trait DatabaseTrait
 {
     /**
-     * @var \CI_DB
+     * @var \CI_DB_query_builder|null
      */
     protected $db;
+
+    /**
+     * @var \Rougin\Describe\Describe
+     */
+    protected $describe;
 
     /**
      * @var \CI_DB_result
@@ -25,24 +32,14 @@ trait DatabaseTrait
     /**
      * Sets the database class.
      *
-     * @param  \CI_DB|null $database
+     * @param  \CI_DB_query_builder $database
      * @return self
      */
-    public function setDatabase($database = null)
+    public function setDatabase($database)
     {
-        $ci = Instance::create();
-
-        $ci->load->helper('inflector');
-
-        if (empty($database)) {
-            $ci->load->database();
-
-            $this->db = $ci->db;
-
-            return $this;
-        }
-
         $this->db = $database;
+
+        $this->describe = DescribeHelper::createInstance($database);
 
         return $this;
     }
