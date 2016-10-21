@@ -21,7 +21,7 @@ $ composer require rougin/wildfire
 
 ### Tables (in SQLite)
 
-#### Users table
+#### "User" table
 
 ``` sql
 CREATE TABLE "user" (
@@ -38,7 +38,7 @@ CREATE TABLE "user" (
 class User extends CI_Model {}
 ```
 
-#### Posts table
+#### "Post" table
 
 ``` sql
 CREATE TABLE post (
