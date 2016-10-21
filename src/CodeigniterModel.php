@@ -15,18 +15,6 @@ class CodeigniterModel extends \CI_Model
     use Traits\ModelTrait, Traits\RelationshipTrait;
 
     /**
-     * @var \Rougin\Wildfire\Wildfire
-     */
-    protected $wildfire;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->wildfire = new Wildfire($this->db);
-    }
-
-    /**
      * Returns all of the models from the database.
      *
      * @return array
@@ -57,7 +45,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function find($id)
     {
-        return $this->wildfire->find($this->getTableName(), $id);
+        return Wildfire::create($this->db)->find($this->getTableName(), $id);
     }
 
     /**
@@ -80,7 +68,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function get()
     {
-        return $this->wildfire->get($this);
+        return Wildfire::create($this->db)->get($this);
     }
 
     /**
