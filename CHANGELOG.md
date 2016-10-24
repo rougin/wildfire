@@ -10,6 +10,9 @@ All notable changes to `Wildfire` will be documented in this file.
 - `$hidden` for hiding columns
 - `ValidateTrait` for validating data using CodeIgniter's `Form_validation` class
 
+### Changed
+- Version of `rougin/describe` to `~1.5`
+
 ## [0.3.1](https://github.com/rougin/wildfire/compare/v0.3.0...v0.3.1) - 2016-09-12
 
 ### Added
