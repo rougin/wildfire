@@ -92,6 +92,12 @@ $posts = $wildfire->result();
 
 ### Using `Rougin\Wildfire\CodeigniterModel`
 
+#### application/models/Post.php
+
+``` php
+class Post extends \Rougin\Wildfire\CodeigniterModel {}
+```
+
 #### application/controllers/Welcome.php
 
 ``` php
@@ -135,7 +141,7 @@ $wildfire->set_database($this->db);
 $wildfire->set_query('SELECT * FROM posts');
 ```
 
-### Using `Rougin\Wildfire\CodeigniterModel`
+#### Using `Rougin\Wildfire\CodeigniterModel`
 
 #### $this->model->find($id)
 
