@@ -110,15 +110,4 @@ class Wildfire extends \CI_Model
 
         return $result;
     }
-
-    /**
-     * Factory method to create Wildfire instance.
-     *
-     * @param \CI_DB|null        $database
-     * @param \CI_DB_result|null $query
-     */
-    public static function create($database = null, $query = null)
-    {
-        return new Wildfire($database, $query);
-    }
 }

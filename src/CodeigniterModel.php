@@ -2,6 +2,8 @@
 
 namespace Rougin\Wildfire;
 
+use Rougin\Helpers\InstanceHelper;
+
 /**
  * Codeigniter Model
  *
@@ -13,6 +15,13 @@ namespace Rougin\Wildfire;
 class CodeigniterModel extends \CI_Model
 {
     use Traits\ModelTrait, Traits\RelationshipTrait;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        InstanceHelper::create($this->db);
+    }
 
     /**
      * Returns all of the models from the database.
@@ -45,7 +54,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function find($id)
     {
-        return Wildfire::create($this->db)->find($this->getTableName(), $id);
+        return InstanceHelper::get()->find($this->getTableName(), $id);
     }
 
     /**
@@ -68,7 +77,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function get()
     {
-        return Wildfire::create($this->db)->get($this);
+        return InstanceHelper::get()->get($this);
     }
 
     /**
