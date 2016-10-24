@@ -20,7 +20,7 @@
     ],
     "require": {
         "php" : ">=5.4.0",
-        "rougin/describe": "~1.3",
+        "rougin/describe": "~1.5",
         "rougin/spark-plug": "~0.4.2"
     },
     "require-dev": {

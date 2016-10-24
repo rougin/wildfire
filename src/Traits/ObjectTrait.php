@@ -75,9 +75,10 @@ trait ObjectTrait
 
         if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters = [ $foreignColumn => $model->$columnName ];
-            $tableName  = TableHelper::getModelName($foreignTable);
+            $foreign    = $this->find($foreignTable, $delimiters);
+            $tableName  = TableHelper::getNameFromModel($foreign);
 
-            $model->$tableName = $this->find($foreignTable, $delimiters);
+            $model->$tableName = $foreign;
         }
     }
 
