@@ -2,7 +2,7 @@
 
 namespace Rougin\Wildfire;
 
-use Rougin\Helpers\InstanceHelper;
+use Rougin\Wildfire\Helpers\InstanceHelper;
 
 /**
  * Codeigniter Model
