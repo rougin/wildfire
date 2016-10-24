@@ -84,9 +84,8 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
         $this->ci->load->model('post', '', true);
 
         $comments = $this->ci->post->with('user')->all();
-        $user = $comments[0]->user;
 
-        $this->assertEquals(1, $user->id);
+        $this->assertEquals(1, $comments[0]->user->id);
     }
 
     /**
