@@ -9,7 +9,7 @@ namespace Rougin\Wildfire\Traits;
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
  * @property \Rougin\Describe\Describe $describe
- * @property \CI_DB_null               $query
+ * @property \CI_DB_result|null        $query
  */
 trait ResultTrait
 {
@@ -35,6 +35,8 @@ trait ResultTrait
         foreach ($result as $row) {
             $data[$row->$id] = ucwords($row->$description);
         }
+
+        $this->resetQuery();
 
         return $data;
     }
@@ -63,19 +65,19 @@ trait ResultTrait
      */
     public function result()
     {
-        $data = $this->getQueryResult();
-
         $result = [];
 
         if (empty($this->table)) {
             $this->get();
         }
 
-        foreach ($data as $row) {
+        foreach ($this->getQueryResult() as $row) {
             $object = $this->createObject($this->table, $row);
 
             array_push($result, $object);
         }
+
+        $this->resetQuery();
 
         return $result;
     }
@@ -98,5 +100,16 @@ trait ResultTrait
         }
 
         return $result;
+    }
+
+    /**
+     * Resets the entire query and table name.
+     *
+     * @return void
+     */
+    protected function resetQuery()
+    {
+        $this->table = null;
+        $this->query = null;
     }
 }
