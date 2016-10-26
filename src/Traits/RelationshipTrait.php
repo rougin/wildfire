@@ -11,6 +11,8 @@ use Rougin\Wildfire\Helpers\TableHelper;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ *
+ * @property \CI_Loader $load
  */
 trait RelationshipTrait
 {
@@ -36,13 +38,11 @@ trait RelationshipTrait
     {
         $belongsTo = [];
 
-        $ci = Instance::create();
-
         foreach ($this->belongs_to as $item) {
             if (! in_array($item, $this->_with)) {
                 continue;
-            } elseif (! isset($ci->$item)) {
-                $ci->load->model($item);
+            } elseif (! isset($this->$item)) {
+                $this->load->model($item);
             }
 
             array_push($belongsTo, TableHelper::getNameFromModel(new $item));
