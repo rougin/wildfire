@@ -138,6 +138,8 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
             'use_page_numbers'  => true,
         ];
 
+        $_GET['per_page'] = 3;
+
         list($items, $links) = $this->ci->post->paginate($expectedRows, $configuration);
 
         $this->assertCount($expectedRows, $items);

@@ -8,12 +8,13 @@ namespace Rougin\Wildfire\Traits;
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
- * @property \CI_URI        $uri
- * @property \CI_Loader     $load
  * @property \CI_Config     $config
- * @property \CI_Pagination $pagination
  * @property \CI_Input      $input
+ * @property \CI_Loader     $load
+ * @property \CI_Pagination $pagination
+ * @property \CI_URI        $uri
  *
+ * @method array   all()
  * @method integer countAll()
  * @method self    limit($value, $offset = '')
  */
