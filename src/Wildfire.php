@@ -75,6 +75,19 @@ class Wildfire extends \CI_Model
             return $this;
         }
 
+        $this->setQueryAndTable($table);
+
+        return $this;
+    }
+
+    /**
+     * Sets the query and table properties.
+     *
+     * @param  string|object $table
+     * @return void
+     */
+    protected function setQueryAndTable($table)
+    {
         list($tableName, $model) = ModelHelper::createInstance($table);
 
         $this->table = $tableName;
@@ -87,7 +100,7 @@ class Wildfire extends \CI_Model
             $this->table = $model;
         }
 
-        return $this;
+        return;
     }
 
     /**
