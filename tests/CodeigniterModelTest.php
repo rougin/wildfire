@@ -133,7 +133,12 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
     {
         $expectedRows = 5;
 
-        list($items, $links) = $this->ci->post->paginate($expectedRows);
+        $configuration = [
+            'page_query_string' => true,
+            'use_page_numbers'  => true,
+        ];
+
+        list($items, $links) = $this->ci->post->paginate($expectedRows, $configuration);
 
         $this->assertCount($expectedRows, $items);
     }
