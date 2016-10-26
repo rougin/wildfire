@@ -60,7 +60,7 @@ trait PaginateTrait
         }
 
         if ($config['use_page_numbers'] && $offset != 0) {
-            $offset = $config['per_page'] * $offset - $config['per_page'];
+            $offset = ($config['per_page'] * $offset) - $config['per_page'];
         }
 
         return $offset;
