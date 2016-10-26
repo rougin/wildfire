@@ -123,4 +123,18 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($data['name'], $comment->name);
     }
+
+    /**
+     * Tests CodeigniterModel::paginate method.
+     *
+     * @return void
+     */
+    public function testPaginateMethod()
+    {
+        $expectedRows = 5;
+
+        list($items, $links) = $this->ci->post->paginate($expectedRows);
+
+        $this->assertCount($expectedRows, $items);
+    }
 }
