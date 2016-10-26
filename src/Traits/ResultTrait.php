@@ -36,8 +36,6 @@ trait ResultTrait
             $data[$row->$id] = ucwords($row->$description);
         }
 
-        $this->resetQuery();
-
         return $data;
     }
 
@@ -79,8 +77,6 @@ trait ResultTrait
             array_push($result, $object);
         }
 
-        $this->resetQuery();
-
         return $result;
     }
 
@@ -102,16 +98,5 @@ trait ResultTrait
         }
 
         return $result;
-    }
-
-    /**
-     * Resets the entire query and table name.
-     *
-     * @return void
-     */
-    protected function resetQuery()
-    {
-        $this->table = null;
-        $this->query = null;
     }
 }
