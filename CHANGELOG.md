@@ -8,6 +8,7 @@ All notable changes to `Wildfire` will be documented in this file.
 - `CodeigniterModel` that extends to `CI_Model`
 - `$belongs_to` for one-to-one relationships
 - `$hidden` for hiding columns
+- `PaginateTrait` for creating pagination links
 
 ### Changed
 - Version of `rougin/describe` to `~1.5`
