@@ -9,7 +9,7 @@ namespace Rougin\Wildfire\Traits;
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
  * @property \Rougin\Describe\Describe $describe
- * @property \CI_DB_null               $query
+ * @property \CI_DB_result             $query
  */
 trait ResultTrait
 {

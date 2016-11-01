@@ -18,9 +18,7 @@ class TableHelper
      */
     public static function getModelName($table)
     {
-        $tableName = $table;
-
-        $tableName  = ucfirst(singular($tableName));
+        $tableName  = ucfirst(singular($table));
         $tableNames = explode('.', $tableName);
 
         return isset($tableNames[1]) ? $tableNames[1] : $tableName;
