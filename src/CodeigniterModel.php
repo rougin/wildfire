@@ -34,6 +34,16 @@ class CodeigniterModel extends \CI_Model
     }
 
     /**
+     * A wrapper to $this->db->count_all().
+     *
+     * @return integer
+     */
+    public function countAll()
+    {
+        return $this->db->count_all($this->getTableName());
+    }
+
+    /**
      * Deletes the specified ID of the model from the database.
      *
      * @param  integer $id
@@ -91,6 +101,20 @@ class CodeigniterModel extends \CI_Model
         $this->db->insert($this->getTableName(), $data);
 
         return $this->db->insert_id();
+    }
+
+    /**
+     * A wrapper to $this->db->limit().
+     *
+     * @param  integer $value
+     * @param  string  $offset
+     * @return self
+     */
+    public function limit($value, $offset = '')
+    {
+        $this->db->limit($value, $offset);
+
+        return $this;
     }
 
     /**
