@@ -9,6 +9,7 @@ All notable changes to `Wildfire` will be documented in this file.
 - `$belongs_to` for one-to-one relationships
 - `$hidden` for hiding columns
 - `ValidateTrait` for validating data using CodeIgniter's `Form_validation` class
+- `PaginateTrait` for creating pagination links using CodeIgniter's `Pagination` class
 
 ### Changed
 - Version of `rougin/describe` to `~1.5`

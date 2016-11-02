@@ -2,6 +2,8 @@
 
 class Post extends Rougin\Wildfire\CodeigniterModel
 {
+    use Rougin\Wildfire\Traits\PaginateTrait;
+
     /**
      * Defines an inverse one-to-one or many relationship.
      *
