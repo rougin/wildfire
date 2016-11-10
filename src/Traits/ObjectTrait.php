@@ -30,7 +30,11 @@ trait ObjectTrait
     {
         list($tableName, $model) = ModelHelper::createInstance($table);
 
-        $properties = [];
+        $properties = [
+            'belongs_to' => [],
+            'columns'    => [],
+            'hidden'     => [],
+        ];
 
         if ($model instanceof CodeigniterModel) {
             $properties = $model->getProperties();
@@ -69,7 +73,7 @@ trait ObjectTrait
         $foreignColumn = $column->getReferencedField();
         $foreignTable  = $column->getReferencedTable();
 
-        if (isset($properties['belongs_to']) && in_array($foreignTable, $properties['belongs_to'])) {
+        if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters = [ $foreignColumn => $model->$columnName ];
             $foreign    = $this->find($foreignTable, $delimiters);
 
