@@ -35,7 +35,7 @@ class Wildfire extends \CI_Model
      *
      * @param  string         $tableName
      * @param  array|integer  $delimiters
-     * @return object
+     * @return object|boolean
      */
     public function find($tableName, $delimiters = [])
     {
@@ -45,9 +45,15 @@ class Wildfire extends \CI_Model
             $delimiters = [ $primaryKey => $delimiters ];
         }
 
-        $query = $this->db->where($delimiters)->get($tableName);
+        $this->db->where($delimiters);
 
-        return $this->createObject($tableName, $query->row());
+        $query = $this->db->get($tableName);
+
+        if ($query->num_rows() > 0 && $query->row()) {
+            return $this->createObject($tableName, $query->row());
+        }
+
+        return false;
     }
 
     /**
