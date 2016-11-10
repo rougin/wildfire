@@ -61,7 +61,7 @@ trait ResultTrait
     /**
      * Returns the result.
      *
-     * @return array
+     * @return object
      */
     public function result()
     {

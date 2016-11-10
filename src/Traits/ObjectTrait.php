@@ -64,6 +64,10 @@ trait ObjectTrait
      */
     protected function setForeignField(\CI_Model $model, Column $column, array $properties)
     {
+        if (! $column->isForeignKey()) {
+            return;
+        }
+
         $columnName = $column->getField();
 
         $foreignColumn = $column->getReferencedField();
@@ -72,12 +76,9 @@ trait ObjectTrait
         if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters = [ $foreignColumn => $model->$columnName ];
             $foreign    = $this->find($foreignTable, $delimiters);
+            $tableName  = TableHelper::getNameFromModel($foreign);
 
-            if (is_object($foreign)) {
-                $tableName = TableHelper::getNameFromModel($foreign);
-
-                $model->$tableName = $foreign;
-            }
+            $model->$tableName = $foreign;
         }
     }
 

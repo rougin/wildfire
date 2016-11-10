@@ -11,7 +11,6 @@ use Rougin\Wildfire\Helpers\InstanceHelper;
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  *
  * @property \CI_DB_query_builder $db
- * @method   array result()
  */
 class CodeigniterModel extends \CI_Model
 {
