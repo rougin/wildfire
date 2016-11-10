@@ -37,9 +37,9 @@ trait ObjectTrait
             $properties = $model->getRelationshipProperties($properties);
         }
 
-        $tableInfo = $this->describe->getTable($tableName);
+        $columns = $this->describe->getTable($tableName);
 
-        $this->setModelFields($model, $row, $properties, $tableInfo);
+        $this->setModelFields($model, $row, $properties, $columns);
 
         return $model;
     }
@@ -69,7 +69,7 @@ trait ObjectTrait
         $foreignColumn = $column->getReferencedField();
         $foreignTable  = $column->getReferencedTable();
 
-        if (in_array($foreignTable, $properties['belongs_to'])) {
+        if (isset($properties['belongs_to']) && in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters = [ $foreignColumn => $model->$columnName ];
             $foreign    = $this->find($foreignTable, $delimiters);
 
@@ -87,18 +87,18 @@ trait ObjectTrait
      * @param  \CI_Model &$model
      * @param  object    $row
      * @param  array     $properties
-     * @param  array     $tableInformation
+     * @param  array     $columns
      * @return void
      */
-    protected function setModelFields(&$model, $row, $properties, $tableInformation)
+    protected function setModelFields(&$model, $row, $properties, $columns)
     {
-        foreach ($tableInformation as $column) {
+        foreach ($columns as $column) {
             $key = $column->getField();
 
-            $inColumns = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
-            $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
+            $inColumns = in_array($key, $properties['columns']);
+            $isHidden  = in_array($key, $properties['hidden']);
 
-            if ($inColumns || $inHiddenColumns) {
+            if (! $inColumns || $isHidden) {
                 continue;
             }
 
