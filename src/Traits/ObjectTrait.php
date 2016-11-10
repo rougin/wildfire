@@ -52,11 +52,11 @@ trait ObjectTrait
      * Finds the row from the specified ID or with the list of delimiters from
      * the specified table.
      *
-     * @param  string         $table
+     * @param  string         $tableName
      * @param  array|integer  $delimiters
-     * @return object|boolean
+     * @return object
      */
-    abstract protected function find($table, $delimiters = []);
+    abstract protected function find($tableName, $delimiters = []);
 
     /**
      * Sets the foreign field of the column, if any.
@@ -76,12 +76,9 @@ trait ObjectTrait
         if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters = [ $foreignColumn => $model->$columnName ];
             $foreign    = $this->find($foreignTable, $delimiters);
+            $tableName  = TableHelper::getNameFromModel($foreign);
 
-            if (is_object($foreign)) {
-                $tableName = TableHelper::getNameFromModel($foreign);
-
-                $model->$tableName = $foreign;
-            }
+            $model->$tableName = $foreign;
         }
     }
 
