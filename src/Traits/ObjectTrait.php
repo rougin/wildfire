@@ -30,7 +30,11 @@ trait ObjectTrait
     {
         list($tableName, $model) = ModelHelper::createInstance($table);
 
-        $properties = [];
+        $properties = [
+            'belongs_to' => [],
+            'columns'    => [],
+            'hidden'     => [],
+        ];
 
         if ($model instanceof CodeigniterModel) {
             $properties = $model->getProperties();
@@ -64,10 +68,6 @@ trait ObjectTrait
      */
     protected function setForeignField(\CI_Model $model, Column $column, array $properties)
     {
-        if (! $column->isForeignKey()) {
-            return;
-        }
-
         $columnName = $column->getField();
 
         $foreignColumn = $column->getReferencedField();
@@ -76,9 +76,12 @@ trait ObjectTrait
         if (in_array($foreignTable, $properties['belongs_to'])) {
             $delimiters = [ $foreignColumn => $model->$columnName ];
             $foreign    = $this->find($foreignTable, $delimiters);
-            $tableName  = TableHelper::getNameFromModel($foreign);
 
-            $model->$tableName = $foreign;
+            if (is_object($foreign)) {
+                $tableName  = TableHelper::getNameFromModel($foreign);
+
+                $model->$tableName = $foreign;
+            }
         }
     }
 
@@ -96,10 +99,10 @@ trait ObjectTrait
         foreach ($tableInformation as $column) {
             $key = $column->getField();
 
-            $inColumns = ! empty($properties['columns']) && ! in_array($key, $properties['columns']);
-            $inHiddenColumns = ! empty($properties['hidden']) && in_array($key, $properties['hidden']);
+            $isColumn = in_array($key, $properties['columns']);
+            $isHidden = in_array($key, $properties['hidden']);
 
-            if ($inColumns || $inHiddenColumns) {
+            if ((! empty($properties['columns']) && ! $isColumn) || $isHidden) {
                 continue;
             }
 
