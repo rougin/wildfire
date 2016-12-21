@@ -59,6 +59,21 @@ trait ObjectTrait
     abstract protected function find($table, $delimiters = []);
 
     /**
+     * Checks if the field is not a column or intended to be hidden.
+     *
+     * @param  string  $key
+     * @param  array   $properties
+     * @return boolean
+     */
+    protected function notColumnOrIsHidden($key, array $properties)
+    {
+        $isColumn = in_array($key, $properties['columns']);
+        $isHidden = in_array($key, $properties['hidden']);
+
+        return (! empty($properties['columns']) && ! $isColumn) || $isHidden;
+    }
+
+    /**
      * Sets the foreign field of the column, if any.
      *
      * @param  \CI_Model               $model
@@ -94,15 +109,12 @@ trait ObjectTrait
      * @param  array     $tableInformation
      * @return void
      */
-    protected function setModelFields(&$model, $row, $properties, $tableInformation)
+    protected function setModelFields(&$model, $row, array $properties, $tableInformation)
     {
         foreach ($tableInformation as $column) {
             $key = $column->getField();
 
-            $isColumn = in_array($key, $properties['columns']);
-            $isHidden = in_array($key, $properties['hidden']);
-
-            if ((! empty($properties['columns']) && ! $isColumn) || $isHidden) {
+            if ($this->notColumnOrIsHidden($key, $properties)) {
                 continue;
             }
 
