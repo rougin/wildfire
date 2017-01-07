@@ -2,7 +2,7 @@
 
 All notable changes to `Wildfire` will be documented in this file.
 
-## [0.4.0](https://github.com/rougin/wildfire/compare/v0.3.1...v0.4.0) - CURRENT_DATE
+## [0.4.0](https://github.com/rougin/wildfire/compare/v0.3.1...v0.4.0) - 2017-01-08
 
 ### Added
 - `CodeigniterModel` that extends to `CI_Model`
