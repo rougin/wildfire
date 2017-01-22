@@ -185,13 +185,7 @@ class Post extends CI_Model {
      *
      * @var array
      */
-    public $columns = array(
-        'id',
-        'subject',
-        'message',
-        'user_id',
-        'description',
-    );
+    public $columns = array('id', 'subject', 'message');
 
 }
 ```
@@ -214,13 +208,7 @@ class Post extends \Rougin\Wildfire\CodeigniterModel {
      *
      * @var array
      */
-    protected $columns = array(
-        'id',
-        'subject',
-        'message',
-        'user_id',
-        'description',
-    );
+    public $columns = array('id', 'subject', 'message');
 
     /**
      * Columns that will be hidden in the display.
@@ -228,7 +216,7 @@ class Post extends \Rougin\Wildfire\CodeigniterModel {
      *
      * @var array
      */
-    protected $hidden = array('datetime_created', 'datetime_updated');
+    protected $hidden = array();
 
 }
 ```
