@@ -221,6 +221,24 @@ class Post extends \Rougin\Wildfire\CodeigniterModel {
 }
 ```
 
+### Traits (for `Rougin\Wildfire\CodeigniterModel`)
+
+#### Available traits
+
+* `PaginateTrait` - creates a result with pagination links, utilizes [Pagination Class](https://www.codeigniter.com/user_guide/libraries/pagination.html)
+* `ValidateTrait` - validate input data, utilizes [Form Validation](https://www.codeigniter.com/user_guide/libraries/form_validation.html)
+
+#### Example
+
+``` php
+class Post extends \Rougin\Wildfire\CodeigniterModel {
+
+    use \Rougin\Wildfire\Traits\ValidateTrait;
+    use \Rougin\Wildfire\Traits\PaginateTrait;
+
+}
+```
+
 ## Change Log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
