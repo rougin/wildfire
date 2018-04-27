@@ -19,8 +19,6 @@ class CodeigniterModel extends \CI_Model
 
     public function __construct()
     {
-        parent::__construct();
-
         InstanceHelper::create($this->db);
     }
 
@@ -31,7 +29,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function all()
     {
-        return $this->find_by([]);
+        return $this->find_by(array());
     }
 
     /**
@@ -41,7 +39,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function countAll()
     {
-        return $this->db->count_all($this->getTableName());
+        return $this->db->count_all($this->table());
     }
 
     /**
@@ -52,9 +50,9 @@ class CodeigniterModel extends \CI_Model
      */
     public function delete($id)
     {
-        $this->db->where($this->getPrimaryKey(), $id);
+        $this->db->where($this->primary(), $id);
 
-        return $this->db->delete($this->getTableName());
+        return $this->db->delete($this->table());
     }
 
     /**
@@ -65,7 +63,11 @@ class CodeigniterModel extends \CI_Model
      */
     public function find($id)
     {
-        return InstanceHelper::get()->find($this->getTableName(), $id);
+        $instance = InstanceHelper::get();
+
+        $table = (string) $this->table();
+
+        return $instance->find($table, $id);
     }
 
     /**
@@ -99,7 +101,9 @@ class CodeigniterModel extends \CI_Model
      */
     public function insert(array $data)
     {
-        $this->db->insert($this->getTableName(), $data);
+        $table = (string) $this->table();
+
+        $this->db->insert($table, $data);
 
         return $this->db->insert_id();
     }
@@ -127,9 +131,10 @@ class CodeigniterModel extends \CI_Model
      */
     public function update($id, array $data)
     {
-        $this->db->where($this->getPrimaryKey(), $id);
-        $this->db->set($data);
+        $this->db->where($this->primary(), $id);
 
-        return $this->db->update($this->getTableName());
+        $this->db->set((array) $data);
+
+        return $this->db->update($this->table());
     }
 }

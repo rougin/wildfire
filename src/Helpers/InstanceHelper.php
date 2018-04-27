@@ -27,7 +27,9 @@ class InstanceHelper
     public static function create($database = null, $query = null)
     {
         if (empty(self::$wildfire)) {
-            self::$wildfire = new Wildfire($database, $query);
+            $wildfire = new Wildfire($database, $query);
+
+            self::$wildfire = $wildfire;
         }
     }
 
@@ -38,10 +40,6 @@ class InstanceHelper
      */
     public static function get()
     {
-        if (! empty(self::$wildfire)) {
-            return self::$wildfire;
-        }
-
-        return null;
+        return empty(self::$wildfire) ? null : self::$wildfire;
     }
 }

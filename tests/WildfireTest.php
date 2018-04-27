@@ -2,8 +2,14 @@
 
 namespace Rougin\Wildfire;
 
-use Rougin\Wildfire\Wildfire;
+use Rougin\SparkPlug\Instance;
 
+/**
+ * Wildfire Test
+ *
+ * @package Wildfire
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ */
 class WildfireTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,7 +20,7 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
     /**
      * @var integer
      */
-    protected $expectedRows = 10;
+    protected $expected = 10;
 
     /**
      * @var string
@@ -28,12 +34,14 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $appPath = __DIR__ . '/TestApp';
+        $path = (string) __DIR__ . '/TestApp';
 
-        $this->ci = \Rougin\SparkPlug\Instance::create($appPath);
+        $this->ci = Instance::create($path);
 
         $this->ci->load->database();
+
         $this->ci->load->model($this->table);
+
         $this->ci->load->model('user');
     }
 
@@ -45,9 +53,10 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
     public function testGetMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
-        $data = $wildfire->get($this->table)->result();
 
-        $this->assertCount($this->expectedRows, $data);
+        $result = $wildfire->get($this->table)->result();
+
+        $this->assertCount($this->expected, $result);
     }
 
     /**
@@ -61,9 +70,9 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
 
         $wildfire = new Wildfire($this->ci->db);
 
-        $data = $wildfire->get('comment')->result();
+        $result = $wildfire->get('comment')->result();
 
-        $this->assertCount($this->expectedRows, $data);
+        $this->assertCount($this->expected, $result);
     }
 
     /**
@@ -73,11 +82,15 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
      */
     public function testQueryMethod()
     {
-        $query = $this->ci->db->query('SELECT * FROM ' . $this->table);
-        $wildfire = new Wildfire($this->ci->db, $query);
-        $data = $wildfire->result();
+        $query = (string) 'SELECT * FROM ' . $this->table;
 
-        $this->assertCount($this->expectedRows, $data);
+        $query = $this->ci->db->query($query);
+
+        $wildfire = new Wildfire($this->ci->db, $query);
+
+        $result = $wildfire->result();
+
+        $this->assertCount($this->expected, $result);
     }
 
     /**
@@ -88,9 +101,10 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
     public function testAsDropdownMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
-        $data = $wildfire->get($this->table)->as_dropdown();
 
-        $this->assertCount($this->expectedRows, $data);
+        $result = $wildfire->get($this->table)->as_dropdown();
+
+        $this->assertCount($this->expected, $result);
     }
 
     /**
@@ -100,11 +114,15 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindMethod()
     {
-        $expectedId = 1;
         $wildfire = new Wildfire($this->ci->db);
-        $post = $wildfire->find($this->table, $expectedId);
 
-        $this->assertEquals($expectedId, $post->get_id());
+        $expected = (integer) 1;
+
+        $post = $wildfire->find($this->table, $expected);
+
+        $result = $post->get_id();
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -114,9 +132,9 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindMethodError()
     {
-        $expectedId = 11;
         $wildfire = new Wildfire($this->ci->db);
-        $post = $wildfire->find($this->table, $expectedId);
+
+        $post = $wildfire->find($this->table, 11);
 
         $this->assertEmpty($post);
     }
@@ -128,13 +146,17 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
      */
     public function testWildfireWithoutConstructor()
     {
-        $this->ci->db->limit(5);
+        $this->ci->db->limit($expected = 5);
 
         $wildfire = new Wildfire;
-        $wildfire->set_database($this->ci->db);
-        $data = $wildfire->get($this->table)->result();
 
-        $this->assertCount(5, $data);
+        $wildfire->set_database($this->ci->db);
+
+        $data = $wildfire->get($this->table);
+
+        $result = $data->result();
+
+        $this->assertCount($expected, $result);
     }
 
     /**
@@ -144,13 +166,16 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetQueryMethod()
     {
-        $query = $this->ci->db->query('SELECT * FROM ' . $this->table);
+        $query = 'SELECT * FROM ' . $this->table;
+
+        $query = $this->ci->db->query($query);
 
         $wildfire = new Wildfire($this->ci->db);
+
         $wildfire->set_query($query);
 
-        $data = $wildfire->result();
+        $result = $wildfire->result();
 
-        $this->assertCount($this->expectedRows, $data);
+        $this->assertCount($this->expected, $result);
     }
 }

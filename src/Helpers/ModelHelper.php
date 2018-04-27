@@ -11,20 +11,37 @@ namespace Rougin\Wildfire\Helpers;
 class ModelHelper
 {
     /**
-     * Gets the model class of the said table.
+     * Returns the model class of the said table.
+     * NOTE: To be removed in v1.0.0. Use self::make instead.
      *
-     * @param  string|object $tableName
+     * @param  string|object $table
      * @return array
      */
-    public static function createInstance($tableName)
+    public static function createInstance($table)
     {
-        if (is_object($tableName)) {
-            return [ TableHelper::getNameFromModel($tableName), $tableName ];
+        return self::make($table);
+    }
+
+    /**
+     * Returns the model class of the said table.
+     *
+     * @param  string|object $table
+     * @return array
+     */
+    public static function make($table)
+    {
+        if (is_object($table) === true) {
+            $name = TableHelper::name($table);
+
+            return array((string) $name, $table);
         }
 
-        $modelName = TableHelper::getModelName($tableName);
-        $newModel  = new $modelName;
+        $model = TableHelper::model($table);
 
-        return [ TableHelper::getNameFromModel($newModel), $newModel ];
+        $model = new $model;
+
+        $name = TableHelper::name($model);
+
+        return array((string) $name, $model);
     }
 }

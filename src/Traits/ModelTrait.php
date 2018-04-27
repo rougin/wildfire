@@ -16,7 +16,7 @@ trait ModelTrait
      *
      * @var array
      */
-    protected $columns = [];
+    protected $columns = array();
 
     /**
      * Columns that will be hidden in the display.
@@ -24,7 +24,7 @@ trait ModelTrait
      *
      * @var array
      */
-    protected $hidden = [ 'password' ];
+    protected $hidden = array('password');
 
     /**
      * Model's default primary key or unique identifier.
@@ -41,13 +41,35 @@ trait ModelTrait
     protected $table = '';
 
     /**
-     * Gets the specified primary key of the model.
+     * Returns the specified primary key of the model.
+     * NOTE: To be removed in v1.0.0. Use $this->primary instead.
      *
      * @return string
      */
     public function getPrimaryKey()
     {
+        return $this->primary();
+    }
+
+    /**
+     * Returns the specified primary key of the model.
+     *
+     * @return string
+     */
+    public function primary()
+    {
         return $this->primary_key;
+    }
+
+    /**
+     * Returns the values from the model's properties.
+     * NOTE: To be removed in v1.0.0. Use $this->properties instead.
+     *
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties();
     }
 
     /**
@@ -55,27 +77,37 @@ trait ModelTrait
      *
      * @return array
      */
-    public function getProperties()
+    public function properties()
     {
-        $properties = [];
+        $properties = array();
 
         $properties['columns'] = $this->columns;
+
         $properties['hidden']  = $this->hidden;
 
         return $properties;
     }
 
     /**
-     * Gets the specified table name of the model.
+     * Returns the specified table name of the model.
+     * NOTE: To be removed in v1.0.0. Use $this->table instead.
      *
      * @return string
      */
     public function getTableName()
     {
-        if (! $this->table) {
-            return plural(strtolower(get_class($this)));
-        }
+        return $this->table();
+    }
 
-        return $this->table;
+    /**
+     * Returns the specified table name of the model.
+     *
+     * @return string
+     */
+    public function table()
+    {
+        $table = plural(strtolower(get_class($this)));
+
+        return $this->table ? $this->table : $table;
     }
 }

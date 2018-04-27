@@ -12,37 +12,60 @@ class TableHelper
 {
     /**
      * Parses the table name from Describe class.
+     * NOTE: To be removed in v1.0.0. Use self::model instead.
      *
      * @param  string $table
      * @return string
      */
     public static function getModelName($table)
     {
-        $tableName  = ucfirst(singular($table));
-        $tableNames = explode('.', $tableName);
+        return self::model($table);
+    }
 
-        return isset($tableNames[1]) ? $tableNames[1] : $tableName;
+    /**
+     * Parses the table name from Describe class.
+     *
+     * @param  string $table
+     * @return string
+     */
+    public static function model($table)
+    {
+        $name = (string) ucfirst(singular($table));
+
+        $names = (array) explode('.', $name);
+
+        return isset($names[1]) ? $names[1] : $name;
     }
 
     /**
      * Gets the table name specified from the model.
-     * NOTE: To be removed in v1.0.0. Use $model->getTableName()
+     * NOTE: To be removed in v1.0.0. Use self::name instead.
      *
      * @param  object $model
      * @return string
      */
     public static function getNameFromModel($model)
     {
-        $tableName = '';
+        return self::name($model);
+    }
 
-        if (method_exists($model, 'getTableName')) {
-            $tableName = $model->getTableName();
-        }
+    /**
+     * Gets the table name specified from the model.
+     * NOTE: To be removed in v1.0.0. Use $model->table()
+     *
+     * @param  object $model
+     * @return string
+     */
+    public static function name($model)
+    {
+        $table = '';
 
-        if (isset($model->table)) {
-            $tableName = $model->table;
-        }
+        $exists = method_exists($model, 'table');
 
-        return $tableName;
+        $exists && $table = $model->table();
+
+        isset($model->table) && $table = $model->table;
+
+        return $table;
     }
 }

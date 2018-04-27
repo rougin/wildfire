@@ -21,6 +21,7 @@ trait ObjectTrait
 {
     /**
      * Creates an object from the specified table and row.
+     * NOTE: To be removed in v1.0.0. Use $this->make instead.
      *
      * @param  string|\Rougin\Wildfire\CodeigniterModel $table
      * @param  object                                   $row
@@ -28,22 +29,35 @@ trait ObjectTrait
      */
     protected function createObject($table, $row)
     {
-        list($tableName, $model) = ModelHelper::createInstance($table);
+        return $this->make($table, $row);
+    }
 
-        $properties = [
-            'belongs_to' => [],
-            'columns'    => [],
-            'hidden'     => [],
-        ];
+    /**
+     * Creates an object from the specified table and row.
+     *
+     * @param  \Rougin\Wildfire\CodeigniterModel\string $table
+     * @param  object                                   $row
+     * @return array
+     */
+    protected function make($table, $row)
+    {
+        list($table, $model) = ModelHelper::make($table);
 
-        if ($model instanceof CodeigniterModel) {
-            $properties = $model->getProperties();
-            $properties = $model->getRelationshipProperties($properties);
+        $properties = array('belongs_to' => array());
+
+        $properties['hidden'] = array();
+
+        $properties['columns'] = array();
+
+        if ($model instanceof CodeigniterModel === true) {
+            $properties = $model->properties();
+
+            $properties = $model->relationships($properties);
         }
 
-        $tableInfo = $this->describe->getTable($tableName);
+        $columns = $this->describe->columns($table);
 
-        $this->setModelFields($model, $row, $properties, $tableInfo);
+        $this->setModelFields($model, $row, $properties, $columns);
 
         return $model;
     }

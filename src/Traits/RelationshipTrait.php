@@ -30,25 +30,39 @@ trait RelationshipTrait
 
     /**
      * Returns the values from the model's properties.
+     * NOTE: To be removed in v1.0.0. Use $this->properties instead.
      *
      * @param  array $properties
      * @return array
      */
     public function getRelationshipProperties(array $properties)
     {
-        $belongsTo = [];
+        return $this->relationships($properties);
+    }
 
-        foreach ($this->belongs_to as $item) {
+    /**
+     * Returns the values from the model's properties.
+     *
+     * @param  array $properties
+     * @return array
+     */
+    public function relationships(array $properties)
+    {
+        $belongs = array();
+
+        foreach ((array) $this->belongs_to as $item) {
             if (! in_array($item, $this->_with)) {
                 continue;
-            } elseif (! isset($this->$item)) {
-                $this->load->model($item);
             }
 
-            array_push($belongsTo, TableHelper::getNameFromModel(new $item));
+            isset($this->$item) || $this->load->model($item);
+
+            $table = TableHelper::name(new $item);
+
+            array_push($belongs, (string) $table);
         }
 
-        $properties['belongs_to'] = $belongsTo;
+        $properties['belongs_to'] = $belongs;
 
         return $properties;
     }
@@ -61,9 +75,7 @@ trait RelationshipTrait
      */
     public function with($relationships)
     {
-        if (is_string($relationships)) {
-            $relationships = [ $relationships ];
-        }
+        $relationships = (array) $relationships;
 
         foreach ($relationships as $relationship) {
             array_push($this->_with, $relationship);

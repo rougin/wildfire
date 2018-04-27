@@ -14,25 +14,39 @@ use Rougin\Describe\Driver\CodeIgniterDriver;
 class DescribeHelper
 {
     /**
-     * Gets the Describe class based on the given database.
+     * Returns the Describe instance based from database.
+     * NOTE: To be removed in v1.0.0. Use self::make instead.
      *
      * @param  \CI_DB_query_builder $database
      * @return \Rougin\Describe\Describe
      */
     public static function createInstance($database)
     {
-        $config = [
-            'default' => [
-                'dbdriver' => $database->dbdriver,
-                'hostname' => $database->hostname,
-                'username' => $database->username,
-                'password' => $database->password,
-                'database' => $database->database
-            ],
-        ];
+        return self::make($database);
+    }
 
-        if (empty($config['default']['hostname'])) {
-            $config['default']['hostname'] = $database->dsn;
+    /**
+     * Returns the Describe instance based from database.
+     *
+     * @param  \CI_DB_query_builder $database
+     * @return \Rougin\Describe\Describe
+     */
+    public static function make($database)
+    {
+        $config = array('dbdriver' => $database->dbdriver);
+
+        $config['hostname'] = $database->hostname;
+
+        $config['username'] = $database->username;
+
+        $config['password'] = $database->password;
+
+        $config['database'] = $database->database;
+
+        if (empty($config['hostname'])) {
+            $dsn = (string) $database->dsn;
+
+            $config['hostname'] = $dsn;
         }
 
         $driver = new CodeIgniterDriver($config);

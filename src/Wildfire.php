@@ -17,40 +17,40 @@ class Wildfire extends \CI_Model
     use Traits\DatabaseTrait, Traits\ObjectTrait, Traits\ResultTrait;
 
     /**
+     * Initializes the Wildfire instance.
+     *
      * @param \CI_DB_query_builder|null $database
      * @param \CI_DB_result|null        $query
      */
     public function __construct($database = null, $query = null)
     {
-        if (! empty($database)) {
-            $this->setDatabase($database);
-        }
+        empty($database) || $this->database($database);
 
         $this->query = $query;
     }
 
     /**
-     * Finds the row from the specified ID or with the list of delimiters from
-     * the specified table.
+     * Finds the row from the specified ID or with the
+     * list of delimiters from the specified table.
      *
-     * @param  string         $tableName
+     * @param  string         $table
      * @param  array|integer  $delimiters
      * @return object|boolean
      */
-    public function find($tableName, $delimiters = [])
+    public function find($table, $delimiters = [])
     {
-        if (is_integer($delimiters)) {
-            $primaryKey = $this->describe->getPrimaryKey($tableName);
+        if (is_integer($delimiters) === true) {
+            $primary = $this->describe->primary($table);
 
-            $delimiters = [ $primaryKey => $delimiters ];
+            $delimiters = array($primary => $delimiters);
         }
 
         $this->db->where($delimiters);
 
-        $query = $this->db->get($tableName);
+        $query = $this->db->get($table);
 
         if ($query->num_rows() > 0 && $query->row()) {
-            return $this->createObject($tableName, $query->row());
+            return $this->createObject($table, $query->row());
         }
 
         return false;

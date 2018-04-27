@@ -2,6 +2,14 @@
 
 namespace Rougin\Wildfire;
 
+use Rougin\SparkPlug\Instance;
+
+/**
+ * Codeigniter Model Test
+ *
+ * @package Wildfire
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ */
 class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,7 +20,7 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
     /**
      * @var integer
      */
-    protected $expectedRows = 10;
+    protected $expected = 10;
 
     /**
      * @var string
@@ -26,13 +34,15 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $appPath = __DIR__ . '/TestApp';
+        $path = (string) __DIR__ . '/TestApp';
 
-        $this->ci = \Rougin\SparkPlug\Instance::create($appPath);
+        $this->ci = Instance::create($path);
 
         $this->ci->load->helper('inflector');
 
-        $this->ci->load->model(singular($this->table), '', true);
+        $table = (string) singular($this->table);
+
+        $this->ci->load->model($table, '', true);
     }
 
     /**
@@ -42,7 +52,11 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethod()
     {
-        $this->assertCount($this->expectedRows - 1, $this->ci->comment->all());
+        $expected = (integer) $this->expected - 1;
+
+        $result = $this->ci->comment->all();
+
+        $this->assertCount($expected, $result);
     }
 
     /**
@@ -52,12 +66,13 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindMethod()
     {
-        $expectedId   = 2;
-        $expectedName = 'm5yq';
+        $expected = (string) 'm5yq';
 
-        $comment = $this->ci->comment->find($expectedId);
+        $comment = $this->ci->comment->find(2);
 
-        $this->assertEquals($expectedName, $comment->name);
+        $result = (string) $comment->name;
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -67,11 +82,11 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testHiddenColumns()
     {
-        $expectedId = 2;
+        $comment = $this->ci->comment->find(2);
 
-        $comment = $this->ci->comment->find($expectedId);
+        $exists = property_exists($comment, 'id');
 
-        $this->assertFalse(property_exists($comment, 'id'));
+        $this->assertFalse($exists);
     }
 
     /**
@@ -83,9 +98,13 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
     {
         $this->ci->load->model('post', '', true);
 
+        $expected = (integer) 1;
+
         $comments = $this->ci->post->with('user')->all();
 
-        $this->assertEquals(1, $comments[0]->user->id);
+        $result = $comments[0]->user->id;
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -95,11 +114,11 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteMethod()
     {
-        $data = [ 'name' => 'test', 'message' => 'test' ];
+        $data = array('name' => 'test', 'message' => 'test');
 
         $id = $this->ci->comment->insert($data);
 
-        $this->ci->comment->delete($id);
+        $this->ci->comment->delete((integer) $id);
 
         $comment = $this->ci->comment->find($id);
 
@@ -113,15 +132,17 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateMethod()
     {
-        $expectedId = 3;
+        $data = array('name' => 'test', 'message' => 'test');
 
-        $data = [ 'name' => 'test', 'message' => 'test' ];
+        $this->ci->comment->update(3, $data);
 
-        $this->ci->comment->update($expectedId, $data);
+        $expected = $data['name'];
 
-        $comment = $this->ci->comment->find($expectedId);
+        $comment = $this->ci->comment->find(3);
 
-        $this->assertEquals($data['name'], $comment->name);
+        $result = $comment->name;
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -131,10 +152,15 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateMethod()
     {
-        $expected  = [ 'name' => 'The Name field is required.' ];
-        $validated = $this->ci->comment->validate([ 'message' => 'test' ]);
+        $expected = array('name' => 'The Name field is required.');
 
-        $this->assertEquals($expected, $this->ci->comment->validation_errors());
+        $data = array('message' => 'test');
+
+        $validated = $this->ci->comment->validate($data);
+
+        $result = $this->ci->comment->validation_errors();
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -144,17 +170,18 @@ class CodeigniterModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testPaginateMethod()
     {
-        $expectedRows = 5;
+        $config = array('page_query_string' => true);
 
-        $configuration = [
-            'page_query_string' => true,
-            'use_page_numbers'  => true,
-        ];
+        $config['use_page_numbers'] = true;
 
         $_GET['per_page'] = 1;
 
-        list($items, $links) = $this->ci->post->paginate($expectedRows, $configuration);
+        $expected = (integer) 5;
 
-        $this->assertCount($expectedRows, $items);
+        $item = $this->ci->post->paginate($expected, $config);
+
+        list($result, $links) = $item;
+
+        $this->assertCount($expected, $result);
     }
 }
