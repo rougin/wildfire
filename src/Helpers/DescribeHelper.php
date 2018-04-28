@@ -43,10 +43,10 @@ class DescribeHelper
 
         $config['database'] = $database->database;
 
-        if (empty($config['hostname'])) {
+        if (empty($config['hostname']) === true) {
             $dsn = (string) $database->dsn;
 
-            $config['hostname'] = $dsn;
+            $config['hostname'] = (string) $dsn;
         }
 
         $driver = new CodeIgniterDriver($config);
