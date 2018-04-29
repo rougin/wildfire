@@ -30,18 +30,18 @@ class ModelHelper
      */
     public static function make($table)
     {
-        if (is_object($table) === true) {
-            $name = TableHelper::name($table);
+        if (is_string($table) === true) {
+            $model = TableHelper::model($table);
 
-            return array((string) $name, $table);
+            $model = new $model;
+
+            $name = TableHelper::name($model);
+
+            return array((string) $name, $model);
         }
 
-        $model = TableHelper::model($table);
+        $name = TableHelper::name($table);
 
-        $model = new $model;
-
-        $name = TableHelper::name($model);
-
-        return array((string) $name, $model);
+        return array((string) $name, $table);
     }
 }
