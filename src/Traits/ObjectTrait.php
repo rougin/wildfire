@@ -88,8 +88,6 @@ trait ObjectTrait
 
             $hidden = in_array($field, $properties['hidden']);
 
-            $foreign = in_array($field, $properties['hidden']);
-
             if ($allowed === true || $hidden === false) {
                 $table = (string) $column->getReferencedTable();
 
@@ -97,7 +95,7 @@ trait ObjectTrait
 
                 $exists = in_array($table, $properties['relationships']);
 
-                $exists && $this->foreign($model, $column, $properties);
+                $exists === true && $this->foreign($model, $column);
             }
         }
 

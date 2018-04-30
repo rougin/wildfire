@@ -27,6 +27,7 @@ trait PaginateTrait
 
         $this->pagination->initialize($config);
 
+        // TODO: Isolate this method from this trait
         $result = $this->limit($page, $offset)->all();
 
         $links = $this->pagination->create_links();

@@ -15,6 +15,11 @@ class CodeigniterModel extends \CI_Model
     use Traits\ModelTrait, Traits\RelationshipTrait;
 
     /**
+     * @var \Rougin\Wildfire\Wildfire
+     */
+    protected $wildfire;
+
+    /**
      * Initializes the Codeigniter model instance.
      *
      * @param \Rougin\Wildfire\Wildfire $wildfire
