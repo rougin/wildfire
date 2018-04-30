@@ -7,17 +7,23 @@ namespace Rougin\Wildfire\Traits;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property array               $validation_rules
- * @property \CI_Form_validation $form_validation
- * @property \CI_Loader          $load
  */
 trait ValidateTrait
 {
     /**
      * @var array
      */
-    protected $validationErrors = [];
+    protected $errors = array();
+
+    /**
+     * Returns a listing of error messages.
+     *
+     * @return array
+     */
+    public function errors()
+    {
+        return $this->errors;
+    }
 
     /**
      * Validates the specified data based on the validation rules.
@@ -25,20 +31,16 @@ trait ValidateTrait
      * @param  array $data
      * @return boolean
      */
-    public function validate(array $data = [])
+    public function validate(array $data = array())
     {
         $this->load->library('form_validation');
 
-        if (! empty($data)) {
-            $this->form_validation->set_data($data);
-        }
+        ! empty($data) && $this->form_validation->set_data($data);
 
         $this->form_validation->set_rules($this->validation_rules);
 
-        $validated = $this->form_validation->run() === true;
-
-        if (! $validated) {
-            $this->validationErrors = $this->form_validation->error_array();
+        if (! ($validated = $this->form_validation->run())) {
+            $this->errors = $this->form_validation->error_array();
         }
 
         return $validated;
@@ -46,11 +48,12 @@ trait ValidateTrait
 
     /**
      * Returns a listing of error messages.
+     * NOTE: To be removed in v1.0.0. Use $this->errors instead.
      *
      * @return array
      */
     public function validation_errors()
     {
-        return $this->validationErrors;
+        return $this->errors();
     }
 }

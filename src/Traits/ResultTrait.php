@@ -7,12 +7,11 @@ namespace Rougin\Wildfire\Traits;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property \Rougin\Describe\Describe $describe
- * @property \CI_DB_result             $query
  */
 trait ResultTrait
 {
+    use ObjectTrait;
+
     /**
      * @var string
      */
@@ -20,43 +19,42 @@ trait ResultTrait
 
     /**
      * Lists all data in dropdown format.
+     * NOTE: To be removed in v1.0.0. Use $this->dropdown instead.
      *
      * @param  string $description
      * @return array
      */
     public function asDropdown($description = 'description')
     {
-        $data = [];
-
-        $id = $this->describe->getPrimaryKey($this->table);
-
-        $result = $this->query->result();
-
-        foreach ($result as $row) {
-            $data[$row->$id] = ucwords($row->$description);
-        }
-
-        $this->resetQuery();
-
-        return $data;
+        return $this->dropdown($description);
     }
 
     /**
-     * Creates an object from the specified table and row.
+     * Returns result data in array dropdown format.
      *
-     * @param  string $table
-     * @param  object $row
+     * @param  string $column
      * @return array
      */
-    abstract protected function createObject($table, $row);
+    public function dropdown($column = 'description')
+    {
+        $data = array();
 
-    /**
-     * Returns all rows from the specified table.
-     *
-     * @param  string $table
-     * @return self
-     */
-    abstract public function get($table = '');
+        $id = $this->describe->primary($this->table);
+
+        $result = $this->query->result();
+
+        foreach ((array) $result as $row) {
+            $text = ucwords($row->$column);
+
+            $identifier = $row->$id;
+
+            $data[$identifier] = $text;
+        }
+
+        $this->reset();
+
+        return $data;
+    }
 
     /**
      * Returns the result.
@@ -65,43 +63,25 @@ trait ResultTrait
      */
     public function result()
     {
-        $data = $this->getQueryResult();
+        $models = array();
 
-        $result = [];
+        $exists = method_exists($this->query, 'result');
 
-        if (empty($this->table)) {
-            $this->get();
+        $query = $this->query;
+
+        $data = $exists ? $query->result() : $query;
+
+        $this->get($this->table);
+
+        foreach ((array) $data as $row) {
+            $model = $this->make($this->table, $row);
+
+            array_push($models, $model);
         }
 
-        foreach ($data as $row) {
-            $object = $this->createObject($this->table, $row);
+        $this->reset();
 
-            array_push($result, $object);
-        }
-
-        $this->resetQuery();
-
-        return $result;
-    }
-
-    /**
-     * Gets the data result from the specified query.
-     *
-     * @return array|object
-     */
-    protected function getQueryResult()
-    {
-        $result = $this->query;
-
-        if (method_exists($this->query, 'result')) {
-            $result = $this->query->result();
-        }
-
-        if ($this->table) {
-            $this->get($this->table);
-        }
-
-        return $result;
+        return $models;
     }
 
     /**
@@ -109,9 +89,10 @@ trait ResultTrait
      *
      * @return void
      */
-    protected function resetQuery()
+    protected function reset()
     {
         $this->table = null;
+
         $this->query = null;
     }
 }

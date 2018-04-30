@@ -83,6 +83,8 @@ trait ModelTrait
 
         $properties['columns'] = $this->columns;
 
+        $properties['relationships'] = array();
+
         $properties['hidden']  = $this->hidden;
 
         return $properties;

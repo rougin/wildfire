@@ -2,6 +2,8 @@
 
 namespace Rougin\Wildfire\Traits;
 
+use Rougin\Describe\Describe;
+use Rougin\Describe\Driver\CodeIgniterDriver;
 use Rougin\Wildfire\Helpers\DescribeHelper;
 
 /**
@@ -49,7 +51,20 @@ trait DatabaseTrait
     {
         $this->db = $database;
 
-        $this->describe = DescribeHelper::make($database);
+        $config = array('dbdriver' => $database->dbdriver);
+
+        $config['hostname'] = $database->hostname;
+        $config['username'] = $database->username;
+        $config['password'] = $database->password;
+        $config['database'] = $database->database;
+
+        if (empty($config['hostname']) === true) {
+            $config['hostname'] = $database->dsn;
+        }
+
+        $driver = new CodeIgniterDriver($config);
+
+        $this->describe = new Describe($driver);
 
         return $this;
     }

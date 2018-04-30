@@ -9,17 +9,21 @@ use Rougin\Wildfire\Helpers\InstanceHelper;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property \CI_DB_query_builder $db
- * @method   array result()
  */
 class CodeigniterModel extends \CI_Model
 {
     use Traits\ModelTrait, Traits\RelationshipTrait;
 
-    public function __construct()
+    /**
+     * Initializes the Codeigniter model instance.
+     *
+     * @param \Rougin\Wildfire\Wildfire $wildfire
+     */
+    public function __construct(Wildfire $wildfire = null)
     {
-        InstanceHelper::create($this->db);
+        $default = new Wildfire($this->db);
+
+        $this->wildfire = $wildfire ?: $default;
     }
 
     /**
@@ -63,11 +67,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function find($id)
     {
-        $instance = InstanceHelper::get();
-
-        $table = (string) $this->table();
-
-        return $instance->find($table, $id);
+        return $this->wildfire->find($this->table(), $id);
     }
 
     /**
@@ -90,7 +90,7 @@ class CodeigniterModel extends \CI_Model
      */
     public function get()
     {
-        return InstanceHelper::get()->get($this);
+        return $this->wildfire->get($this);
     }
 
     /**
@@ -118,6 +118,20 @@ class CodeigniterModel extends \CI_Model
     public function limit($value, $offset = '')
     {
         $this->db->limit($value, $offset);
+
+        return $this;
+    }
+
+    /**
+     * Sets a property with a value.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @return self
+     */
+    public function set($key, $value)
+    {
+        $this->$key = $value;
 
         return $this;
     }

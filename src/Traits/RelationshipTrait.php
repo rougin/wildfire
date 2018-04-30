@@ -3,7 +3,6 @@
 namespace Rougin\Wildfire\Traits;
 
 use Rougin\SparkPlug\Instance;
-
 use Rougin\Wildfire\Helpers\TableHelper;
 
 /**
@@ -11,8 +10,6 @@ use Rougin\Wildfire\Helpers\TableHelper;
  *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
- *
- * @property \CI_Loader $load
  */
 trait RelationshipTrait
 {
@@ -21,12 +18,12 @@ trait RelationshipTrait
      *
      * @var array
      */
-    protected $belongs_to = [];
+    protected $belongs_to = array();
 
     /**
      * @var array
      */
-    private $_with = [];
+    private $_with = array();
 
     /**
      * Returns the values from the model's properties.
@@ -48,21 +45,15 @@ trait RelationshipTrait
      */
     public function relationships(array $properties)
     {
-        $belongs = array();
-
         foreach ((array) $this->belongs_to as $item) {
-            if (! in_array($item, $this->_with)) {
-                continue;
+            if (in_array($item, $this->_with) === true) {
+                isset($this->$item) || $this->load->model($item);
+
+                $table = TableHelper::name(new $item);
+
+                $properties['relationships'][] = $table;
             }
-
-            isset($this->$item) || $this->load->model($item);
-
-            $table = TableHelper::name(new $item);
-
-            array_push($belongs, (string) $table);
         }
-
-        $properties['belongs_to'] = $belongs;
 
         return $properties;
     }

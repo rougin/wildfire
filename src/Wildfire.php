@@ -2,7 +2,7 @@
 
 namespace Rougin\Wildfire;
 
-use Rougin\Wildfire\Helpers\ModelHelper;
+use Rougin\Wildfire\Helpers\TableHelper;
 
 /**
  * Wildfire
@@ -14,7 +14,7 @@ use Rougin\Wildfire\Helpers\ModelHelper;
  */
 class Wildfire extends \CI_Model
 {
-    use Traits\DatabaseTrait, Traits\ObjectTrait, Traits\ResultTrait;
+    use Traits\DatabaseTrait, Traits\ResultTrait;
 
     /**
      * Initializes the Wildfire instance.
@@ -50,7 +50,7 @@ class Wildfire extends \CI_Model
         $query = $this->db->get($table);
 
         if ($query->num_rows() > 0 && $query->row()) {
-            return $this->createObject($table, $query->row());
+            return $this->make($table, $query->row());
         }
 
         return false;
@@ -65,46 +65,64 @@ class Wildfire extends \CI_Model
     public function get($table = '')
     {
         // Guess the specified table from the query
-        if (empty($table)) {
+        if (empty($table) === true) {
+            $pattern = '/\bfrom\b\s*(\w+)/i';
+
             $query = $this->db->last_query();
 
-            preg_match('/\bfrom\b\s*(\w+)/i', $query, $matches);
+            preg_match($pattern, $query, $matches);
 
-            $this->table = $matches[1];
+            $this->table = (string) $matches[1];
 
             return $this;
         }
 
-        $this->setQueryAndTable($table);
+        return $this->prepare($table);
+    }
+
+    /**
+     * Returns the model class of the said table.
+     *
+     * @param  string|object $table
+     * @return array
+     */
+    protected function model($table)
+    {
+        if (is_string($table) === true) {
+            $model = TableHelper::model($table);
+
+            $model = new $model;
+
+            $name = TableHelper::name($model);
+
+            return array((string) $name, $model);
+        }
+
+        $name = TableHelper::name($table);
+
+        return array((string) $name, $table);
+    }
+
+    /**
+     * Prepares the query and table properties.
+     *
+     * @param  string|object $table
+     * @return self
+     */
+    protected function prepare($table)
+    {
+        list($name, $model) = (array) $this->model($table);
+
+        $this->query || $this->query = $this->db->get($name);
+
+        $this->table = $model === $table ? $model : $name;
 
         return $this;
     }
 
     /**
-     * Sets the query and table properties.
-     *
-     * @param  string|object $table
-     * @return void
-     */
-    protected function setQueryAndTable($table)
-    {
-        list($tableName, $model) = ModelHelper::createInstance($table);
-
-        $this->table = $tableName;
-
-        if ($this->query == null) {
-            $this->query = $this->db->get($tableName);
-        }
-
-        if ($model == $table) {
-            $this->table = $model;
-        }
-
-        return;
-    }
-
-    /**
      * Calls methods from this class in underscore case.
+     * NOTE: To be removed in v1.0.0. Methods are now only one words.
      *
      * @param  string $method
      * @param  mixed  $parameters
@@ -112,13 +130,14 @@ class Wildfire extends \CI_Model
      */
     public function __call($method, $parameters)
     {
-        $method = camelize($method);
+        $method = (string) camelize($method);
+
         $result = $this;
 
-        if (method_exists($this, $method)) {
-            $class = [$this, $method];
-            
-            $result = call_user_func_array($class, $parameters);
+        if (method_exists($this, $method) === true) {
+            $instance = array($this, (string) $method);
+
+            $result = call_user_func_array($instance, $parameters);
         }
 
         return $result;
