@@ -1,17 +1,17 @@
 # Wildfire
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
+[![Software License][ico-license]][link-license]
 [![Build Status][ico-travis]][link-travis]
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Yet another wrapper for [CodeIgniter](https://codeigniter.com)'s [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html).
+Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework.
 
 ## Install
 
-Via Composer
+Via [Composer](https://getcomposer.org):
 
 ``` bash
 $ composer require rougin/wildfire
@@ -21,8 +21,6 @@ $ composer require rougin/wildfire
 
 ### Tables (in SQLite)
 
-#### "User" table
-
 ``` sql
 CREATE TABLE "user" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -30,17 +28,7 @@ CREATE TABLE "user" (
     "age" INTEGER NOT NULL,
     "gender" TEXT NOT NULL
 );
-```
 
-#### application/models/User.php
-
-``` php
-class User extends CI_Model {}
-```
-
-#### "Post" table
-
-``` sql
 CREATE TABLE post (
     id INTEGER PRIMARY KEY,
     subject TEXT NOT NULL,
@@ -51,59 +39,82 @@ CREATE TABLE post (
 );
 ```
 
-#### application/models/Post.php
+### Models
+
+**application/models/User.php**
+
+``` php
+class User extends CI_Model {}
+```
+
+**application/models/Post.php**
 
 ``` php
 class Post extends CI_Model {}
 ```
 
-### Using [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
+### Using with a [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
 
-#### application/controllers/Welcome.php
+**application/controllers/Welcome.php**
 
 ``` php
-$this->load->model('post')->model('user');
+use Rougin\Wildfire\Wildfire;
+
+// Load the required models
+$this->load->model('post');
+$this->load->model('user');
 
 // Build your queries here
 $this->db->like('subject', 'Foo Bar', 'both');
 
-// Instantiate Wildfire with the CI_DB class
-$wildfire = new Rougin\Wildfire\Wildfire($this->db);
+// Pass the existing \CI_DB instance
+$wildfire = new Wildfire($this->db);
 
-// Returns an array of Post objects with a User object per Post object
+// Returns an array of Post objects with a
+// User object per Post object from result
 $posts = $wildfire->get('post')->result();
 ```
 
-### Using raw SQL query
+### Using with a raw SQL query
 
-#### application/controllers/Welcome.php
+**application/controllers/Welcome.php**
 
 ``` php
-$this->load->model('post')->model('user');
+use Rougin\Wildfire\Wildfire;
 
+// Load the required models
+$this->load->model('post');
+$this->load->model('user');
+
+// Create raw SQL queries here...
 $query = $this->db->query('SELECT * FROM post');
 
-// Instantiate Wildfire with the database class and the query
-$wildfire = new Rougin\Wildfire\Wildfire($this->db, $query);
+// Pass the database class with the raw query
+$wildfire = new Wildfire($this->db, $query);
 
-// Returns an array of Post objects with a User object per Post object
+// Returns an array of Post objects with a
+// User object per Post object from result
 $posts = $wildfire->result();
 ```
 
-### Using `Rougin\Wildfire\CodeigniterModel`
+### Using the `Rougin\Wildfire\CodeigniterModel` instance
 
-#### application/models/Post.php
+**application/models/Post.php**
 
 ``` php
-class Post extends \Rougin\Wildfire\CodeigniterModel {}
+use Rougin\Wildfire\CodeigniterModel;
+
+class Post extends CodeigniterModel {}
 ```
 
-#### application/controllers/Welcome.php
+**application/controllers/Welcome.php**
 
 ``` php
+// Loads the Post model...
 $this->load->model('post');
 
-// Returns an array of Post objects
+// Returns an array of Post objects with a
+// User object per Post object from result
 $posts = $this->post->all();
 ```
 
@@ -112,11 +123,13 @@ $posts = $this->post->all();
 #### $wildfire->find($table, $delimiters = [])
 
 ``` php
+$delimeters = array('name' => 'Test');
+
 // Returns a post with an ID of 1.
 $posts = $wildfire->find('post', 1);
 
 // Returns a post from the provided delimiters.
-$posts = $wildfire->find('post', [ 'name' => 'Foo Bar' ]);
+$posts = $wildfire->find('post', $delimiters);
 ```
 
 #### $wildfire->get($table = '')->as_dropdown($description = 'description')
@@ -141,7 +154,7 @@ $wildfire->set_database($this->db);
 $wildfire->set_query('SELECT * FROM posts');
 ```
 
-#### Using `Rougin\Wildfire\CodeigniterModel`
+#### Using the `Rougin\Wildfire\CodeigniterModel`
 
 #### $this->model->find($id)
 
@@ -241,17 +254,13 @@ class Post extends \Rougin\Wildfire\CodeigniterModel {
 
 ## Change Log
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG][link-changelog] for more information what has changed recently.
 
 ## Testing
 
 ``` bash
 $ composer test
 ```
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 
@@ -260,11 +269,11 @@ If you discover any security related issues, please email rougingutib@gmail.com 
 ## Credits
 
 - [Rougin Royce Gutib][link-author]
-- [All Contributors][link-contributors]
+- [All contributors][link-contributors]
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/rougin/wildfire.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
@@ -273,10 +282,13 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/wildfire.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/wildfire.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/rougin/wildfire
-[link-travis]: https://travis-ci.org/rougin/wildfire
-[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/wildfire/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/rougin/wildfire
-[link-downloads]: https://packagist.org/packages/rougin/wildfire
 [link-author]: https://github.com/rougin
-[link-contributors]: ../../contributors
+[link-author]: https://rougin.github.io
+[link-changelog]: https://github.com/rougin/wildfire/blob/master/CHANGELOG.md
+[link-code-quality]: https://scrutinizer-ci.com/g/rougin/wildfire
+[link-contributors]: https://github.com/rougin/wildfire/contributors
+[link-downloads]: https://packagist.org/packages/rougin/wildfire
+[link-license]: https://github.com/rougin/wildfire/blob/master/LICENSE.md
+[link-packagist]: https://packagist.org/packages/rougin/wildfire
+[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/wildfire/code-structure
+[link-travis]: https://travis-ci.org/rougin/wildfire

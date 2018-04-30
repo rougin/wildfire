@@ -7,22 +7,31 @@ All notable changes to `Wildfire` will be documented in this file.
 ### Added
 - `DatabaseTrait::database`
 - `DatabaseTrait::query`
-- `ModelHelper::make`
 - `ModelTrait::primary`
+- `ModelTrait::properties`
 - `ModelTrait::table`
+- `RelationshipTrait::relationships`
+- `ResultTrait::dropdown`
 - `TableHelper:model`
 - `TableHelper:name`
+- `ValidateTrait::errors`
 
 ### Deprecated
 - `DatabaseTrait::setDatabase`
 - `DatabaseTrait::setQuery`
-- `ModelHelper::createInstance`
 - `ModelTrait::getPrimaryKey`
+- `ModelTrait::getProperties`
 - `ModelTrait::getTableName`
+- `RelationshipTrait::getRelationshipProperties`
+- `ResultTrait::asDropdown`
 - `TableHelper:getModelName`
 - `TableHelper:getNameFromModel`
+- `ValidateTrait::validation_errors`
 
 ### Removed
+- `CodeigniterModel::countAll` in `PaginateTrait::paginate`
+- `DatabaseHelper` (moved logic to `DatabaseTrait::database` instead)
+- `InstanceHelper` (moved logic to `CodeigniterModel::__construct` instead)
 - `parent::__construct` in `CodeigniterModel::__construct`
 
 ## [0.4.0](https://github.com/rougin/wildfire/compare/v0.3.1...v0.4.0) - 2017-01-08
