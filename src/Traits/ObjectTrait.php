@@ -19,8 +19,8 @@ trait ObjectTrait
     /**
      * Creates an object from the specified table and row.
      *
-     * @param  \Rougin\Wildfire\CodeigniterModel\string $table
-     * @param  object                                   $row
+     * @param  object|string $table
+     * @param  object        $row
      * @return array
      */
     protected function make($table, $row)

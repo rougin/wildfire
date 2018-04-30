@@ -4,7 +4,6 @@ namespace Rougin\Wildfire\Traits;
 
 use Rougin\Describe\Describe;
 use Rougin\Describe\Driver\CodeIgniterDriver;
-use Rougin\Wildfire\Helpers\DescribeHelper;
 
 /**
  * Database Trait
