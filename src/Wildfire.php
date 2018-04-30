@@ -122,7 +122,7 @@ class Wildfire extends \CI_Model
 
     /**
      * Calls methods from this class in underscore case.
-     * NOTE: To be removed in v1.0.0. Methods are now only one words.
+     * NOTE: To be removed in v1.0.0. Methods are now only one word.
      *
      * @param  string $method
      * @param  mixed  $parameters
