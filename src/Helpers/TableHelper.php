@@ -64,8 +64,8 @@ class TableHelper
 
         $exists && $table = $model->table();
 
-        isset($model->table) && $table = $model->table;
+        $isset = isset($model->table) === true;
 
-        return $table;
+        return $isset ? $model->table : $table;
     }
 }
