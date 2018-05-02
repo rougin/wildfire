@@ -75,7 +75,7 @@ $query_builder = true;
 
 $db['default'] = array(
     'dsn'    => '',
-    'hostname' => 'sqlite:' . APPPATH . 'databases/test.db',
+    'hostname' => 'sqlite:' . APPPATH . 'databases/weblog.db',
     'username' => '',
     'password' => '',
     'database' => '',

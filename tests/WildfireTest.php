@@ -18,97 +18,135 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
     protected $ci;
 
     /**
-     * @var integer
-     */
-    protected $expected = 10;
-
-    /**
-     * @var string
-     */
-    protected $table = 'post';
-
-    /**
      * Sets up the CodeIgniter application.
      *
      * @return void
      */
     public function setUp()
     {
-        $path = (string) __DIR__ . '/TestApp';
+        $path = (string) __DIR__ . '/Weblog';
 
         $this->ci = Instance::create($path);
 
-        $this->ci->load->database();
+        $this->ci->load->helper('inflector');
 
-        $this->ci->load->model($this->table);
+        $this->ci->load->database();
 
         $this->ci->load->model('user');
     }
 
     /**
-     * Tests Wildfire::get method.
+     * Tests Wildfire::__call.
      *
      * @return void
      */
-    public function testGetMethod()
+    public function testCallMagicMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
 
-        $result = $wildfire->get($this->table)->result();
+        $wildfire->where('name', 'Royce');
 
-        $this->assertCount($this->expected, $result);
+        $wildfire = $wildfire->get('users');
+
+        $data = array('id' => 2, 'name' => 'Royce');
+
+        $data['age'] = (integer) 18;
+
+        $data['gender'] = 'male';
+
+        $expected = new \User($data);
+
+        $result = current($wildfire->result());
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
-     * Tests Wildfire::get method with a different table name.
+     * Tests Wildfire::__call with an exception.
      *
      * @return void
      */
-    public function testGetMethodWithDifferentTableName()
+    public function testCallMagicMethodWithException()
     {
-        $this->ci->load->model('comment');
+        $exception = 'BadMethodCallException';
 
+        $this->setExpectedException($exception);
+
+        (new Wildfire($this->ci->db))->test();
+    }
+
+    /**
+     * Tests Wildfire::__construct with \CI_DB_query_builder.
+     *
+     * @return void
+     */
+    public function testConstructMethodWithBuilder()
+    {
         $wildfire = new Wildfire($this->ci->db);
 
-        $result = $wildfire->get('comment')->result();
+        $wildfire = $wildfire->get('users');
 
-        $this->assertCount($this->expected, $result);
+        $data = array('id' => 1, 'name' => 'Rougin');
+
+        $data['age'] = (integer) 20;
+
+        $data['gender'] = 'male';
+
+        $expected = new \User((array) $data);
+
+        $result = current($wildfire->result());
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
-     * Tests the library using a query.
+     * Tests Wildfire::__construct with \CI_DB_result.
      *
      * @return void
      */
-    public function testQueryMethod()
+    public function testConstructMethodWithResult()
     {
-        $query = (string) 'SELECT * FROM ' . $this->table;
+        $query = 'SELECT name FROM users';
 
         $query = $this->ci->db->query($query);
 
-        $wildfire = new Wildfire($this->ci->db, $query);
+        $wildfire = new Wildfire($query);
 
-        $result = $wildfire->result();
+        $items = (array) $wildfire->result();
 
-        $this->assertCount($this->expected, $result);
+        $data = array('name' => 'Rougin');
+
+        $expected = new \User((array) $data);
+
+        $result = $items[0];
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
-     * Tests Wildfire::as_dropdown method.
+     * Tests Wildfire::dropdown.
      *
      * @return void
      */
-    public function testAsDropdownMethod()
+    public function testDropdownMethod()
     {
         $wildfire = new Wildfire($this->ci->db);
 
-        $result = $wildfire->get($this->table)->as_dropdown();
+        $expected = array(1 => 'Rougin');
 
-        $this->assertCount($this->expected, $result);
+        $expected[2] = 'Royce';
+
+        $expected[3] = 'Angel';
+
+        $wildfire = $wildfire->get('users');
+
+        $result = $wildfire->dropdown('name');
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
-     * Tests Wildfire::as_dropdown method.
+     * Tests Wildfire::find.
      *
      * @return void
      */
@@ -116,66 +154,16 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
     {
         $wildfire = new Wildfire($this->ci->db);
 
-        $expected = (integer) 1;
+        $data = array('id' => 3, 'name' => 'Angel');
 
-        $post = $wildfire->find($this->table, $expected);
+        $data['age'] = (integer) 19;
 
-        $result = $post->get_id();
+        $data['gender'] = 'female';
+
+        $expected = new \User($data);
+
+        $result = $wildfire->find('users', $data['id']);
 
         $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests Wildfire::as_dropdown method with an error.
-     *
-     * @return void
-     */
-    public function testFindMethodError()
-    {
-        $wildfire = new Wildfire($this->ci->db);
-
-        $post = $wildfire->find($this->table, 11);
-
-        $this->assertEmpty($post);
-    }
-
-    /**
-     * Tests Wildfire without $this->db.
-     *
-     * @return void
-     */
-    public function testWildfireWithoutConstructor()
-    {
-        $this->ci->db->limit($expected = 5);
-
-        $wildfire = new Wildfire;
-
-        $wildfire->set_database($this->ci->db);
-
-        $data = $wildfire->get($this->table);
-
-        $result = $data->result();
-
-        $this->assertCount($expected, $result);
-    }
-
-    /**
-     * Tests Wildfire::set_query.
-     *
-     * @return void
-     */
-    public function testSetQueryMethod()
-    {
-        $query = 'SELECT * FROM ' . $this->table;
-
-        $query = $this->ci->db->query($query);
-
-        $wildfire = new Wildfire($this->ci->db);
-
-        $wildfire->set_query($query);
-
-        $result = $wildfire->result();
-
-        $this->assertCount($this->expected, $result);
     }
 }

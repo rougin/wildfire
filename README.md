@@ -19,237 +19,79 @@ $ composer require rougin/wildfire
 
 ## Usage
 
-### Tables (in SQLite)
+### Preparation
 
 ``` sql
-CREATE TABLE "user" (
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    "name" TEXT NOT NULL,
-    "age" INTEGER NOT NULL,
-    "gender" TEXT NOT NULL
+-- Import this script to a SQLite database
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    age INTEGER NOT NULL,
+    gender TEXT NOT NULL
 );
 
-CREATE TABLE post (
-    id INTEGER PRIMARY KEY,
-    subject TEXT NOT NULL,
-    message TEXT NOT NULL,
-    user_id INTEGER,
-    description TEXT NULL,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-);
+INSERT INTO users (name, age, gender) VALUES ('Rougin', 20, 'male');
+INSERT INTO users (name, age, gender) VALUES ('Royce', 18, 'male');
+INSERT INTO users (name, age, gender) VALUES ('Angel', 19, 'female');
 ```
 
-### Models
-
-**application/models/User.php**
-
 ``` php
-class User extends CI_Model {}
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model {}
 ```
 
-**application/models/Post.php**
-
 ``` php
-class Post extends CI_Model {}
+// application/controllers/Welcome.php
+
+// Enables the inflector helper. It is
+// being used to determine the class or
+// the model name to use based from the
+// given table name from the Wildfire.
+$this->load->helper('inflector');
+
+// Loads the required model
+$this->load->model('user');
 ```
 
-### Using with a [Query Builder](https://codeigniter.com/user_guide/database/query_builder.html)
-
-**application/controllers/Welcome.php**
+### Using the `Wildfire` instance with `CI_DB`
 
 ``` php
+// application/controllers/Welcome.php
+
 use Rougin\Wildfire\Wildfire;
 
-// Load the required models
-$this->load->model('post');
-$this->load->model('user');
-
-// Build your queries here
-$this->db->like('subject', 'Foo Bar', 'both');
-
-// Pass the existing \CI_DB instance
+// Passes the existing \CI_DB instance
 $wildfire = new Wildfire($this->db);
 
-// Returns an array of Post objects with a
-// User object per Post object from result
-$posts = $wildfire->get('post')->result();
+// Can be also extended from \CI_DB instance
+$wildfire->like('subject', 'Test', 'both');
+
+// Returns an array of User-based objects
+$users = $wildfire->get('users')->result();
 ```
 
-### Using with a raw SQL query
-
-**application/controllers/Welcome.php**
+### Using the `Wildfire` instance with `CI_DB_result`
 
 ``` php
+// application/controllers/Welcome.php
+
 use Rougin\Wildfire\Wildfire;
 
-// Load the required models
-$this->load->model('post');
-$this->load->model('user');
+$query = 'SELECT p.* FROM post p';
 
 // Create raw SQL queries here...
-$query = $this->db->query('SELECT * FROM post');
+$result = $this->db->query($query);
 
-// Pass the database class with the raw query
-$wildfire = new Wildfire($this->db, $query);
+// ...or even the result of $this->db->get()
+$result = $this->db->get('users');
 
-// Returns an array of Post objects with a
-// User object per Post object from result
-$posts = $wildfire->result();
-```
+// Pass the result as the argument
+$wildfire = new Wildfire($result);
 
-### Using the `Rougin\Wildfire\CodeigniterModel` instance
-
-**application/models/Post.php**
-
-``` php
-use Rougin\Wildfire\CodeigniterModel;
-
-class Post extends CodeigniterModel {}
-```
-
-**application/controllers/Welcome.php**
-
-``` php
-// Loads the Post model...
-$this->load->model('post');
-
-// Returns an array of Post objects with a
-// User object per Post object from result
-$posts = $this->post->all();
-```
-
-### Methods
-
-#### $wildfire->find($table, $delimiters = [])
-
-``` php
-$delimeters = array('name' => 'Test');
-
-// Returns a post with an ID of 1.
-$posts = $wildfire->find('post', 1);
-
-// Returns a post from the provided delimiters.
-$posts = $wildfire->find('post', $delimiters);
-```
-
-#### $wildfire->get($table = '')->as_dropdown($description = 'description')
-
-``` php
-// Returns a list of posts that can be used in form_dropdown().
-// $description means what column will be used to display.
-$posts = $wildfire->get('post')->as_dropdown('subject');
-```
-
-#### $wildfire->set_database($this->db)
-
-``` php
-// Sets as the current database
-$wildfire->set_database($this->db);
-```
-
-#### $wildfire->set_query()
-
-``` php
-// Sets as the current query
-$wildfire->set_query('SELECT * FROM posts');
-```
-
-#### Using the `Rougin\Wildfire\CodeigniterModel`
-
-#### $this->model->find($id)
-
-``` php
-// Returns a post with an ID of 1.
-$posts = $this->post->find(1);
-```
-
-#### $this->model->find_by(array $delimiters = [])
-
-``` php
-// Returns a post from the provided delimiters.
-$posts = $this->post->find_by([ 'name' => 'Foo Bar' ]);
-```
-
-#### $this->model->get()->as_dropdown($description = 'description')
-
-``` php
-// Returns a list of posts that can be used in form_dropdown().
-// $description means what column will be used to display.
-$posts = $this->post->get()->as_dropdown('subject');
-```
-
-### Model Conventions
-
-#### Extends from `CI_Model` (deprecated as of `v0.4.0`)
-
-``` php
-class Post extends CI_Model {
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    public $table = 'post';
-
-    /**
-     * Columns that will be displayed.
-     * If not set, it will get the columns from the database table.
-     *
-     * @var array
-     */
-    public $columns = array('id', 'subject', 'message');
-
-}
-```
-
-#### Extends from `Rougin\Wildfire\CodeigniterModel`
-
-``` php
-class Post extends \Rougin\Wildfire\CodeigniterModel {
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'post';
-
-    /**
-     * Columns that will be displayed.
-     * If not set, it will get the columns from the database table.
-     *
-     * @var array
-     */
-    public $columns = array('id', 'subject', 'message');
-
-    /**
-     * Columns that will be hidden in the display.
-     * If not set, it will hide a "password" column if it exists.
-     *
-     * @var array
-     */
-    protected $hidden = array();
-
-}
-```
-
-### Traits (for `Rougin\Wildfire\CodeigniterModel`)
-
-#### Available traits
-
-* `PaginateTrait` - creates a result with pagination links, utilizes [Pagination Class](https://www.codeigniter.com/user_guide/libraries/pagination.html)
-* `ValidateTrait` - validate input data, utilizes [Form Validation](https://www.codeigniter.com/user_guide/libraries/form_validation.html)
-
-#### Example
-
-``` php
-class Post extends \Rougin\Wildfire\CodeigniterModel {
-
-    use \Rougin\Wildfire\Traits\ValidateTrait;
-    use \Rougin\Wildfire\Traits\PaginateTrait;
-
-}
+// Returns an array of User-based objects
+$users = $wildfire->result();
 ```
 
 ## Change Log

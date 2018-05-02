@@ -4,35 +4,28 @@ All notable changes to `Wildfire` will be documented in this file.
 
 ## [0.5.0](https://github.com/rougin/wildfire/compare/v0.4.0...v0.5.0) - Unreleased
 
-### Added
-- `DatabaseTrait::database`
-- `DatabaseTrait::query`
-- `ModelTrait::primary`
-- `ModelTrait::properties`
-- `ModelTrait::table`
-- `RelationshipTrait::relationships`
-- `ResultTrait::dropdown`
-- `TableHelper:model`
-- `TableHelper:name`
-- `ValidateTrait::errors`
+**NOTE**: This release will break your application if upgrading from `v0.4.0` release.
 
-### Deprecated
-- `DatabaseTrait::setDatabase`
-- `DatabaseTrait::setQuery`
-- `ModelTrait::getPrimaryKey`
-- `ModelTrait::getProperties`
-- `ModelTrait::getTableName`
-- `RelationshipTrait::getRelationshipProperties`
-- `ResultTrait::asDropdown`
-- `TableHelper:getModelName`
-- `TableHelper:getNameFromModel`
-- `ValidateTrait::validation_errors`
+### Added
+- `Model` class
+- `Wildfire::__construct($data)`
+- `Wildfire::dropdown($column)`
+- `Wildfire::find($table, $id)`
+- `Wildfire::get($table = '', $limit = null, $offset = null)`
 
 ### Removed
-- `CodeigniterModel::countAll` in `PaginateTrait::paginate`
-- `DatabaseHelper` (moved logic to `DatabaseTrait::database` instead)
-- `InstanceHelper` (moved logic to `CodeigniterModel::__construct` instead)
-- `parent::__construct` in `CodeigniterModel::__construct`
+- `CodeigniterModel` class
+- `Helpers` directory
+- `Traits\DatabaseTrait` trait
+- `Traits\ModelTrait` trait
+- `Traits\ResultTrait` trait
+- `Wildfire::__construct($database = null, $query = null)`
+- `Wildfire::asDropdown($description = 'description')`
+- `Wildfire::find($table, $delimiters = array())`
+- `Wildfire::get($table = '')`
+- `Wildfire::setDatabase($database)`
+- `Wildfire::setQuery($query)`
+- `Wildfire` extended to `CI_Model`
 
 ## [0.4.0](https://github.com/rougin/wildfire/compare/v0.3.1...v0.4.0) - 2017-01-08
 

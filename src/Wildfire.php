@@ -2,144 +2,168 @@
 
 namespace Rougin\Wildfire;
 
-use Rougin\Wildfire\Helpers\TableHelper;
+use CI_DB_query_builder as QueryBuilder;
+use CI_DB_result as QueryResult;
 
 /**
  * Wildfire
  *
- * Yet another wrapper for CodeIgniter's Query Builder Class.
- *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class Wildfire extends \CI_Model
+class Wildfire
 {
-    use Traits\DatabaseTrait, Traits\ResultTrait;
+    /**
+     * @var \CI_DB_query_builder
+     */
+    protected $builder;
+
+    /**
+     * @var \CI_DB_result
+     */
+    protected $result;
+
+    /**
+     * @var string
+     */
+    protected $table = '';
 
     /**
      * Initializes the Wildfire instance.
      *
-     * @param \CI_DB_query_builder|null $database
-     * @param \CI_DB_result|null        $query
+     * @param \CI_DB_query_builder|\CI_DB_result $cidb
      */
-    public function __construct($database = null, $query = null)
+    public function __construct($cidb)
     {
-        empty($database) || $this->database($database);
+        $builder = $cidb instanceof QueryBuilder;
 
-        $this->query = $query;
+        $builder === true && $this->builder = $cidb;
+
+        if ($cidb instanceof QueryResult) {
+            $this->result = $cidb;
+
+            $this->table = $this->guess();
+        }
     }
 
     /**
-     * Finds the row from the specified ID or with the
-     * list of delimiters from the specified table.
+     * Returns result data in array dropdown format.
      *
-     * @param  string         $table
-     * @param  array|integer  $delimiters
-     * @return object|boolean
-     */
-    public function find($table, $delimiters = [])
-    {
-        if (is_integer($delimiters) === true) {
-            $primary = $this->describe->primary($table);
-
-            $delimiters = array($primary => $delimiters);
-        }
-
-        $this->db->where($delimiters);
-
-        $query = $this->db->get($table);
-
-        if ($query->num_rows() > 0 && $query->row()) {
-            return $this->make($table, $query->row());
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns all rows from the specified table.
-     *
-     * @param  mixed $table
-     * @return self
-     */
-    public function get($table = '')
-    {
-        // Guess the specified table from the query
-        if (empty($table) === true) {
-            $pattern = '/\bfrom\b\s*(\w+)/i';
-
-            $query = $this->db->last_query();
-
-            preg_match($pattern, $query, $matches);
-
-            $this->table = (string) $matches[1];
-
-            return $this;
-        }
-
-        return $this->prepare($table);
-    }
-
-    /**
-     * Returns the model class of the said table.
-     *
-     * @param  string|object $table
+     * @param  string $column
      * @return array
      */
-    protected function model($table)
+    public function dropdown($column)
     {
-        if (is_string($table) === true) {
-            $model = TableHelper::model($table);
+        $data = array();
 
-            $model = new $model;
+        foreach ($this->result() as $item) {
+            $text = ucwords($item->$column);
 
-            $name = TableHelper::name($model);
+            $id = $item->{$item->primary()};
 
-            return array((string) $name, $model);
+            $data[$id] = (string) $text;
         }
 
-        $name = TableHelper::name($table);
-
-        return array((string) $name, $table);
+        return $data;
     }
 
     /**
-     * Prepares the query and table properties.
+     * Finds the row from storage based on given identifier.
      *
-     * @param  string|object $table
+     * @param  string  $table
+     * @param  integer $id
+     * @return \CI_Model
+     */
+    public function find($table, $id)
+    {
+        $singular = ucwords(singular($table));
+
+        $model = new $singular;
+
+        $data = array($model->primary() => $id);
+
+        $this->builder->where((array) $data);
+
+        $items = $this->get($table)->result();
+
+        return current((array) $items);
+    }
+
+    /**
+     * Returns an array of rows from a specified table.
+     *
+     * @param  string       $table
+     * @param  integer|null $limit
+     * @param  integer|null $offset
      * @return self
      */
-    protected function prepare($table)
+    public function get($table = '', $limit = null, $offset = null)
     {
-        list($name, $model) = (array) $this->model($table);
+        $this->table = (string) ucwords((string) singular($table));
 
-        $this->query || $this->query = $this->db->get($name);
-
-        $this->table = $model === $table ? $model : $name;
+        $this->result = $this->builder->get($table, $limit, $offset);
 
         return $this;
     }
 
     /**
-     * Calls methods from this class in underscore case.
-     * NOTE: To be removed in v1.0.0. Methods are now only one word.
+     * Returns the result with model instances.
      *
-     * @param  string $method
-     * @param  mixed  $parameters
-     * @return mixed
+     * @return \CI_Model[]
      */
-    public function __call($method, $parameters)
+    public function result()
     {
-        $method = (string) camelize($method);
+        $items = $this->result->result_array();
 
-        $result = $this;
+        for ($i = 0; $i < count($items); $i++) {
+            $item = (array) $items[(integer) $i];
 
-        if (method_exists($this, $method) === true) {
-            $instance = array($this, (string) $method);
-
-            $result = call_user_func_array($instance, $parameters);
+            $items[$i] = new $this->table($item);
         }
 
-        return $result;
+        return (array) $items;
+    }
+
+    /**
+     * Returns the guessed table name from PDOStatement.
+     *
+     * @return string
+     */
+    protected function guess()
+    {
+        $statement = $this->result->result_id;
+
+        $pattern = '/\bfrom\b\s*(\w+)/i';
+
+        $query = $statement->queryString;
+
+        preg_match($pattern, $query, $matches);
+
+        return ucwords(singular($matches[1]));
+    }
+
+    /**
+     * Calls a method from the \CI_DB_query_builder instance.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @return self
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, $arguments)
+    {
+        if (method_exists($this->builder, $method) === true) {
+            $instance = (array) array($this->builder, (string) $method);
+
+            $this->builder = call_user_func_array($instance, $arguments);
+
+            return $this;
+        }
+
+        $method = get_class($this) . '::' . $method . '()';
+
+        $message = 'Call to undefined method ' . $method;
+
+        throw new \BadMethodCallException((string) $message);
     }
 }
