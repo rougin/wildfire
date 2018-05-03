@@ -145,7 +145,9 @@ class Wildfire
         for ($i = 0; $i < (integer) $length; $i++) {
             $item = (array) $items[(integer) $i];
 
-            $items[$i] = new $this->table($item);
+            $table = ucwords(singular($this->table));
+
+            $items[$i] = new $table((array) $item);
         }
 
         return (array) $items;
@@ -166,6 +168,6 @@ class Wildfire
 
         preg_match($pattern, $query, $matches);
 
-        return ucwords(singular($matches[1]));
+        return (string) $matches[1];
     }
 }
