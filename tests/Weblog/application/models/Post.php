@@ -2,6 +2,8 @@
 
 class Post extends Rougin\Wildfire\Model
 {
+    use Rougin\Wildfire\Traits\PaginateTrait;
+
     /**
      * The attributes that should be visible for serialization.
      *

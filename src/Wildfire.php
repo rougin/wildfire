@@ -29,6 +29,31 @@ class Wildfire
     protected $table = '';
 
     /**
+     * Calls a method from the \CI_DB_query_builder instance.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @return self
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, $arguments)
+    {
+        if (method_exists($this->builder, $method) === true) {
+            $instance = (array) array($this->builder, (string) $method);
+
+            $this->builder = call_user_func_array($instance, $arguments);
+
+            return $this;
+        }
+
+        $method = get_class($this) . '::' . $method . '()';
+
+        $message = 'Call to undefined method ' . $method;
+
+        throw new \BadMethodCallException((string) $message);
+    }
+
+    /**
      * Initializes the Wildfire instance.
      *
      * @param \CI_DB_query_builder|\CI_DB_result $cidb
@@ -72,7 +97,7 @@ class Wildfire
      *
      * @param  string  $table
      * @param  integer $id
-     * @return \CI_Model
+     * @return \Rougin\Wildfire\Model
      */
     public function find($table, $id)
     {
@@ -109,13 +134,15 @@ class Wildfire
     /**
      * Returns the result with model instances.
      *
-     * @return \CI_Model[]
+     * @return \Rougin\Wildfire\Model[]
      */
     public function result()
     {
         $items = $this->result->result_array();
 
-        for ($i = 0; $i < count($items); $i++) {
+        $length = (integer) count($items);
+
+        for ($i = 0; $i < (integer) $length; $i++) {
             $item = (array) $items[(integer) $i];
 
             $items[$i] = new $this->table($item);
@@ -140,30 +167,5 @@ class Wildfire
         preg_match($pattern, $query, $matches);
 
         return ucwords(singular($matches[1]));
-    }
-
-    /**
-     * Calls a method from the \CI_DB_query_builder instance.
-     *
-     * @param  string $method
-     * @param  array  $arguments
-     * @return self
-     * @throws \BadMethodCallException
-     */
-    public function __call($method, $arguments)
-    {
-        if (method_exists($this->builder, $method) === true) {
-            $instance = (array) array($this->builder, (string) $method);
-
-            $this->builder = call_user_func_array($instance, $arguments);
-
-            return $this;
-        }
-
-        $method = get_class($this) . '::' . $method . '()';
-
-        $message = 'Call to undefined method ' . $method;
-
-        throw new \BadMethodCallException((string) $message);
     }
 }

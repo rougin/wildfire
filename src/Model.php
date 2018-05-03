@@ -94,21 +94,7 @@ class Model extends \CI_Model
      */
     public function __toString()
     {
-        return json_encode($this->array());
-    }
-
-    /**
-     * Returns the attributes as an array.
-     *
-     * @return array
-     */
-    public function array()
-    {
-        $flipped = array_flip((array) $this->columns());
-
-        $values = (array) $this->attributes;
-
-        return array_intersect_key($values, $flipped);
+        return json_encode($this->data());
     }
 
     /**
@@ -119,6 +105,20 @@ class Model extends \CI_Model
     public function columns()
     {
         return array_diff($this->visible, $this->hidden);
+    }
+
+    /**
+     * Returns the attributes as an array.
+     *
+     * @return array
+     */
+    public function data()
+    {
+        $flipped = array_flip((array) $this->columns());
+
+        $values = (array) $this->attributes;
+
+        return array_intersect_key($values, $flipped);
     }
 
     /**

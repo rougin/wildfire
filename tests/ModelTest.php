@@ -18,7 +18,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase
     protected $ci;
 
     /**
-     * Sets up the CodeIgniter application.
+     * Sets up the Codeigniter application.
      *
      * @return void
      */
