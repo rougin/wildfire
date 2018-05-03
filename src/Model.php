@@ -18,6 +18,13 @@ class Model extends \CI_Model
     protected $attributes = array();
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = array('id' => 'integer');
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array
@@ -59,15 +66,25 @@ class Model extends \CI_Model
      */
     public function __construct(array $attributes = array())
     {
-        $this->attributes = $this->original = $attributes;
+        $casts = (array) array('id' => 'integer');
 
-        $keys = (array) array_keys($this->original);
+        $this->casts = array_merge($casts, $this->casts);
 
-        $this->visible = $this->visible ?: (array) $keys;
+        $this->original = (array) $attributes;
+
+        foreach ($attributes as $key => $value) {
+            $casted = $this->cast($key, $value);
+
+            $this->attributes[$key] = $casted;
+        }
+
+        $keys = array_keys($this->original);
+
+        $this->visible = $this->visible ?: $keys;
     }
 
     /**
-     * Returns the attribute or the __get from \CI_Model.
+     * Returns the attribute or from \CI_Model::__get.
      *
      * @param  string $key
      * @return mixed
@@ -129,5 +146,30 @@ class Model extends \CI_Model
     public function primary()
     {
         return $this->primary;
+    }
+
+    /**
+     * Casts an attribute to a native PHP type.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @return mixed
+     */
+    protected function cast($key, $value)
+    {
+        $exists = isset($this->casts[$key]);
+
+        $type = trim(strtolower((string) ''));
+
+        $exists && $type = $this->casts[$key];
+
+        switch (trim(strtolower($type))) {
+            case 'boolean':
+                return (boolean) $value;
+            case 'integer':
+                return (integer) $value;
+            default:
+                return $value;
+        }
     }
 }

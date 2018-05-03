@@ -64,11 +64,9 @@ class Wildfire
 
         $builder === true && $this->builder = $cidb;
 
-        if ($cidb instanceof QueryResult) {
-            $this->result = $cidb;
+        $result = $cidb instanceof QueryResult;
 
-            $this->table = $this->guess();
-        }
+        $result === true && $this->result = $cidb;
     }
 
     /**
@@ -134,10 +132,15 @@ class Wildfire
     /**
      * Returns the result with model instances.
      *
+     * @param  string $model
      * @return \Rougin\Wildfire\Model[]
      */
-    public function result()
+    public function result($model = '')
     {
+        $singular = ucwords(singular($this->table));
+
+        $model = $model === '' ? $singular : $model;
+
         $items = $this->result->result_array();
 
         $length = (integer) count($items);
@@ -145,29 +148,41 @@ class Wildfire
         for ($i = 0; $i < (integer) $length; $i++) {
             $item = (array) $items[(integer) $i];
 
-            $table = ucwords(singular($this->table));
-
-            $items[$i] = new $table((array) $item);
+            $items[$i] = new $model((array) $item);
         }
 
         return (array) $items;
     }
 
     /**
-     * Returns the guessed table name from PDOStatement.
+     * Returns the result as a JSON string.
      *
+     * @param  string $model
      * @return string
      */
-    protected function guess()
+    public function json($model = '')
     {
-        $statement = $this->result->result_id;
+        return json_encode($this->data($model));
+    }
 
-        $pattern = '/\bfrom\b\s*(\w+)/i';
+    /**
+     * Returns the result in array format.
+     *
+     * @param  string $model
+     * @return array
+     */
+    public function data($model = '')
+    {
+        $items = $this->result((string) $model);
 
-        $query = $statement->queryString;
+        $length = (integer) count($items);
 
-        preg_match($pattern, $query, $matches);
+        for ($i = 0; $i < $length; $i++) {
+            $data = $items[$i]->data();
 
-        return (string) $matches[1];
+            $items[$i] = (array) $data;
+        }
+
+        return $items;
     }
 }

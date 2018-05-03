@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework.
+Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework. Heavily inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
 
 ## Install
 
@@ -28,12 +28,19 @@ CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT NOT NULL,
     age INTEGER NOT NULL,
-    gender TEXT NOT NULL
+    gender TEXT NOT NULL,
+    accepted INTEGER DEFAULT 0
 );
 
 INSERT INTO users (name, age, gender) VALUES ('Rougin', 20, 'male');
 INSERT INTO users (name, age, gender) VALUES ('Royce', 18, 'male');
 INSERT INTO users (name, age, gender) VALUES ('Angel', 19, 'female');
+```
+
+``` php
+// application/config/config.php
+
+$config['composer_autoload'] = TRUE; // or the specified path of "vendor/autoload.php";
 ```
 
 ``` php
@@ -44,6 +51,9 @@ class User extends \Rougin\Wildfire\Model {}
 
 ``` php
 // application/controllers/Welcome.php
+
+// Loads the database connection 
+$this->load->database();
 
 // Enables the inflector helper. It is
 // being used to determine the class or
@@ -91,8 +101,92 @@ $result = $this->db->get('users');
 $wildfire = new Wildfire($result);
 
 // Returns an array of User-based objects
-$users = $wildfire->result();
+$users = $wildfire->result('User');
 ```
+
+### `Model` properties
+
+#### Casting attributes to native types
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model {
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = array('accepted' => 'boolean')
+
+}
+```
+
+``` json
+{
+    "id": 1,
+    "name": "Rougin",
+    "age": "20",
+    "gender": "male",
+    "accepted": false,
+}
+```
+
+Notice that the value of `accepted` was changed from string integer (`'0'`) into native boolean (`false`). If not specified (e.g `age` field), all values will be returned as string except the `id` field (which will be automatically casted as native integer) by default.
+
+#### Hiding attributes for serialization
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model {
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = array('gender');
+
+}
+```
+
+``` json
+{
+    "id": 1,
+    "name": "Rougin",
+    "age": "20",
+    "accepted": "0",
+}
+```
+
+The `gender` field was not included in the result.
+
+#### Visible attributes for serialization
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model {
+
+    /**
+     * The attributes that should be visible for serialization.
+     *
+     * @var array
+     */
+    protected $visible = array('gender');
+
+}
+```
+
+``` json
+{
+    "gender": "male"
+}
+```
+
+As contrast to the `hidden` attribute, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
 
 ## Change Log
 

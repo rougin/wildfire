@@ -54,6 +54,8 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
 
         $data['gender'] = 'male';
 
+        $data['accepted'] = 0;
+
         $expected = new \User($data);
 
         $result = current($wildfire->result());
@@ -92,6 +94,8 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
 
         $data['gender'] = 'male';
 
+        $data['accepted'] = 0;
+
         $expected = new \User((array) $data);
 
         $result = current($wildfire->result());
@@ -112,7 +116,7 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
 
         $wildfire = new Wildfire($query);
 
-        $items = (array) $wildfire->result();
+        $items = (array) $wildfire->result('User');
 
         $data = array('name' => 'Rougin');
 
@@ -160,9 +164,93 @@ class WildfireTest extends \PHPUnit_Framework_TestCase
 
         $data['gender'] = 'female';
 
+        $data['accepted'] = 0;
+
         $expected = new \User($data);
 
         $result = $wildfire->find('users', $data['id']);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests Wildfire::data.
+     *
+     * @return void
+     */
+    public function testDataMethod()
+    {
+        $expected = array();
+
+        $item = array('name' => 'Rougin');
+        $item['age'] = 20;
+        $item['gender'] = 'male';
+        $item['id'] = 1;
+        $item['accepted'] = false;
+
+        $expected[] = $item;
+
+        $item = array('name' => 'Royce');
+        $item['age'] = 18;
+        $item['gender'] = 'male';
+        $item['id'] = 2;
+        $item['accepted'] = false;
+
+        $expected[] = $item;
+
+        $item = array('name' => 'Angel');
+        $item['age'] = 19;
+        $item['gender'] = 'female';
+        $item['id'] = 3;
+        $item['accepted'] = false;
+
+        $expected[] = $item;
+
+        $wildfire = new Wildfire($this->ci->db);
+
+        $result = $wildfire->get('users')->data();
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests Wildfire::json.
+     *
+     * @return void
+     */
+    public function testJsonMethod()
+    {
+        $expected = array();
+
+        $item = array('id' => 1);
+        $item['name'] = 'Rougin';
+        $item['age'] = 20;
+        $item['gender'] = 'male';
+        $item['accepted'] = false;
+
+        $expected[] = $item;
+
+        $item = array('id' => 2);
+        $item['name'] = 'Royce';
+        $item['age'] = 18;
+        $item['gender'] = 'male';
+        $item['accepted'] = false;
+
+        $expected[] = $item;
+
+        $item = array('id' => 3);
+        $item['name'] = 'Angel';
+        $item['age'] = 19;
+        $item['gender'] = 'female';
+        $item['accepted'] = false;
+
+        $expected[] = $item;
+
+        $expected = json_encode($expected);
+
+        $wildfire = new Wildfire($this->ci->db);
+
+        $result = $wildfire->get('users')->json();
 
         $this->assertEquals($expected, $result);
     }
