@@ -68,11 +68,10 @@ trait PaginateTrait
     }
 
     /**
-     * Retrieves configuration from pagination.php.
-     * If not available, will based on given and default data.
+     * Returns the pagination configuration.
      *
      * @param  array $config
-     * @return void
+     * @return array
      */
     protected function prepare(array $config)
     {
