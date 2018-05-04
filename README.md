@@ -11,7 +11,7 @@ Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_gui
 
 ## Install
 
-Via [Composer](https://getcomposer.org):
+Install Wildfire via [Composer](https://getcomposer.org):
 
 ``` bash
 $ composer require rougin/wildfire
@@ -65,20 +65,20 @@ $this->load->helper('inflector');
 $this->load->model('user');
 ```
 
-### Using the `Wildfire` instance with `CI_DB`
+### Using the `Wildfire` instance with `CI_DB_query_builder`
 
 ``` php
 // application/controllers/Welcome.php
 
 use Rougin\Wildfire\Wildfire;
 
-// Passes the existing \CI_DB instance
+// Pass the \CI_DB_query_builder instance
 $wildfire = new Wildfire($this->db);
 
-// Can be also extended from \CI_DB instance
+// Can also be called to \CI_DB_query_builder
 $wildfire->like('name', 'Royce', 'both');
 
-// Returns an array of User-based objects
+// Returns an array of User objects
 $users = $wildfire->get('users')->result();
 ```
 
@@ -100,7 +100,7 @@ $result = $this->db->get('users');
 // Pass the result as the argument
 $wildfire = new Wildfire($result);
 
-// Returns an array of User-based objects
+// Returns an array of User objects
 $users = $wildfire->result('User');
 ```
 
@@ -123,6 +123,20 @@ class User extends \Rougin\Wildfire\Model {
 }
 ```
 
+**Without native casts**
+
+``` json
+{
+    "id": 1,
+    "name": "Rougin",
+    "age": "20",
+    "gender": "male",
+    "accepted": "0",
+}
+```
+
+**With native casts**
+
 ``` json
 {
     "id": 1,
@@ -133,7 +147,7 @@ class User extends \Rougin\Wildfire\Model {
 }
 ```
 
-Notice that the value of `accepted` was changed from string integer (`'0'`) into native boolean (`false`). If not specified (e.g `age` field), all values will be returned as string except the `id` field (which will be automatically casted as native integer) by default.
+Notice that the value of `accepted` was changed from string integer (`'0'`) into native boolean (`false`). If not specified (e.g. `age` field), all values will be returned as string except the `id` field (which will be automatically casted as native integer, also if it exists) by default.
 
 #### Hiding attributes for serialization
 
@@ -151,6 +165,20 @@ class User extends \Rougin\Wildfire\Model {
 
 }
 ```
+
+**Without hidden attributes**
+
+``` json
+{
+    "id": 1,
+    "name": "Rougin",
+    "age": "20",
+    "gender": "male",
+    "accepted": "0",
+}
+```
+
+**With hidden attributes**
 
 ``` json
 {
@@ -180,6 +208,20 @@ class User extends \Rougin\Wildfire\Model {
 }
 ```
 
+**Without visible attributes**
+
+``` json
+{
+    "id": 1,
+    "name": "Rougin",
+    "age": "20",
+    "gender": "male",
+    "accepted": "0",
+}
+```
+
+**With visible attributes**
+
 ``` json
 {
     "gender": "male"
@@ -188,7 +230,9 @@ class User extends \Rougin\Wildfire\Model {
 
 As contrast to the `hidden` attribute, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
 
-## Migrating from `v0.4.0`
+## Migrating from `v0.4.0` to `v0.5.0`
+
+The new release for `v0.5.0` will be having a backward compatability break (BC break). This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was done also to remove code complexity and to simplify arguments on existing methods.
 
 ### Change the `CodeigniterModel` class to `Model` class
 
@@ -197,16 +241,12 @@ This also applies to `Wildfire` used as a `CI_Model` as well.
 **Before**
 
 ``` php
-// application/models/User.php
-
 class User extends \Rougin\Wildfire\CodeigniterModel {}
 ```
 
 **After**
 
 ``` php
-// application/models/User.php
-
 class User extends \Rougin\Wildfire\Model {}
 ```
 
@@ -215,8 +255,6 @@ class User extends \Rougin\Wildfire\Model {}
 **Before**
 
 ``` php
-// application/controllers/Welcome.php
-
 // PaginateTrait::paginate($perPage, $config = array())
 list($result, $links) = $this->user->paginate(5, $config);
 ```
@@ -224,8 +262,6 @@ list($result, $links) = $this->user->paginate(5, $config);
 **After**
 
 ``` php
-// application/controllers/Welcome.php
-
 $total = $this->db->count_all_results('users');
 
 // PaginateTrait::paginate($perPage, $total, $config = array())
@@ -239,8 +275,6 @@ The total count must be passed in the second parameter.
 **Before**
 
 ``` php
-// application/controllers/Welcome.php
-
 $query = $this->db->query('SELECT * FROM users');
 
 // Wildfire::__construct($database = null, $query = null)
@@ -250,8 +284,6 @@ $wildfire = new Wildfire($this->db, $query);
 **After**
 
 ``` php
-// application/controllers/Welcome.php
-
 // $this->db->query returns a CI_DB_result class
 $query = $this->db->query('SELECT * FROM users');
 
@@ -266,19 +298,15 @@ If the data is a `CI_DB_result`, it should be passed on the first parameter.
 **Before**
 
 ``` php
-// application/controllers/Welcome.php
-
 // Wildfire::asDropdown($description = 'description')
-$dropdown = $wildfire->asDropdown('name');
+$dropdown = $wildfire->asDropdown();
 ```
 
 **After**
 
 ``` php
-// application/controllers/Welcome.php
-
 // Wildfire::dropdown($column)
-$dropdown = $wildfire->dropdown('name');
+$dropdown = $wildfire->dropdown('description');
 ```
 
 Also take note that there is no default value in the argument.
@@ -288,8 +316,6 @@ Also take note that there is no default value in the argument.
 **Before**
 
 ``` php
-// application/controllers/Welcome.php
-
 $delimiters = array('name' => 'Rougin');
 
 // Wildfire::find($table, $delimiters = array())
@@ -299,8 +325,6 @@ $users = $wildfire->find('users', $delimiters);
 **After**
 
 ``` php
-// application/controllers/Welcome.php
-
 $this->db->where('name', (string) 'Rougin');
 
 $users = $wildfire->get('users')->result();
@@ -309,8 +333,6 @@ $users = $wildfire->get('users')->result();
 Use only `Wildfire::find` to return single row data.
 
 ``` php
-// application/controllers/Welcome.php
-
 // Wildfire::find($table, $id)
 $user = $wildfire->find('users', 1);
 ```
@@ -320,8 +342,6 @@ $user = $wildfire->find('users', 1);
 **Before**
 
 ``` php
-// application/controllers/Welcome.php
-
 use Rougin\Wildfire\Wildfire;
 
 $wildfire = new Wildfire;
@@ -336,8 +356,6 @@ $wildfire->set_query($query);
 **After**
 
 ``` php
-// application/controllers/Welcome.php
-
 use Rougin\Wildfire\Wildfire;
 
 $wildfire = new Wildfire($this->db);
@@ -349,7 +367,7 @@ $query = $this->db->query('SELECT * FROM users');
 $wildfire = new Wildfire($query);
 ```
 
-The `Wildfire` parameter must be defined in either `CI_DB_query_builder` (`$this->db`) or `CB_DB_result` instances.
+The `Wildfire` parameter must be defined with either `CI_DB_query_builder` (`$this->db`) or `CB_DB_result` instances.
 
 ## Change Log
 
