@@ -8,12 +8,13 @@ All notable changes to `Wildfire` will be documented in this file.
 
 ### Added
 - `Model` class
+- `Traits\PaginateTrait::paginate($page, $total, $config = array())`
 - `Traits\ValidateTrait::errors`
 - `Wildfire::__construct($data)`
 - `Wildfire::dropdown($column)`
 - `Wildfire::find($table, $id)`
 - `Wildfire::get($table = '', $limit = null, $offset = null)`
-- `Traits\PaginateTrait::paginate($page, $total, $config = array())`
+- `Wildfire::result($model = '')`
 
 ### Removed
 - `CodeigniterModel` class
@@ -27,6 +28,7 @@ All notable changes to `Wildfire` will be documented in this file.
 - `Wildfire::asDropdown($description = 'description')`
 - `Wildfire::find($table, $delimiters = array())`
 - `Wildfire::get($table = '')`
+- `Wildfire::result`
 - `Wildfire::setDatabase($database)`
 - `Wildfire::setQuery($query)`
 - `Wildfire` extended to `CI_Model`

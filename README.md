@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework. Heavily inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
+Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework. This library was also heavily inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
 
 ## Install
 
@@ -76,7 +76,7 @@ use Rougin\Wildfire\Wildfire;
 $wildfire = new Wildfire($this->db);
 
 // Can be also extended from \CI_DB instance
-$wildfire->like('subject', 'Test', 'both');
+$wildfire->like('name', 'Royce', 'both');
 
 // Returns an array of User-based objects
 $users = $wildfire->get('users')->result();
@@ -187,6 +187,169 @@ class User extends \Rougin\Wildfire\Model {
 ```
 
 As contrast to the `hidden` attribute, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
+
+## Migrating from `v0.4.0`
+
+### Change the `CodeigniterModel` class to `Model` class
+
+This also applies to `Wildfire` used as a `CI_Model` as well.
+
+**Before**
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\CodeigniterModel {}
+```
+
+**After**
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model {}
+```
+
+### Change the arguments for `PaginateTrait::paginate`
+
+**Before**
+
+``` php
+// application/controllers/Welcome.php
+
+// PaginateTrait::paginate($perPage, $config = array())
+list($result, $links) = $this->user->paginate(5, $config);
+```
+
+**After**
+
+``` php
+// application/controllers/Welcome.php
+
+$total = $this->db->count_all_results('users');
+
+// PaginateTrait::paginate($perPage, $total, $config = array())
+list($offset, $links) = $this->user->paginate(5, $total, $config);
+```
+
+The total count must be passed in the second parameter.
+
+### Change the arguments for `Wildfire::__construct`
+
+**Before**
+
+``` php
+// application/controllers/Welcome.php
+
+$query = $this->db->query('SELECT * FROM users');
+
+// Wildfire::__construct($database = null, $query = null)
+$wildfire = new Wildfire($this->db, $query);
+```
+
+**After**
+
+``` php
+// application/controllers/Welcome.php
+
+// $this->db->query returns a CI_DB_result class
+$query = $this->db->query('SELECT * FROM users');
+
+// Wildfire::__construct($data)
+$wildfire = new Wildfire($query);
+```
+
+If the data is a `CI_DB_result`, it should be passed on the first parameter.
+
+### Change the method `Wildfire::asDropdown` to `Wildfire::dropdown`
+
+**Before**
+
+``` php
+// application/controllers/Welcome.php
+
+// Wildfire::asDropdown($description = 'description')
+$dropdown = $wildfire->asDropdown('name');
+```
+
+**After**
+
+``` php
+// application/controllers/Welcome.php
+
+// Wildfire::dropdown($column)
+$dropdown = $wildfire->dropdown('name');
+```
+
+Also take note that there is no default value in the argument.
+
+### Replace `$delimiters` with `$id` in `Wildfire::find`
+
+**Before**
+
+``` php
+// application/controllers/Welcome.php
+
+$delimiters = array('name' => 'Rougin');
+
+// Wildfire::find($table, $delimiters = array())
+$users = $wildfire->find('users', $delimiters);
+```
+
+**After**
+
+``` php
+// application/controllers/Welcome.php
+
+$this->db->where('name', (string) 'Rougin');
+
+$users = $wildfire->get('users')->result();
+```
+
+Use only `Wildfire::find` to return single row data.
+
+``` php
+// application/controllers/Welcome.php
+
+// Wildfire::find($table, $id)
+$user = $wildfire->find('users', 1);
+```
+
+### Remove `set_database` and `set_query` methods
+
+**Before**
+
+``` php
+// application/controllers/Welcome.php
+
+use Rougin\Wildfire\Wildfire;
+
+$wildfire = new Wildfire;
+
+$wildfire->set_database($this->db);
+
+$query = $this->db->query('SELECT * FROM users');
+
+$wildfire->set_query($query);
+```
+
+**After**
+
+``` php
+// application/controllers/Welcome.php
+
+use Rougin\Wildfire\Wildfire;
+
+$wildfire = new Wildfire($this->db);
+
+// or
+
+$query = $this->db->query('SELECT * FROM users');
+
+$wildfire = new Wildfire($query);
+```
+
+The `Wildfire` parameter must be defined in either `CI_DB_query_builder` (`$this->db`) or `CB_DB_result` instances.
 
 ## Change Log
 
