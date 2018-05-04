@@ -40,7 +40,27 @@ INSERT INTO users (name, age, gender) VALUES ('Angel', 19, 'female');
 ``` php
 // application/config/config.php
 
-$config['composer_autoload'] = TRUE; // or the specified path of "vendor/autoload.php";
+/*
+|--------------------------------------------------------------------------
+| Composer auto-loading
+|--------------------------------------------------------------------------
+|
+| Enabling this setting will tell CodeIgniter to look for a Composer
+| package auto-loader script in application/vendor/autoload.php.
+|
+|   $config['composer_autoload'] = TRUE;
+|
+| Or if you have your vendor/ directory located somewhere else, you
+| can opt to set a specific path as well:
+|
+|   $config['composer_autoload'] = '/path/to/vendor/autoload.php';
+|
+| For more information about Composer, please visit http://getcomposer.org/
+|
+| Note: This will NOT disable or override the CodeIgniter-specific
+|   autoloading (application/config/autoload.php)
+*/
+$config['composer_autoload'] = TRUE;
 ```
 
 ``` php
@@ -104,7 +124,7 @@ $wildfire = new Wildfire($result);
 $users = $wildfire->result('User');
 ```
 
-### `Model` properties
+### Properties for the `Model` instance
 
 #### Casting attributes to native types
 
@@ -147,7 +167,7 @@ class User extends \Rougin\Wildfire\Model {
 }
 ```
 
-Notice that the value of `accepted` was changed from string integer (`'0'`) into native boolean (`false`). If not specified (e.g. `age` field), all values will be returned as string except the `id` field (which will be automatically casted as native integer, also if it exists) by default.
+Notice that the value of `accepted` was changed from string integer (`'0'`) into native boolean (`false`). If not specified (e.g. `age` field), all values will be returned as string except the `id` field (which will be automatically casted as native integer, also if the said column exists) by default.
 
 #### Hiding attributes for serialization
 
@@ -230,9 +250,9 @@ class User extends \Rougin\Wildfire\Model {
 
 As contrast to the `hidden` attribute, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
 
-## Migrating from `v0.4.0` to `v0.5.0`
+## Migrating to the `v0.5.0` release
 
-The new release for `v0.5.0` will be having a backward compatability break (BC break). This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was done also to remove code complexity and to simplify arguments on existing methods.
+The new release for `v0.5.0` will be having a backward compatability break (BC break). It means that some functionalities on the earlier versions might not be working after updating. This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was also introduced to remove code complexity and to simplify arguments on existing methods.
 
 ### Change the `CodeigniterModel` class to `Model` class
 
