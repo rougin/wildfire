@@ -252,7 +252,7 @@ As contrast to the `hidden` attribute, only the `gender` field was displayed in 
 
 ## Migrating to the `v0.5.0` release
 
-The new release for `v0.5.0` will be having a backward compatability break (BC break). It means that some functionalities on the earlier versions might not be working after updating. This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was also introduced to remove code complexity and to simplify arguments on existing methods.
+The new release for `v0.5.0` will be having a backward compatability break (BC break). It means that some functionalities on the earlier versions might not be working after updating. This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was also introduced to remove code complexity and to simplify arguments on existing methods. To check the documentation for the last release (`v0.4.0`), kindly click [here](https://github.com/rougin/wildfire/blob/v0.4.0/README.md).
 
 ### Change the `CodeigniterModel` class to `Model` class
 
