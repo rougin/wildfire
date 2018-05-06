@@ -1,6 +1,6 @@
 {
     "name": "rougin/wildfire",
-    "description": "Yet another wrapper for CodeIgniter's Query Builder Class",
+    "description": "Query Builder wrapper for the Codeigniter framework.",
     "keywords": [
         "codeigniter",
         "query",
