@@ -7,6 +7,8 @@ use Rougin\Wildfire\Wildfire;
 /**
  * Wildfire Trait
  *
+ * @method string table()
+ *
  * @package Wildfire
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
