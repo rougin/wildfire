@@ -10,6 +10,7 @@ All notable changes to `Wildfire` will be documented in this file.
 - `Model` class
 - `Traits\PaginateTrait::paginate($page, $total, $config = array())`
 - `Traits\ValidateTrait::errors`
+- `Traits\WildfireTrait`
 - `Wildfire::__construct($data)`
 - `Wildfire::dropdown($column)`
 - `Wildfire::find($table, $id)`

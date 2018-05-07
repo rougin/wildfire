@@ -2,6 +2,8 @@
 
 class User extends Rougin\Wildfire\Model
 {
+    use Rougin\Wildfire\Traits\WildfireTrait;
+
     /**
      * The attributes that should be cast to native types.
      *

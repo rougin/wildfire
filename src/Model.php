@@ -149,6 +149,16 @@ class Model extends \CI_Model
     }
 
     /**
+     * Returns the name of the table.
+     *
+     * @return string
+     */
+    public function table()
+    {
+        return $this->table;
+    }
+
+    /**
      * Casts an attribute to a native PHP type.
      *
      * @param  string $key
