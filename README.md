@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework. This library was also heavily inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
+Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from [Codeigniter](https://codeigniter.com) framework. Also inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
 
 ## Install
 
