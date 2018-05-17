@@ -75,13 +75,11 @@ class User extends \Rougin\Wildfire\Model {}
 // Loads the database connection 
 $this->load->database();
 
-// Enables the inflector helper. It is
-// being used to determine the class or
-// the model name to use based from the
-// given table name from the Wildfire.
+// Enables the inflector helper. It is being used to determine the class or the
+// model name to use based from the given table name from the Wildfire.
 $this->load->helper('inflector');
 
-// Loads the required model
+// Loads the required model/s
 $this->load->model('user');
 ```
 
@@ -248,15 +246,13 @@ class User extends \Rougin\Wildfire\Model {
 }
 ```
 
-As contrast to the `hidden` attribute, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
+In contrast to the `hidden` attribute, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
 
 ## Migrating to the `v0.5.0` release
 
-The new release for `v0.5.0` will be having a backward compatability break (BC break). It means that some functionalities on the earlier versions might not be working after updating. This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was also introduced to remove code complexity and to simplify arguments on existing methods. To check the documentation for the last release (`v0.4.0`), kindly click [here](https://github.com/rougin/wildfire/blob/v0.4.0/README.md).
+The new release for `v0.5.0` will be having a [backward compatibility](https://en.wikipedia.org/wiki/Backward_compatibility) break (BC break). So some functionalities on the earlier versions might not be working after updating. This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was also introduced to remove code complexity and to simplify arguments on existing methods. To check the documentation for the last release (`v0.4.0`), kindly click [here](https://github.com/rougin/wildfire/blob/v0.4.0/README.md).
 
 ### Change the `CodeigniterModel` class to `Model` class
-
-This also applies to `Wildfire` used as a `CI_Model` as well.
 
 **Before**
 
@@ -268,6 +264,24 @@ class User extends \Rougin\Wildfire\CodeigniterModel {}
 
 ``` php
 class User extends \Rougin\Wildfire\Model {}
+```
+
+When `Wildfire` is used as a `CI_Model`, use `WildfireTrait` instead.
+
+**Before**
+
+``` php
+class User extends \Rougin\Wildfire\Wildfire {}
+```
+
+**After**
+
+``` php
+class User extends \Rougin\Wildfire\Model {
+
+    use \Rougin\Wildfire\Traits\WildfireTrait;
+
+}
 ```
 
 ### Change the arguments for `PaginateTrait::paginate`
