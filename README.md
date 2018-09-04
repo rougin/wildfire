@@ -433,7 +433,6 @@ The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/wildfire.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/wildfire.svg?style=flat-square
 
-[link-author]: https://github.com/rougin
 [link-author]: https://rougin.github.io
 [link-changelog]: https://github.com/rougin/wildfire/blob/master/CHANGELOG.md
 [link-code-quality]: https://scrutinizer-ci.com/g/rougin/wildfire
