@@ -1,13 +1,7 @@
 {
     "name": "rougin/wildfire",
     "description": "Query Builder wrapper for the Codeigniter framework.",
-    "keywords": [
-        "codeigniter",
-        "query",
-        "builder",
-        "php",
-        "wildfire"
-    ],
+    "keywords": ["codeigniter", "query", "builder", "php", "wildfire"],
     "homepage": "https://github.com/rougin/wildfire",
     "license": "MIT",
     "authors": [
@@ -19,8 +13,7 @@
         }
     ],
     "require": {
-        "php" : ">=5.4.0",
-        "rougin/codeigniter": "~3.0",
+        "php": ">=5.4.0",
         "rougin/spark-plug": "~0.5"
     },
     "require-dev": {
@@ -42,12 +35,12 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.5-dev"
+            "dev-master": "1.0-dev"
         }
     },
     "suggest": {
-        "rougin/codeigniter": "Installs CodeIgniter core through Composer",
-        "rougin/combustor": "Lets you generate controllers, models, and views from database tables for CodeIgniter",
-        "rougin/refinery": "\"Ready-to-eat\" migrations for CodeIgniter"
+        "rougin/codeigniter": "Core functionality of the Codeigniter framework.",
+        "rougin/combustor": "MVC code generator for the Codeigniter framework.",
+        "rougin/refinery": "\"Ready-to-eat\" migrations for the Codeigniter framework."
     }
 }
