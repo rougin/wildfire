@@ -304,6 +304,54 @@ list($offset, $links) = $this->user->paginate(5, $total, $config);
 
 The total count must be passed in the second parameter.
 
+### Remove `Model::countAll`
+
+**Before**
+
+``` php
+$total = $this->user->countAll();
+```
+
+**After**
+
+``` php
+$total = $this->db->count_all_results('users');
+```
+
+This is being used only in `PaginateTrait::paginate`.
+
+### Change the method `ValidateTrait::validation_errors` to `ValidateTrait::errors`
+
+**Before**
+
+``` php
+ValidateTrait::validation_errors()
+```
+
+**After**
+
+``` php
+ValidateTrait::errors()
+```
+
+### Change the property `ValidateTrait::validation_rules` to `ValidateTrait::rules`
+
+**Before**
+
+``` php
+// application/models/User.php
+
+protected $validation_rules = array();
+```
+
+**After**
+
+``` php
+// application/models/User.php
+
+protected $rules = array();
+```
+
 ### Change the arguments for `Wildfire::__construct`
 
 **Before**

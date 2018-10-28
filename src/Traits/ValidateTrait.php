@@ -20,6 +20,16 @@ trait ValidateTrait
     protected $errors = array();
 
     /**
+     * Returns a listing of error messages.
+     *
+     * @return array
+     */
+    public function errors()
+    {
+        return $this->errors;
+    }
+
+    /**
      * Validates the specified data based on the validation rules.
      *
      * @param  array $data
@@ -42,15 +52,5 @@ trait ValidateTrait
         }
 
         return $validation->run() === true;
-    }
-
-    /**
-     * Returns a listing of error messages.
-     *
-     * @return array
-     */
-    public function errors()
-    {
-        return $this->errors;
     }
 }

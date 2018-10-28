@@ -13,7 +13,6 @@ use Rougin\Wildfire\Wildfire;
  */
 class WildfireTraitTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \CI_Controller
      */
