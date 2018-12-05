@@ -6,7 +6,7 @@ namespace Rougin\Wildfire;
  * Model
  *
  * @package Wildfire
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class Model extends \CI_Model
 {

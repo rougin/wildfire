@@ -12,7 +12,7 @@ namespace Rougin\Wildfire\Traits;
  * @property \CI_URI        $uri
  *
  * @package Wildfire
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 trait PaginateTrait
 {

@@ -8,7 +8,7 @@ use Rougin\SparkPlug\Instance;
  * Paginate Trait Test
  *
  * @package Wildfire
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class PaginateTraitTest extends \PHPUnit_Framework_TestCase
 {

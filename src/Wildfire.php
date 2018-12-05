@@ -9,7 +9,7 @@ use CI_DB_result as QueryResult;
  * Wildfire
  *
  * @package Wildfire
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class Wildfire
 {

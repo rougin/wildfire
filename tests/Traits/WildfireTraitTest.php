@@ -9,7 +9,7 @@ use Rougin\Wildfire\Wildfire;
  * Wildfire Trait Test
  *
  * @package Wildfire
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class WildfireTraitTest extends \PHPUnit_Framework_TestCase
 {

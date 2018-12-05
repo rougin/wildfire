@@ -8,7 +8,7 @@ use Rougin\SparkPlug\Instance;
  * Model Test
  *
  * @package Wildfire
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class ModelTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase
     {
         $this->ci->load->model('user');
 
-        $expected = 'Rougin Royce Gutib';
+        $expected = 'Rougin Gutib';
 
         $data = array('name' => $expected);
 
