@@ -9,15 +9,15 @@
 
 Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from [Codeigniter](https://codeigniter.com) framework. Also inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
 
-## Install
+## Installation
 
-Install Wildfire via [Composer](https://getcomposer.org):
+Install `Wildfire` via [Composer](https://getcomposer.org/):
 
 ``` bash
 $ composer require rougin/wildfire
 ```
 
-## Usage
+## Basic Usage
 
 ### Preparation
 
@@ -136,7 +136,7 @@ class User extends \Rougin\Wildfire\Model {
      *
      * @var array
      */
-    protected $casts = array('accepted' => 'boolean')
+    protected $casts = array('accepted' => 'boolean');
 
 }
 ```
@@ -451,7 +451,7 @@ $wildfire = new Wildfire($query);
 
 The `Wildfire` parameter must be defined with either `CI_DB_query_builder` (`$this->db`) or `CB_DB_result` instances.
 
-## Change Log
+## Changelog
 
 Please see [CHANGELOG][link-changelog] for more information what has changed recently.
 
@@ -461,27 +461,21 @@ Please see [CHANGELOG][link-changelog] for more information what has changed rec
 $ composer test
 ```
 
-## Security
-
-If you discover any security related issues, please email rougingutib@gmail.com instead of using the issue tracker.
-
 ## Credits
 
-- [Rougin Royce Gutib][link-author]
 - [All contributors][link-contributors]
 
 ## License
 
 The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/rougin/wildfire.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/rougin/wildfire/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/wildfire.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/wildfire.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/wildfire.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/wildfire.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/rougin/wildfire/master.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/rougin/wildfire.svg?style=flat-square
 
-[link-author]: https://rougin.github.io
 [link-changelog]: https://github.com/rougin/wildfire/blob/master/CHANGELOG.md
 [link-code-quality]: https://scrutinizer-ci.com/g/rougin/wildfire
 [link-contributors]: https://github.com/rougin/wildfire/contributors
