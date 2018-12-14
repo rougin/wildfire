@@ -50,8 +50,10 @@
     },
     "suggest":
     {
-        "rougin/codeigniter": "Core functionality of the Codeigniter framework.",
-        "rougin/combustor": "MVC code generator for the Codeigniter framework.",
-        "rougin/refinery": "\"Ready-to-eat\" migrations for the Codeigniter framework."
+        "rougin/codeigniter": "Packaged \"system\" folder of the Codeigniter framework.",
+        "rougin/combustor": "CRUD generator for the Codeigniter framework.",
+        "rougin/credo": "Doctrine ORM integration for the Codeigniter framework.",
+        "rougin/ignite": "Composer-based project for the Codeigniter framework.",
+        "rougin/refinery": "\"Ready-to-eat\" migrations for Codeigniter framework"
     }
 }
