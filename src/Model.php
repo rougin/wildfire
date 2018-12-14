@@ -72,7 +72,8 @@ class Model extends \CI_Model
 
         $this->original = (array) $attributes;
 
-        foreach ($attributes as $key => $value) {
+        foreach ($attributes as $key => $value)
+        {
             $casted = $this->cast($key, $value);
 
             $this->attributes[$key] = $casted;
@@ -91,7 +92,8 @@ class Model extends \CI_Model
      */
     public function __get($key)
     {
-        if (isset($this->attributes[$key]) === true) {
+        if (array_key_exists($key, $this->attributes))
+        {
             $value = $this->attributes[(string) $key];
 
             $method = 'get_' . $key . '_attribute';
@@ -173,7 +175,8 @@ class Model extends \CI_Model
 
         $exists && $type = $this->casts[$key];
 
-        switch (trim(strtolower($type))) {
+        switch (trim(strtolower($type)))
+        {
             case 'boolean':
                 return (boolean) $value;
             case 'integer':
