@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from [Codeigniter](https://codeigniter.com) framework. Also inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
+Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework. It is also inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
 
 ## Installation
 
@@ -66,7 +66,9 @@ $config['composer_autoload'] = TRUE;
 ``` php
 // application/models/User.php
 
-class User extends \Rougin\Wildfire\Model {}
+class User extends \Rougin\Wildfire\Model
+{
+}
 ```
 
 ``` php
@@ -129,15 +131,14 @@ $users = $wildfire->result('User');
 ``` php
 // application/models/User.php
 
-class User extends \Rougin\Wildfire\Model {
-
+class User extends \Rougin\Wildfire\Model
+{
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = array('accepted' => 'boolean');
-
 }
 ```
 
@@ -172,15 +173,14 @@ Notice that the value of `accepted` was changed from string integer (`'0'`) into
 ``` php
 // application/models/User.php
 
-class User extends \Rougin\Wildfire\Model {
-
+class User extends \Rougin\Wildfire\Model
+{
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array
      */
     protected $hidden = array('gender');
-
 }
 ```
 
@@ -214,15 +214,14 @@ The `gender` field was not included in the result.
 ``` php
 // application/models/User.php
 
-class User extends \Rougin\Wildfire\Model {
-
+class User extends \Rougin\Wildfire\Model
+{
     /**
      * The attributes that should be visible for serialization.
      *
      * @var array
      */
     protected $visible = array('gender');
-
 }
 ```
 
@@ -257,13 +256,17 @@ The new release for `v0.5.0` will be having a [backward compatibility](https://e
 **Before**
 
 ``` php
-class User extends \Rougin\Wildfire\CodeigniterModel {}
+class User extends \Rougin\Wildfire\CodeigniterModel
+{
+}
 ```
 
 **After**
 
 ``` php
-class User extends \Rougin\Wildfire\Model {}
+class User extends \Rougin\Wildfire\Model
+{
+}
 ```
 
 When `Wildfire` is used as a `CI_Model`, use `WildfireTrait` instead.
@@ -271,16 +274,17 @@ When `Wildfire` is used as a `CI_Model`, use `WildfireTrait` instead.
 **Before**
 
 ``` php
-class User extends \Rougin\Wildfire\Wildfire {}
+class User extends \Rougin\Wildfire\Wildfire
+{
+}
 ```
 
 **After**
 
 ``` php
-class User extends \Rougin\Wildfire\Model {
-
+class User extends \Rougin\Wildfire\Model
+{
     use \Rougin\Wildfire\Traits\WildfireTrait;
-
 }
 ```
 
