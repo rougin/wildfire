@@ -2,15 +2,15 @@
     "name": "rougin/wildfire",
     "description": "Query Builder wrapper for the Codeigniter framework.",
     "keywords": ["codeigniter", "query", "builder", "php", "wildfire"],
-    "homepage": "https://rougin.github.io/wildfire/",
+    "homepage": "https://roug.in/wildfire/",
     "license": "MIT",
     "authors":
     [
         {
             "name": "Rougin Gutib",
             "email": "rougingutib@gmail.com",
-            "homepage": "http://rougin.github.io",
-            "role": "Developer"
+            "homepage": "http://roug.in",
+            "role": "Software Engineer"
         }
     ],
     "require":
