@@ -2,10 +2,11 @@
 
 namespace Rougin\Wildfire;
 
-use CI_DB_query_builder as QueryBuilder;
 use CI_DB_result as QueryResult;
 
 /**
+ * @method \Rougin\Wildfire\Wildfire where(mixed $key, mixed $value = null, bool $escape = null)
+ *
  * @package Wildfire
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -30,8 +31,8 @@ class Wildfire
     /**
      * Calls a method from the \CI_DB_query_builder instance.
      *
-     * @param string $method
-     * @param mixed[]  $params
+     * @param string  $method
+     * @param mixed[] $params
      *
      * @return self
      * @throws \BadMethodCallException
@@ -50,7 +51,10 @@ class Wildfire
         /** @var callable */
         $class = array($this->builder, $method);
 
-        $this->builder = call_user_func_array($class, $params);
+        /** @var \CI_DB_query_builder */
+        $builder = call_user_func_array($class, $params);
+
+        $this->builder = $builder;
 
         return $this;
     }
@@ -77,7 +81,7 @@ class Wildfire
      *
      * @param string $column
      *
-     * @return array
+     * @return string[]
      */
     public function dropdown($column)
     {
@@ -85,9 +89,15 @@ class Wildfire
 
         foreach ($this->result() as $item)
         {
-            $id = $item->{$item->primary()};
+            $result = $item->data();
 
-            $data[$id] = ucwords($item->$column);
+            /** @var integer */
+            $id = $result[$item->primary()];
+
+            /** @var string */
+            $text = $result[$column];
+
+            $data[$id] = ucwords($text);
         }
 
         return $data;
@@ -105,6 +115,7 @@ class Wildfire
     {
         $singular = ucwords(singular($table));
 
+        /** @var \Rougin\Wildfire\Model */
         $model = new $singular;
 
         $data = array($model->primary() => $id);
@@ -170,7 +181,7 @@ class Wildfire
      */
     public function json($model = '')
     {
-        return json_encode($this->data($model));
+        return (string) json_encode($this->data($model));
     }
 
     /**
@@ -182,17 +193,15 @@ class Wildfire
      */
     public function data($model = '')
     {
-        $items = $this->result((string) $model);
+        $items = $this->result($model);
 
-        $length = (int) count($items);
+        $result = array();
 
-        for ($i = 0; $i < $length; $i++)
+        foreach ($items as $item)
         {
-            $data = $items[$i]->data();
-
-            $items[$i] = (array) $data;
+            $result[] = $item->data();
         }
 
-        return $items;
+        return $result;
     }
 }

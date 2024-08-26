@@ -7,7 +7,7 @@ class Post extends Rougin\Wildfire\Model
     /**
      * The attributes that should be visible for serialization.
      *
-     * @var array
+     * @var string[]
      */
     protected $hidden = array('message');
 
@@ -25,6 +25,9 @@ class Post extends Rougin\Wildfire\Model
      */
     public function get_id_attribute()
     {
-        return $this->attributes['user_id'];
+        /** @var integer */
+        $id = $this->attributes['user_id'];
+
+        return (int) $id;
     }
 }

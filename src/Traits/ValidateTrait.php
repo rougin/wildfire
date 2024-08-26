@@ -31,7 +31,7 @@ trait ValidateTrait
     /**
      * Validates the specified data based on the validation rules.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @return boolean
      */

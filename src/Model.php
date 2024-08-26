@@ -40,7 +40,7 @@ class Model extends \CI_Model
     /**
      * The model attribute's original state.
      *
-     * @var array<string, string>
+     * @var array<string, mixed>
      */
     protected $original = array();
 
@@ -113,7 +113,7 @@ class Model extends \CI_Model
      */
     public function __toString()
     {
-        return json_encode($this->data());
+        return (string) json_encode($this->data());
     }
 
     /**
@@ -188,9 +188,10 @@ class Model extends \CI_Model
 
         if ($type === 'integer')
         {
+            /** @var integer $value */
             return (int) $value;
         }
 
-        return (string) $value;
+        return $value;
     }
 }

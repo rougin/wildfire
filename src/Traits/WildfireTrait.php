@@ -32,6 +32,7 @@ trait WildfireTrait
         /** @var callable */
         $class = array($this->wildfire, $method);
 
+        /** @var \Rougin\Wildfire\Wildfire */
         $wildfire = call_user_func_array($class, $params);
 
         $this->wildfire = $wildfire;
@@ -57,7 +58,7 @@ trait WildfireTrait
      * @param integer|null $limit
      * @param integer|null $offset
      *
-     * @return self
+     * @return \Rougin\Wildfire\Wildfire
      */
     public function get($limit = null, $offset = null)
     {

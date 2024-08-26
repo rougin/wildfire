@@ -55,13 +55,19 @@ trait PaginateTrait
      */
     protected function offset($page, $config)
     {
-        $offset = $this->uri->segment($config['uri_segment']);
+        /** @var integer */
+        $segment = $config['uri_segment'];
+
+        /** @var integer */
+        $offset = $this->uri->segment($segment);
 
         if (array_key_exists('page_query_string', $config))
         {
+            /** @var string */
             $segment = $config['query_string_segment'];
 
-            $offset = $this->input->get((string) $segment);
+            /** @var integer */
+            $offset = $this->input->get($segment);
         }
 
         $numbers = $config['use_page_numbers'] && $offset !== 0;
@@ -74,7 +80,7 @@ trait PaginateTrait
      *
      * @param array<string, mixed> $config
      *
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     protected function prepare($config)
     {
