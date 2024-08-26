@@ -3,26 +3,25 @@
 namespace Rougin\Wildfire\Traits;
 
 /**
- * Validate Trait
- *
  * @property array               $rules
  * @property \CI_Form_validation $form_validation
  * @property \CI_Loader          $load
  *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 trait ValidateTrait
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $errors = array();
 
     /**
      * Returns a listing of error messages.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function errors()
     {
@@ -32,7 +31,8 @@ trait ValidateTrait
     /**
      * Validates the specified data based on the validation rules.
      *
-     * @param  array $data
+     * @param array $data
+     *
      * @return boolean
      */
     public function validate(array $data)
@@ -41,16 +41,19 @@ trait ValidateTrait
 
         $validation = $this->form_validation;
 
-        $validation->set_data((array) $data);
+        $validation->set_data($data);
 
         $validation->set_rules($this->rules);
 
-        if ($validation->run() === false) {
-            $errors = $validation->error_array();
+        $valid = true;
 
-            $this->errors = (array) $errors;
+        if (! $validation->run())
+        {
+            $this->errors = $validation->error_array();
+
+            $valid = false;
         }
 
-        return $validation->run() === true;
+        return $valid;
     }
 }

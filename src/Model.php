@@ -3,31 +3,30 @@
 namespace Rougin\Wildfire;
 
 /**
- * Model
- *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Model extends \CI_Model
 {
     /**
      * The model's attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = array();
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = array('id' => 'integer');
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var string[]
      */
     protected $hidden = array();
 
@@ -41,7 +40,7 @@ class Model extends \CI_Model
     /**
      * The model attribute's original state.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $original = array();
 
@@ -55,14 +54,14 @@ class Model extends \CI_Model
     /**
      * The attributes that should be visible for serialization.
      *
-     * @var array
+     * @var string[]
      */
     protected $visible = array();
 
     /**
      * Initializes the model instance.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = array())
     {
@@ -87,23 +86,24 @@ class Model extends \CI_Model
     /**
      * Returns the attribute or from \CI_Model::__get.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function __get($key)
     {
-        if (array_key_exists($key, $this->attributes))
+        if (! array_key_exists($key, $this->attributes))
         {
-            $value = $this->attributes[(string) $key];
-
-            $method = 'get_' . $key . '_attribute';
-
-            $exists = method_exists($this, $method);
-
-            return $exists ? $this->{$method}() : $value;
+            return parent::__get((string) $key);
         }
 
-        return parent::__get((string) $key);
+        $value = $this->attributes[(string) $key];
+
+        $method = 'get_' . $key . '_attribute';
+
+        $exists = method_exists($this, $method);
+
+        return $exists ? $this->{$method}() : $value;
     }
 
     /**
@@ -119,7 +119,7 @@ class Model extends \CI_Model
     /**
      * Returns an array of column names.
      *
-     * @return array
+     * @return string[]
      */
     public function columns()
     {
@@ -129,7 +129,7 @@ class Model extends \CI_Model
     /**
      * Returns the attributes as an array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function data()
     {
@@ -163,26 +163,34 @@ class Model extends \CI_Model
     /**
      * Casts an attribute to a native PHP type.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return mixed
      */
     protected function cast($key, $value)
     {
-        $exists = isset($this->casts[$key]);
-
+        // Parse the type from the property -----
         $type = trim(strtolower((string) ''));
 
-        $exists && $type = $this->casts[$key];
-
-        switch (trim(strtolower($type)))
+        if (array_key_exists($key, $this->casts))
         {
-            case 'boolean':
-                return (boolean) $value;
-            case 'integer':
-                return (integer) $value;
-            default:
-                return $value;
+            $type = $this->casts[$key];
         }
+
+        $type = trim(strtolower($type));
+        // --------------------------------------
+
+        if ($type === 'boolean')
+        {
+            return (bool) $value;
+        }
+
+        if ($type === 'integer')
+        {
+            return (int) $value;
+        }
+
+        return (string) $value;
     }
 }

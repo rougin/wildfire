@@ -6,10 +6,9 @@ use Rougin\SparkPlug\Instance;
 use Rougin\Wildfire\Testcase;
 
 /**
- * Paginate Trait Test
- *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class PaginateTraitTest extends Testcase
 {
@@ -19,8 +18,6 @@ class PaginateTraitTest extends Testcase
     protected $ci;
 
     /**
-     * Sets up the Codeigniter application.
-     *
      * @return void
      */
     public function doSetUp()
@@ -33,19 +30,17 @@ class PaginateTraitTest extends Testcase
     }
 
     /**
-     * Tests PaginateTrait::paginate.
-     *
      * @return void
      */
-    public function testPaginateMethod()
+    public function test_pagination_result()
     {
-        $expected = (integer) 10;
+        $expected = (int) 10;
 
         $config = array('page_query_string' => true);
 
         $config['use_page_numbers'] = true;
 
-        $_GET['per_page'] = (integer) 3;
+        $_GET['per_page'] = (int) 3;
 
         $post = new \Post(array('user_id' => 1));
 

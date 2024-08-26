@@ -5,10 +5,9 @@ namespace Rougin\Wildfire;
 use Rougin\SparkPlug\Instance;
 
 /**
- * Model Test
- *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class ModelTest extends Testcase
 {
@@ -18,8 +17,6 @@ class ModelTest extends Testcase
     protected $ci;
 
     /**
-     * Sets up the Codeigniter application.
-     *
      * @return void
      */
     public function doSetUp()
@@ -30,11 +27,9 @@ class ModelTest extends Testcase
     }
 
     /**
-     * Tests Model::__get.
-     *
      * @return void
      */
-    public function testGetMagicMethod()
+    public function test_magic_property()
     {
         $this->ci->load->model('user');
 
@@ -50,11 +45,9 @@ class ModelTest extends Testcase
     }
 
     /**
-     * Tests Model::__get with its parent method.
-     *
      * @return void
      */
-    public function testGetMagicMethodWithParent()
+    public function test_magic_property_with_parent()
     {
         $this->ci->load->model('user');
 
@@ -70,11 +63,9 @@ class ModelTest extends Testcase
     }
 
     /**
-     * Tests Model::__toString.
-     *
      * @return void
      */
-    public function testToStringMagicMethod()
+    public function test_model_as_string()
     {
         $this->ci->load->model('user');
 

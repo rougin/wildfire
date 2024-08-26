@@ -3,8 +3,6 @@
 namespace Rougin\Wildfire\Traits;
 
 /**
- * Paginate Trait
- *
  * @property \CI_Config     $config
  * @property \CI_Input      $input
  * @property \CI_Loader     $load
@@ -12,17 +10,19 @@ namespace Rougin\Wildfire\Traits;
  * @property \CI_URI        $uri
  *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 trait PaginateTrait
 {
     /**
      * Limits the data based on given configuration and generates pagination links.
      *
-     * @param  integer $page
-     * @param  integer $total
-     * @param  array   $config
-     * @return array
+     * @param integer              $page
+     * @param integer              $total
+     * @param array<string, mixed> $config
+     *
+     * @return array<integer, integer|string>
      */
     public function paginate($page, $total, $config = array())
     {
@@ -32,9 +32,9 @@ trait PaginateTrait
 
         $config = $this->prepare((array) $config);
 
-        $config['per_page'] = (integer) $page;
+        $config['per_page'] = (int) $page;
 
-        $config['total_rows'] = (integer) $total;
+        $config['total_rows'] = (int) $total;
 
         $offset = $this->offset($page, $config);
 
@@ -48,18 +48,20 @@ trait PaginateTrait
     /**
      * Returns the offset from the defined configuration.
      *
-     * @param  integer $page
-     * @param  array   $config
+     * @param integer              $page
+     * @param array<string, mixed> $config
+     *
      * @return integer
      */
-    protected function offset($page, array $config)
+    protected function offset($page, $config)
     {
         $offset = $this->uri->segment($config['uri_segment']);
 
-        if ($config['page_query_string'] === true) {
+        if (array_key_exists('page_query_string', $config))
+        {
             $segment = $config['query_string_segment'];
 
-            $offset = $this->input->get($segment);
+            $offset = $this->input->get((string) $segment);
         }
 
         $numbers = $config['use_page_numbers'] && $offset !== 0;
@@ -70,10 +72,11 @@ trait PaginateTrait
     /**
      * Returns the pagination configuration.
      *
-     * @param  array $config
-     * @return array
+     * @param array<string, mixed> $config
+     *
+     * @return array<string, string>
      */
-    protected function prepare(array $config)
+    protected function prepare($config)
     {
         $this->load->helper('url');
 
@@ -84,10 +87,17 @@ trait PaginateTrait
         $items['uri_segment'] = 3;
         $items['use_page_numbers'] = false;
 
-        foreach ((array) $items as $key => $value) {
-            if ($this->config->item($key) !== null) {
+        foreach ((array) $items as $key => $value)
+        {
+            if ($this->config->item($key))
+            {
                 $config[$key] = $this->config->item($key);
-            } elseif (! isset($config[$key])) {
+
+                continue;
+            }
+
+            if (! array_key_exists($key, $config))
+            {
                 $config[$key] = $value;
             }
         }

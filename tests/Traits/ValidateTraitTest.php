@@ -6,10 +6,9 @@ use Rougin\SparkPlug\Instance;
 use Rougin\Wildfire\Testcase;
 
 /**
- * Validate Trait Test
- *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class ValidateTraitTest extends Testcase
 {
@@ -19,8 +18,6 @@ class ValidateTraitTest extends Testcase
     protected $ci;
 
     /**
-     * Sets up the Codeigniter application.
-     *
      * @return void
      */
     public function doSetUp()
@@ -33,11 +30,9 @@ class ValidateTraitTest extends Testcase
     }
 
     /**
-     * Tests ValidateTrait::validate.
-     *
      * @return void
      */
-    public function testValidateMethod()
+    public function test_validation_errors()
     {
         $expected = array('name' => 'The Name field is required.');
 
