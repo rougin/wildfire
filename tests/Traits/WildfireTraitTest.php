@@ -48,7 +48,7 @@ class WildfireTraitTest extends Testcase
 
         $this->ci->user->where('name', 'Royce');
 
-        $wildfire = $this->ci->user->get('users');
+        $wildfire = $this->ci->user->get();
 
         $data = array('id' => 2, 'name' => 'Royce');
 
