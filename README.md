@@ -2,12 +2,11 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]][link-license]
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
+[![Build Status][ico-build]][link-build]
+[![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Wildfire is a wrapper for [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) from the [Codeigniter](https://codeigniter.com) framework. It is also inspired by the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) from Laravel.
+Wildfire is a package which is a simple wrapper for the [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) based from [Codeigniter 3](https://codeigniter.com/userguide3/). The package was due to the inspiration from the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) of Laravel.
 
 ## Installation
 
@@ -249,211 +248,11 @@ In contrast to the `hidden` attribute, only the `gender` field was displayed in 
 
 ## Migrating to the `v0.5.0` release
 
-The new release for `v0.5.0` will be having a [backward compatibility](https://en.wikipedia.org/wiki/Backward_compatibility) break (BC break). So some functionalities on the earlier versions might not be working after updating. This was done to increase the maintainability of the project while also adhering to the functionalities for both Codeigniter and Eloquent ORM. It was also introduced to remove code complexity and to simplify arguments on existing methods. To check the documentation for the last release (`v0.4.0`), kindly click [here](https://github.com/rougin/wildfire/blob/v0.4.0/README.md).
-
-### Change the `CodeigniterModel` class to `Model` class
-
-**Before**
-
-``` php
-class User extends \Rougin\Wildfire\CodeigniterModel
-{
-}
-```
-
-**After**
-
-``` php
-class User extends \Rougin\Wildfire\Model
-{
-}
-```
-
-When `Wildfire` is used as a `CI_Model`, use `WildfireTrait` instead.
-
-**Before**
-
-``` php
-class User extends \Rougin\Wildfire\Wildfire
-{
-}
-```
-
-**After**
-
-``` php
-class User extends \Rougin\Wildfire\Model
-{
-    use \Rougin\Wildfire\Traits\WildfireTrait;
-}
-```
-
-### Change the arguments for `PaginateTrait::paginate`
-
-**Before**
-
-``` php
-// PaginateTrait::paginate($perPage, $config = array())
-list($result, $links) = $this->user->paginate(5, $config);
-```
-
-**After**
-
-``` php
-$total = $this->db->count_all_results('users');
-
-// PaginateTrait::paginate($perPage, $total, $config = array())
-list($offset, $links) = $this->user->paginate(5, $total, $config);
-```
-
-The total count must be passed in the second parameter.
-
-### Remove `Model::countAll`
-
-**Before**
-
-``` php
-$total = $this->user->countAll();
-```
-
-**After**
-
-``` php
-$total = $this->db->count_all_results('users');
-```
-
-This is being used only in `PaginateTrait::paginate`.
-
-### Change the method `ValidateTrait::validation_errors` to `ValidateTrait::errors`
-
-**Before**
-
-``` php
-ValidateTrait::validation_errors()
-```
-
-**After**
-
-``` php
-ValidateTrait::errors()
-```
-
-### Change the property `ValidateTrait::validation_rules` to `ValidateTrait::rules`
-
-**Before**
-
-``` php
-// application/models/User.php
-
-protected $validation_rules = array();
-```
-
-**After**
-
-``` php
-// application/models/User.php
-
-protected $rules = array();
-```
-
-### Change the arguments for `Wildfire::__construct`
-
-**Before**
-
-``` php
-$query = $this->db->query('SELECT * FROM users');
-
-// Wildfire::__construct($database = null, $query = null)
-$wildfire = new Wildfire($this->db, $query);
-```
-
-**After**
-
-``` php
-// $this->db->query returns a CI_DB_result class
-$query = $this->db->query('SELECT * FROM users');
-
-// Wildfire::__construct($data)
-$wildfire = new Wildfire($query);
-```
-
-If the data is a `CI_DB_result`, it should be passed on the first parameter.
-
-### Change the method `Wildfire::asDropdown` to `Wildfire::dropdown`
-
-**Before**
-
-``` php
-// Wildfire::asDropdown($description = 'description')
-$dropdown = $wildfire->asDropdown();
-```
-
-**After**
-
-``` php
-// Wildfire::dropdown($column)
-$dropdown = $wildfire->dropdown('description');
-```
-
-Also take note that there is no default value in the argument.
-
-### Replace `$delimiters` with `$id` in `Wildfire::find`
-
-**Before**
-
-``` php
-$delimiters = array('name' => 'Rougin');
-
-// Wildfire::find($table, $delimiters = array())
-$users = $wildfire->find('users', $delimiters);
-```
-
-**After**
-
-``` php
-$this->db->where('name', (string) 'Rougin');
-
-$users = $wildfire->get('users')->result();
-```
-
-Use only `Wildfire::find` to return single row data.
-
-``` php
-// Wildfire::find($table, $id)
-$user = $wildfire->find('users', 1);
-```
-
-### Remove `set_database` and `set_query` methods
-
-**Before**
-
-``` php
-use Rougin\Wildfire\Wildfire;
-
-$wildfire = new Wildfire;
-
-$wildfire->set_database($this->db);
-
-$query = $this->db->query('SELECT * FROM users');
-
-$wildfire->set_query($query);
-```
-
-**After**
-
-``` php
-use Rougin\Wildfire\Wildfire;
-
-$wildfire = new Wildfire($this->db);
-
-// or
-
-$query = $this->db->query('SELECT * FROM users');
-
-$wildfire = new Wildfire($query);
-```
-
-The `Wildfire` parameter must be defined with either `CI_DB_query_builder` (`$this->db`) or `CB_DB_result` instances.
+The new release for `v0.5.0` will be having a [backward compatibility](https://en.wikipedia.org/wiki/Backward_compatibility) break (BC break). With this, some functionalities from the earlier versions might not be working after upgrading. This was done to increase the maintainability of the project while also adhering to the functionalities for both `Codeigniter 3` and `Eloquent ORM`. Please see the [UPGRADING][link-upgrading] page for the said breaking changes.
+
+> [!TIP]
+> If still using the `v0.4` release, kindly click its documentation below:
+> https://github.com/rougin/credo/blob/v0.4.0/README.md
 
 ## Changelog
 
@@ -473,18 +272,17 @@ $ composer test
 
 The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/wildfire.svg?style=flat-square
+[ico-build]: https://img.shields.io/github/actions/workflow/status/rougin/wildfire/build.yml?style=flat-square
+[ico-coverage]: https://img.shields.io/codecov/c/github/rougin/wildfire?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/wildfire.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/wildfire.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/rougin/wildfire/master.svg?style=flat-square
 [ico-version]: https://img.shields.io/packagist/v/rougin/wildfire.svg?style=flat-square
 
+[link-build]: https://github.com/rougin/wildfire/actions
 [link-changelog]: https://github.com/rougin/wildfire/blob/master/CHANGELOG.md
-[link-code-quality]: https://scrutinizer-ci.com/g/rougin/wildfire
 [link-contributors]: https://github.com/rougin/wildfire/contributors
+[link-coverage]: https://app.codecov.io/gh/rougin/wildfire
 [link-downloads]: https://packagist.org/packages/rougin/wildfire
 [link-license]: https://github.com/rougin/wildfire/blob/master/LICENSE.md
 [link-packagist]: https://packagist.org/packages/rougin/wildfire
-[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/wildfire/code-structure
-[link-travis]: https://travis-ci.org/rougin/wildfire
+[link-upgrading]: https://github.com/rougin/wildfire/blob/master/UPGRADING.md

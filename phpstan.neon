@@ -1,0 +1,18 @@
+parameters:
+  level: 9
+  paths:
+    - src
+    - tests
+  excludePaths:
+    analyse:
+      - tests/Weblog
+  scanDirectories:
+    - vendor/rougin/codeigniter/src
+  ignoreErrors:
+    - '#^Access to an undefined property CI_Controller\:\:\$db\.$#'
+    - '#^Access to an undefined property CI_Controller\:\:\$post\.$#'
+    - '#^Call to an undefined method CI_DB_query_builder\:\:insert_id\(\)\.$#'
+    - '#^Call to an undefined method CI_Loader\:\:repository\(\)\.$#'
+    - '#^Constant APPPATH not found\.$#'
+    - '#^Method Rougin\\Credo\\Model\:\:metadata\(\) return type with generic class Doctrine\\ORM\\Mapping\\ClassMetadata does not specify its types\: T$#'
+    - '#^Parameter \#2 \$lockMode of method Doctrine\\ORM\\EntityRepository\<object\>\:\:find\(\) expects 0\|1\|2\|4\|null, int\|null given\.$#'

@@ -1,4 +1,7 @@
+.php-cs-fixer.cache
+.phpunit.result.cache
 build
 composer.lock
 docs
+tests/Weblog/application/databases/test.db
 vendor

@@ -1,8 +1,9 @@
 <?php
 
-namespace Rougin\Wildfire;
+namespace Rougin\Wildfire\Traits;
 
 use Rougin\SparkPlug\Instance;
+use Rougin\Wildfire\Testcase;
 use Rougin\Wildfire\Wildfire;
 
 /**
@@ -11,7 +12,7 @@ use Rougin\Wildfire\Wildfire;
  * @package Wildfire
  * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class WildfireTraitTest extends \PHPUnit_Framework_TestCase
+class WildfireTraitTest extends Testcase
 {
     /**
      * @var \CI_Controller
@@ -23,7 +24,7 @@ class WildfireTraitTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $path = (string) __DIR__ . '/Weblog';
 
