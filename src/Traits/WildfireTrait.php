@@ -5,12 +5,11 @@ namespace Rougin\Wildfire\Traits;
 use Rougin\Wildfire\Wildfire;
 
 /**
- * Wildfire Trait
- *
  * @method string table()
  *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 trait WildfireTrait
 {
@@ -22,16 +21,21 @@ trait WildfireTrait
     /**
      * Calls a method from the Wildfire instance.
      *
-     * @param  string $method
-     * @param  array  $arguments
+     * @param string  $method
+     * @param mixed[] $params
+     *
      * @return self
      * @throws \BadMethodCallException
      */
-    public function __call($method, $arguments)
+    public function __call($method, $params)
     {
-        $instance = (array) array($this->wildfire, (string) $method);
+        /** @var callable */
+        $class = array($this->wildfire, $method);
 
-        $this->wildfire = call_user_func_array($instance, $arguments);
+        /** @var \Rougin\Wildfire\Wildfire */
+        $wildfire = call_user_func_array($class, $params);
+
+        $this->wildfire = $wildfire;
 
         return $this;
     }
@@ -39,9 +43,9 @@ trait WildfireTrait
     /**
      * Finds the row from storage based on given identifier.
      *
-     * @param  string  $table
-     * @param  integer $id
-     * @return \Rougin\Wildfire\Model
+     * @param integer $id
+     *
+     * @return \Rougin\Wildfire\Model|null
      */
     public function find($id)
     {
@@ -51,10 +55,10 @@ trait WildfireTrait
     /**
      * Returns an array of rows from a specified table.
      *
-     * @param  string       $table
-     * @param  integer|null $limit
-     * @param  integer|null $offset
-     * @return self
+     * @param integer|null $limit
+     * @param integer|null $offset
+     *
+     * @return \Rougin\Wildfire\Wildfire
      */
     public function get($limit = null, $offset = null)
     {
@@ -64,7 +68,8 @@ trait WildfireTrait
     /**
      * Sets the Wildfire instance.
      *
-     * @param  \Rougin\Wildfire\Wildfire $wildfire
+     * @param \Rougin\Wildfire\Wildfire $wildfire
+     *
      * @return self
      */
     public function wildfire(Wildfire $wildfire)

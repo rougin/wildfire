@@ -1,17 +1,17 @@
 <?php
 
-namespace Rougin\Wildfire;
+namespace Rougin\Wildfire\Traits;
 
 use Rougin\SparkPlug\Instance;
+use Rougin\Wildfire\Testcase;
 use Rougin\Wildfire\Wildfire;
 
 /**
- * Wildfire Trait Test
- *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class WildfireTraitTest extends \PHPUnit_Framework_TestCase
+class WildfireTraitTest extends Testcase
 {
     /**
      * @var \CI_Controller
@@ -19,11 +19,9 @@ class WildfireTraitTest extends \PHPUnit_Framework_TestCase
     protected $ci;
 
     /**
-     * Sets up the Codeigniter application.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $path = (string) __DIR__ . '/Weblog';
 
@@ -35,45 +33,13 @@ class WildfireTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests WildfireTrait::__call.
-     *
      * @return void
      */
-    public function testCallMagicMethod()
-    {
-        $wildfire = new Wildfire($this->ci->db);
-
-        $this->ci->user->wildfire($wildfire);
-
-        $this->ci->user->where('name', 'Royce');
-
-        $wildfire = $this->ci->user->get('users');
-
-        $data = array('id' => 2, 'name' => 'Royce');
-
-        $data['age'] = (integer) 18;
-
-        $data['gender'] = 'male';
-
-        $data['accepted'] = 0;
-
-        $expected = new \User($data);
-
-        $result = current($wildfire->result());
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests WildfireTrait::find.
-     *
-     * @return void
-     */
-    public function testFindMethod()
+    public function test_find_method_from_model()
     {
         $data = array('id' => 3, 'name' => 'Angel');
 
-        $data['age'] = (integer) 19;
+        $data['age'] = (int) 19;
 
         $data['gender'] = 'female';
 
@@ -91,11 +57,9 @@ class WildfireTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests WildfireTrait::get.
-     *
      * @return void
      */
-    public function testGetMethod()
+    public function test_get_method_from_model()
     {
         $expected = array();
 
@@ -128,6 +92,34 @@ class WildfireTraitTest extends \PHPUnit_Framework_TestCase
         $this->ci->user->wildfire($wildfire);
 
         $result = $this->ci->user->get()->result();
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_magic_method_from_model()
+    {
+        $wildfire = new Wildfire($this->ci->db);
+
+        $this->ci->user->wildfire($wildfire);
+
+        $this->ci->user->where('name', 'Royce');
+
+        $wildfire = $this->ci->user->get();
+
+        $data = array('id' => 2, 'name' => 'Royce');
+
+        $data['age'] = (int) 18;
+
+        $data['gender'] = 'male';
+
+        $data['accepted'] = 0;
+
+        $expected = new \User($data);
+
+        $result = current($wildfire->result());
 
         $this->assertEquals($expected, $result);
     }

@@ -1,16 +1,16 @@
 <?php
 
-namespace Rougin\Wildfire;
+namespace Rougin\Wildfire\Traits;
 
 use Rougin\SparkPlug\Instance;
+use Rougin\Wildfire\Testcase;
 
 /**
- * Validate Trait Test
- *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ValidateTraitTest extends \PHPUnit_Framework_TestCase
+class ValidateTraitTest extends Testcase
 {
     /**
      * @var \CI_Controller
@@ -18,11 +18,9 @@ class ValidateTraitTest extends \PHPUnit_Framework_TestCase
     protected $ci;
 
     /**
-     * Sets up the Codeigniter application.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $path = (string) __DIR__ . '/Weblog';
 
@@ -32,11 +30,9 @@ class ValidateTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests ValidateTrait::validate.
-     *
      * @return void
      */
-    public function testValidateMethod()
+    public function test_validation_errors()
     {
         $expected = array('name' => 'The Name field is required.');
 

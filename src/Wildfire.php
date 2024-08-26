@@ -2,14 +2,14 @@
 
 namespace Rougin\Wildfire;
 
-use CI_DB_query_builder as QueryBuilder;
 use CI_DB_result as QueryResult;
 
 /**
- * Wildfire
+ * @method \Rougin\Wildfire\Wildfire where(mixed $key, mixed $value = null, bool $escape = null)
  *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Wildfire
 {
@@ -31,26 +31,32 @@ class Wildfire
     /**
      * Calls a method from the \CI_DB_query_builder instance.
      *
-     * @param  string $method
-     * @param  array  $arguments
+     * @param string  $method
+     * @param mixed[] $params
+     *
      * @return self
      * @throws \BadMethodCallException
      */
-    public function __call($method, $arguments)
+    public function __call($method, $params)
     {
-        if (method_exists($this->builder, $method) === true) {
-            $instance = (array) array($this->builder, (string) $method);
+        if (! method_exists($this->builder, $method))
+        {
+            $method = get_class($this) . '::' . $method . '()';
 
-            $this->builder = call_user_func_array($instance, $arguments);
+            $text = 'Call to undefined method ' . $method;
 
-            return $this;
+            throw new \BadMethodCallException((string) $text);
         }
 
-        $method = get_class($this) . '::' . $method . '()';
+        /** @var callable */
+        $class = array($this->builder, $method);
 
-        $message = 'Call to undefined method ' . $method;
+        /** @var \CI_DB_query_builder */
+        $builder = call_user_func_array($class, $params);
 
-        throw new \BadMethodCallException((string) $message);
+        $this->builder = $builder;
+
+        return $this;
     }
 
     /**
@@ -60,31 +66,38 @@ class Wildfire
      */
     public function __construct($cidb)
     {
-        $builder = $cidb instanceof QueryBuilder;
-
-        $builder === true && $this->builder = $cidb;
-
-        $result = $cidb instanceof QueryResult;
-
-        $result === true && $this->result = $cidb;
+        if ($cidb instanceof QueryResult)
+        {
+            $this->result = $cidb;
+        }
+        else
+        {
+            $this->builder = $cidb;
+        }
     }
 
     /**
      * Returns result data in array dropdown format.
      *
-     * @param  string $column
-     * @return array
+     * @param string $column
+     *
+     * @return string[]
      */
     public function dropdown($column)
     {
         $data = array();
 
-        foreach ($this->result() as $item) {
-            $text = ucwords($item->$column);
+        foreach ($this->result() as $item)
+        {
+            $result = $item->data();
 
-            $id = $item->{$item->primary()};
+            /** @var integer */
+            $id = $result[$item->primary()];
 
-            $data[$id] = (string) $text;
+            /** @var string */
+            $text = $result[$column];
+
+            $data[$id] = ucwords($text);
         }
 
         return $data;
@@ -93,14 +106,16 @@ class Wildfire
     /**
      * Finds the row from storage based on given identifier.
      *
-     * @param  string  $table
-     * @param  integer $id
-     * @return \Rougin\Wildfire\Model
+     * @param string  $table
+     * @param integer $id
+     *
+     * @return \Rougin\Wildfire\Model|null
      */
     public function find($table, $id)
     {
         $singular = ucwords(singular($table));
 
+        /** @var \Rougin\Wildfire\Model */
         $model = new $singular;
 
         $data = array($model->primary() => $id);
@@ -109,15 +124,16 @@ class Wildfire
 
         $items = $this->get($table)->result();
 
-        return current((array) $items);
+        return $items ? $items[0] : null;
     }
 
     /**
      * Returns an array of rows from a specified table.
      *
-     * @param  string       $table
-     * @param  integer|null $limit
-     * @param  integer|null $offset
+     * @param string       $table
+     * @param integer|null $limit
+     * @param integer|null $offset
+     *
      * @return self
      */
     public function get($table = '', $limit = null, $offset = null)
@@ -132,7 +148,8 @@ class Wildfire
     /**
      * Returns the result with model instances.
      *
-     * @param  string $model
+     * @param string $model
+     *
      * @return \Rougin\Wildfire\Model[]
      */
     public function result($model = '')
@@ -143,10 +160,11 @@ class Wildfire
 
         $items = $this->result->result_array();
 
-        $length = (integer) count($items);
+        $length = (int) count($items);
 
-        for ($i = 0; $i < (integer) $length; $i++) {
-            $item = (array) $items[(integer) $i];
+        for ($i = 0; $i < (int) $length; $i++)
+        {
+            $item = (array) $items[(int) $i];
 
             $items[$i] = new $model((array) $item);
         }
@@ -157,32 +175,33 @@ class Wildfire
     /**
      * Returns the result as a JSON string.
      *
-     * @param  string $model
+     * @param string $model
+     *
      * @return string
      */
     public function json($model = '')
     {
-        return json_encode($this->data($model));
+        return (string) json_encode($this->data($model));
     }
 
     /**
      * Returns the result in array format.
      *
-     * @param  string $model
-     * @return array
+     * @param string $model
+     *
+     * @return array<string, mixed>[]
      */
     public function data($model = '')
     {
-        $items = $this->result((string) $model);
+        $items = $this->result($model);
 
-        $length = (integer) count($items);
+        $result = array();
 
-        for ($i = 0; $i < $length; $i++) {
-            $data = $items[$i]->data();
-
-            $items[$i] = (array) $data;
+        foreach ($items as $item)
+        {
+            $result[] = $item->data();
         }
 
-        return $items;
+        return $result;
     }
 }

@@ -1,16 +1,16 @@
 <?php
 
-namespace Rougin\Wildfire;
+namespace Rougin\Wildfire\Traits;
 
 use Rougin\SparkPlug\Instance;
+use Rougin\Wildfire\Testcase;
 
 /**
- * Paginate Trait Test
- *
  * @package Wildfire
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class PaginateTraitTest extends \PHPUnit_Framework_TestCase
+class PaginateTraitTest extends Testcase
 {
     /**
      * @var \CI_Controller
@@ -18,11 +18,9 @@ class PaginateTraitTest extends \PHPUnit_Framework_TestCase
     protected $ci;
 
     /**
-     * Sets up the Codeigniter application.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $path = (string) __DIR__ . '/Weblog';
 
@@ -32,19 +30,17 @@ class PaginateTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests PaginateTrait::paginate.
-     *
      * @return void
      */
-    public function testPaginateMethod()
+    public function test_pagination_result()
     {
-        $expected = (integer) 10;
+        $expected = (int) 10;
 
         $config = array('page_query_string' => true);
 
         $config['use_page_numbers'] = true;
 
-        $_GET['per_page'] = (integer) 3;
+        $_GET['per_page'] = (int) 3;
 
         $post = new \Post(array('user_id' => 1));
 

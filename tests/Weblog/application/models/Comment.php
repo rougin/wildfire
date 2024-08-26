@@ -8,7 +8,7 @@ class Comment extends Rougin\Wildfire\Model
      * An array of validation rules. This needs to be the same format
      * as validation rules passed to the Form_validation library.
      *
-     * @var array
+     * @var array<string, string>[]
      */
     protected $rules = array(
         array('field' => 'name', 'label' => 'Name', 'rules' => 'required'),

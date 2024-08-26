@@ -1,59 +1,61 @@
 {
-    "name": "rougin/wildfire",
-    "description": "Query Builder wrapper for the Codeigniter framework.",
-    "keywords": ["codeigniter", "query", "builder", "php", "wildfire"],
-    "homepage": "https://roug.in/wildfire/",
-    "license": "MIT",
-    "authors":
-    [
-        {
-            "name": "Rougin Gutib",
-            "email": "rougingutib@gmail.com",
-            "homepage": "http://roug.in",
-            "role": "Software Engineer"
-        }
-    ],
-    "require":
+  "name": "rougin/wildfire",
+  "description": "A Query Builder wrapper for Codeigniter 3.",
+  "keywords": [ "codeigniter", "query-builder", "wildfire" ],
+  "homepage": "https://roug.in/wildfire/",
+  "license": "MIT",
+  "authors":
+  [
     {
-        "php": ">=5.4.0",
-        "rougin/spark-plug": "~0.5"
-    },
-    "require-dev":
-    {
-        "phpunit/phpunit": "~4.2|~5.7",
-        "scrutinizer/ocular": "~1.1.0"
-    },
-    "autoload":
-    {
-        "psr-4":
-        {
-            "Rougin\\Wildfire\\": "src"
-        }
-    },
-    "autoload-dev":
-    {
-        "psr-4":
-        {
-            "Rougin\\Wildfire\\": "tests"
-        }
-    },
-    "scripts":
-    {
-        "test": "phpunit"
-    },
-    "extra":
-    {
-        "branch-alias":
-        {
-            "dev-master": "1.0-dev"
-        }
-    },
-    "suggest":
-    {
-        "rougin/codeigniter": "Packaged \"system\" folder of the Codeigniter framework.",
-        "rougin/combustor": "CRUD generator for the Codeigniter framework.",
-        "rougin/credo": "Doctrine ORM integration for the Codeigniter framework.",
-        "rougin/ignite": "Composer-based project for the Codeigniter framework.",
-        "rougin/refinery": "\"Ready-to-eat\" migrations for Codeigniter framework"
+      "name": "Rougin Gutib",
+      "email": "rougingutib@gmail.com",
+      "homepage": "http://roug.in",
+      "role": "Software Engineer"
     }
+  ],
+  "require":
+  {
+    "php": ">=5.4.0",
+    "rougin/codeigniter": "~3.0",
+    "rougin/spark-plug": "~0.5"
+  },
+  "require-dev":
+  {
+    "phpunit/phpunit": "~4.2|~5.7|~6.0|~7.0|~8.0|~9.0",
+    "sanmai/phpunit-legacy-adapter": "~6.1|~8.0"
+  },
+  "autoload":
+  {
+    "psr-4":
+    {
+      "Rougin\\Wildfire\\": "src"
+    }
+  },
+  "autoload-dev":
+  {
+    "psr-4":
+    {
+      "Rougin\\Wildfire\\": "tests"
+    }
+  },
+  "scripts":
+  {
+    "test": "phpunit"
+  },
+  "extra":
+  {
+    "branch-alias":
+    {
+      "dev-master": "1.0-dev"
+    }
+  },
+  "suggest":
+  {
+    "rougin/codeigniter": "Codeigniter 3's Composer-based package.",
+    "rougin/combustor": "A simple CRUD generator for Codeigniter 3.",
+    "rougin/credo": "A Doctrine ORM wrapper for Codeigniter 3.",
+    "rougin/ignite": "Codeigniter 3 as a Composer-based project.",
+    "rougin/refinery": "Database migrations for Codeigniter 3.",
+    "rougin/wildfire": "A Query Builder wrapper for Codeigniter 3."
+  }
 }
