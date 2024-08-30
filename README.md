@@ -6,7 +6,7 @@
 [![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Wildfire is a package which is a simple wrapper for the [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) based from [Codeigniter 3](https://codeigniter.com/userguide3/). The package was due to the inspiration from the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) of Laravel.
+Wildfire is a package which is a simple wrapper for the [Query Builder Class](https://codeigniter.com/user_guide/database/query_builder.html) based from [Codeigniter 3](https://codeigniter.com/userguide3/). The package was inspired from the [Eloquent ORM](https://laravel.com/docs/5.6/eloquent) of Laravel.
 
 ## Installation
 
@@ -18,7 +18,9 @@ $ composer require rougin/wildfire
 
 ## Basic Usage
 
-### Preparation
+### Prerequisites
+
+Create a sample database table to be used (e.g., `users`):
 
 ``` sql
 -- Import this script to a SQLite database
@@ -33,8 +35,10 @@ CREATE TABLE users (
 
 INSERT INTO users (name, age, gender) VALUES ('Rougin', 20, 'male');
 INSERT INTO users (name, age, gender) VALUES ('Royce', 18, 'male');
-INSERT INTO users (name, age, gender) VALUES ('Angel', 19, 'female');
+INSERT INTO users (name, age, gender) VALUES ('Mei', 19, 'female');
 ```
+
+Then enable the `composer_autoload` option in `config.php`:
 
 ``` php
 // application/config/config.php
@@ -62,10 +66,13 @@ INSERT INTO users (name, age, gender) VALUES ('Angel', 19, 'female');
 $config['composer_autoload'] = TRUE;
 ```
 
+Extend the specified model (e.g., `User`) to the `Model` class of `Wildfire`:
+
 ``` php
 // application/models/User.php
+use Rougin\Wildfire\Model;
 
-class User extends \Rougin\Wildfire\Model
+class User extends Model
 {
 }
 ```
