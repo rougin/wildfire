@@ -45,15 +45,11 @@ trait ValidateTrait
 
         $validation->set_rules($this->rules);
 
-        $valid = true;
-
         if (! $validation->run())
         {
             $this->errors = $validation->error_array();
-
-            $valid = false;
         }
 
-        return $valid;
+        return count($this->errors) === 0;
     }
 }
