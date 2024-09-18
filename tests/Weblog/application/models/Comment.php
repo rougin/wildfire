@@ -6,7 +6,9 @@ class Comment extends Rougin\Wildfire\Model
 
     /**
      * An array of validation rules. This needs to be the same format
-     * as validation rules passed to the Form_validation library.
+     * as validation rules passed to the Form Validation library.
+     *
+     * @link https://codeigniter.com/userguide3/libraries/form_validation.html#setting-rules-using-an-array
      *
      * @var array<string, string>[]
      */

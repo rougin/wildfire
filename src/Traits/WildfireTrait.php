@@ -5,6 +5,8 @@ namespace Rougin\Wildfire\Traits;
 use Rougin\Wildfire\Wildfire;
 
 /**
+ * @property \CI_DB_result $db
+ *
  * @method string table()
  *
  * @package Wildfire
@@ -49,7 +51,7 @@ trait WildfireTrait
      */
     public function find($id)
     {
-        return $this->wildfire->find($this->table(), $id);
+        return $this->init()->find($this->table(), $id);
     }
 
     /**
@@ -62,7 +64,7 @@ trait WildfireTrait
      */
     public function get($limit = null, $offset = null)
     {
-        return $this->wildfire->get($this->table(), $limit, $offset);
+        return $this->init()->get($this->table(), $limit, $offset);
     }
 
     /**
@@ -74,8 +76,29 @@ trait WildfireTrait
      */
     public function wildfire(Wildfire $wildfire)
     {
-        $this->wildfire = $wildfire;
+        $this->init($wildfire);
 
         return $this;
+    }
+
+    /**
+     * Initializes the Wildfire instance.
+     *
+     * @param \Rougin\Wildfire\Wildfire|null $wildfire
+     *
+     * @return \Rougin\Wildfire\Wildfire
+     */
+    private function init(Wildfire $wildfire = null)
+    {
+        if ($wildfire)
+        {
+            $this->wildfire = $wildfire;
+        }
+        else
+        {
+            $this->wildfire = new Wildfire($this->db);
+        }
+
+        return $this->wildfire;
     }
 }

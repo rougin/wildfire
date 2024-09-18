@@ -6,6 +6,7 @@ All notable changes to `Wildfire` will be documented in this file.
 
 ### Added
 - `$pagee` variable for pagination customization in `PaginateTrait`
+- `init` in `WildfireTrait` to initialize `Wildfire` without specifying
 
 ### Changed
 - Code documentation by `php-cs-fixer`, code quality by `phpstan`

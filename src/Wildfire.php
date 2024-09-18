@@ -5,8 +5,6 @@ namespace Rougin\Wildfire;
 use CI_DB_result as QueryResult;
 
 /**
- * @method \Rougin\Wildfire\Wildfire where(mixed $key, mixed $value = null, bool $escape = null)
- *
  * @package Wildfire
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -120,7 +118,7 @@ class Wildfire
 
         $data = array($model->primary() => $id);
 
-        $this->builder->where((array) $data);
+        $this->builder->where($data);
 
         $items = $this->get($table)->result();
 
@@ -138,7 +136,7 @@ class Wildfire
      */
     public function get($table = '', $limit = null, $offset = null)
     {
-        $this->table = (string) ucwords((string) singular($table));
+        $this->table = ucwords(singular($table));
 
         $this->result = $this->builder->get($table, $limit, $offset);
 
@@ -164,12 +162,12 @@ class Wildfire
 
         for ($i = 0; $i < (int) $length; $i++)
         {
-            $item = (array) $items[(int) $i];
+            $item = $items[$i];
 
-            $items[$i] = new $model((array) $item);
+            $items[$i] = new $model($item);
         }
 
-        return (array) $items;
+        return $items;
     }
 
     /**
