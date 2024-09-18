@@ -12,6 +12,15 @@ class Post extends Rougin\Wildfire\Model
     protected $hidden = array('message');
 
     /**
+     * Additional configuration to Pagination Class.
+     *
+     * @link https://codeigniter.com/userguide3/libraries/pagination.html?highlight=pagination#customizing-the-pagination
+     *
+     * @var array<string, mixed>
+     */
+    protected $pagee = array();
+
+    /**
      * The table associated with the model.
      *
      * @var string

@@ -4,6 +4,9 @@ All notable changes to `Wildfire` will be documented in this file.
 
 ## [0.6.0](https://github.com/rougin/wildfire/compare/v0.5.0...v0.6.0) - Unreleased
 
+### Added
+- `$pagee` variable for pagination customization in `PaginateTrait`
+
 ### Changed
 - Code documentation by `php-cs-fixer`, code quality by `phpstan`
 - Workflow from `Travis CI` to `Github Actions`

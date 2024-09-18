@@ -3,11 +3,12 @@
 namespace Rougin\Wildfire\Traits;
 
 /**
- * @property \CI_Config     $config
- * @property \CI_Input      $input
- * @property \CI_Loader     $load
- * @property \CI_Pagination $pagination
- * @property \CI_URI        $uri
+ * @property \CI_Config           $config
+ * @property \CI_Input            $input
+ * @property \CI_Loader           $load
+ * @property array<string, mixed> $pagee
+ * @property \CI_Pagination       $pagination
+ * @property \CI_URI              $uri
  *
  * @package Wildfire
  *
@@ -91,6 +92,11 @@ trait PaginateTrait
      */
     protected function prepare($config)
     {
+        if (isset($this->pagee))
+        {
+            $config = array_merge($config, $this->pagee);
+        }
+
         $this->load->helper('url');
 
         $items = array('uri_segment' => 3);

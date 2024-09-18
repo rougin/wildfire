@@ -3,9 +3,9 @@
 namespace Rougin\Wildfire\Traits;
 
 /**
- * @property array               $rules
- * @property \CI_Form_validation $form_validation
- * @property \CI_Loader          $load
+ * @property array<string, string>[] $rules
+ * @property \CI_Form_validation     $form_validation
+ * @property \CI_Loader              $load
  *
  * @package Wildfire
  *
