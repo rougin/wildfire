@@ -18,25 +18,25 @@ trait PaginateTrait
     /**
      * Limits the data based on given configuration and generates pagination links.
      *
-     * @param integer              $page
+     * @param integer              $limit
      * @param integer              $total
      * @param array<string, mixed> $config
      *
      * @return array<integer, integer|string>
      */
-    public function paginate($page, $total, $config = array())
+    public function paginate($limit, $total, $config = array())
     {
         $this->load->library('pagination');
 
         $pagination = $this->pagination;
 
-        $config = $this->prepare((array) $config);
+        $config = $this->prepare($config);
 
-        $config['per_page'] = (int) $page;
+        $config['per_page'] = (int) $limit;
 
-        $config['total_rows'] = (int) $total;
+        $config['total_rows'] = $total;
 
-        $offset = $this->offset($page, $config);
+        $offset = $this->offset($config);
 
         $pagination->initialize($config);
 
@@ -48,15 +48,17 @@ trait PaginateTrait
     /**
      * Returns the offset from the defined configuration.
      *
-     * @param integer              $page
      * @param array<string, mixed> $config
      *
      * @return integer
      */
-    protected function offset($page, $config)
+    protected function offset($config)
     {
         /** @var integer */
         $segment = $config['uri_segment'];
+
+        /** @var integer */
+        $limit = $config['per_page'];
 
         /** @var integer */
         $offset = $this->uri->segment($segment);
@@ -70,9 +72,14 @@ trait PaginateTrait
             $offset = $this->input->get($segment);
         }
 
-        $numbers = $config['use_page_numbers'] && $offset !== 0;
+        $hasOffset = $offset !== 0 && $offset !== null;
 
-        return $numbers ? ($page * $offset) - $page : $offset;
+        /** @var boolean */
+        $useNumbers = $config['use_page_numbers'];
+
+        $numbers = $useNumbers && $hasOffset;
+
+        return $numbers ? ($limit * $offset) - $limit : $offset;
     }
 
     /**
@@ -86,28 +93,12 @@ trait PaginateTrait
     {
         $this->load->helper('url');
 
-        $items = array('base_url' => current_url());
+        $items = array('uri_segment' => 3);
 
         $items['page_query_string'] = false;
         $items['query_string_segment'] = 'per_page';
-        $items['uri_segment'] = 3;
         $items['use_page_numbers'] = false;
 
-        foreach ((array) $items as $key => $value)
-        {
-            if ($this->config->item($key))
-            {
-                $config[$key] = $this->config->item($key);
-
-                continue;
-            }
-
-            if (! array_key_exists($key, $config))
-            {
-                $config[$key] = $value;
-            }
-        }
-
-        return $config;
+        return array_merge($items, $config);
     }
 }

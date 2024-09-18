@@ -9,6 +9,9 @@ All notable changes to `Wildfire` will be documented in this file.
 - Workflow from `Travis CI` to `Github Actions`
 - Code coverage from `Scrutinizer CI` to `Codecov`
 
+### Fixed
+- Getting offset value in `PaginateTrait`
+
 ## [0.5.0](https://github.com/rougin/wildfire/compare/v0.4.0...v0.5.0) - 2018-09-23
 
 > [!NOTE]
