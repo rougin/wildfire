@@ -10,66 +10,71 @@ namespace Rougin\Wildfire;
 class Model extends \CI_Model
 {
     /**
-     * The model's attributes.
+     * Model's current attributes.
      *
      * @var array<string, mixed>
      */
     protected $attributes = array();
 
     /**
-     * The attributes that should be cast to native types.
+     * Attributes that should be cast to native types.
      *
      * @var array<string, string>
      */
     protected $casts = array('id' => 'integer');
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Attributes that should be hidden for serialization.
      *
      * @var string[]
      */
     protected $hidden = array();
 
     /**
-     * The primary key for the model.
+     * Primary key for the model.
      *
      * @var string
      */
     protected $primary = 'id';
 
     /**
-     * The model attribute's original state.
+     * Model attribute's original state.
      *
      * @var array<string, mixed>
      */
     protected $original = array();
 
     /**
-     * The table associated with the model.
+     * Table associated with the model.
      *
      * @var string
      */
     protected $table = '';
 
     /**
-     * The attributes that should be visible for serialization.
+     * Allows usage of timestamp fields ("created_at", "updated_at").
+     *
+     * @var boolean
+     */
+    protected $timestamps = true;
+
+    /**
+     * Attributes that should be visible for serialization.
      *
      * @var string[]
      */
     protected $visible = array();
 
     /**
-     * Initializes the model instance.
-     *
      * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = array())
     {
-        $casts = (array) array('id' => 'integer');
+        $casts = array('id' => 'integer');
 
         $this->casts = array_merge($casts, $this->casts);
 
-        $this->original = (array) $attributes;
+        $this->original = $attributes;
 
         foreach ($attributes as $key => $value)
         {
@@ -133,9 +138,9 @@ class Model extends \CI_Model
      */
     public function data()
     {
-        $flipped = array_flip((array) $this->columns());
+        $flipped = array_flip($this->columns());
 
-        $values = (array) $this->attributes;
+        $values = $this->attributes;
 
         return array_intersect_key($values, $flipped);
     }

@@ -16,9 +16,9 @@ use Rougin\Wildfire\Wildfire;
 trait WildfireTrait
 {
     /**
-     * @var \Rougin\Wildfire\Wildfire
+     * @var \Rougin\Wildfire\Wildfire|null
      */
-    protected $wildfire;
+    protected $self = null;
 
     /**
      * Calls a method from the Wildfire instance.
@@ -32,12 +32,12 @@ trait WildfireTrait
     public function __call($method, $params)
     {
         /** @var callable */
-        $class = array($this->wildfire, $method);
+        $class = array($this->self, $method);
 
         /** @var \Rougin\Wildfire\Wildfire */
-        $wildfire = call_user_func_array($class, $params);
+        $self = call_user_func_array($class, $params);
 
-        $this->wildfire = $wildfire;
+        $this->self = $self;
 
         return $this;
     }
@@ -51,7 +51,7 @@ trait WildfireTrait
      */
     public function find($id)
     {
-        return $this->init()->find($this->table(), $id);
+        return $this->wildfire()->find($this->table(), $id);
     }
 
     /**
@@ -64,41 +64,28 @@ trait WildfireTrait
      */
     public function get($limit = null, $offset = null)
     {
-        return $this->init()->get($this->table(), $limit, $offset);
+        return $this->wildfire()->get($this->table(), $limit, $offset);
     }
 
     /**
      * Sets the Wildfire instance.
      *
-     * @param \Rougin\Wildfire\Wildfire $wildfire
-     *
-     * @return self
-     */
-    public function wildfire(Wildfire $wildfire)
-    {
-        $this->init($wildfire);
-
-        return $this;
-    }
-
-    /**
-     * Initializes the Wildfire instance.
-     *
      * @param \Rougin\Wildfire\Wildfire|null $wildfire
      *
      * @return \Rougin\Wildfire\Wildfire
      */
-    private function init(Wildfire $wildfire = null)
+    public function wildfire(Wildfire $wildfire = null)
     {
         if ($wildfire)
         {
-            $this->wildfire = $wildfire;
-        }
-        else
-        {
-            $this->wildfire = new Wildfire($this->db);
+            $this->self = $wildfire;
         }
 
-        return $this->wildfire;
+        if (! $this->self)
+        {
+            $this->self = new Wildfire($this->db);
+        }
+
+        return $this->self;
     }
 }

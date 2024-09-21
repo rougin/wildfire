@@ -39,7 +39,9 @@ class WildfireTest extends Testcase
     {
         $wildfire = new Wildfire($this->ci->db);
 
+        // TODO: Add methods from query builder to Wildfire as @method ---
         $wildfire->where('name', 'Royce');
+        // ---------------------------------------------------------------
 
         $wildfire = $wildfire->get('users');
 

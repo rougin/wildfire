@@ -5,6 +5,8 @@ namespace Rougin\Wildfire;
 use CI_DB_result as QueryResult;
 
 /**
+ * @method \Rougin\Wildfire\Wildfire where(mixed $key, mixed $value = null, boolean $escape = null)
+ *
  * @package Wildfire
  *
  * @author Rougin Gutib <rougingutib@gmail.com>

@@ -35,6 +35,26 @@ class WildfireTraitTest extends Testcase
     /**
      * @return void
      */
+    public function test_as_wildfire_undefined()
+    {
+        $data = array('id' => 3, 'name' => 'Angel');
+
+        $data['age'] = (int) 19;
+
+        $data['gender'] = 'female';
+
+        $data['accepted'] = 0;
+
+        $expected = new \User((array) $data);
+
+        $result = $this->ci->user->find($data['id']);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return void
+     */
     public function test_find_method_from_model()
     {
         $data = array('id' => 3, 'name' => 'Angel');
@@ -101,11 +121,9 @@ class WildfireTraitTest extends Testcase
      */
     public function test_magic_method_from_model()
     {
-        $wildfire = new Wildfire($this->ci->db);
-
-        $this->ci->user->wildfire($wildfire);
-
+        // TODO: Add methods from query builder to Wildfire as @method ---
         $this->ci->user->where('name', 'Royce');
+        // ---------------------------------------------------------------
 
         $wildfire = $this->ci->user->get();
 
