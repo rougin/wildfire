@@ -6,6 +6,7 @@ All notable changes to `Wildfire` will be documented in this file.
 
 ### Added
 - `$pagee` for customizing pagination in `PaginateTrait`
+- `WritableTrait` for handling CRUD operations
 
 ### Changed
 - `WildfireTrait::wildfire` returns the `Wildfire` instance
