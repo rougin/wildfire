@@ -1,6 +1,6 @@
 {
   "name": "rougin/wildfire",
-  "description": "A Query Builder wrapper for Codeigniter 3.",
+  "description": "Query Builder wrapper for Codeigniter 3.",
   "keywords": [ "codeigniter", "query-builder", "wildfire" ],
   "homepage": "https://roug.in/wildfire/",
   "license": "MIT",
@@ -51,11 +51,11 @@
   },
   "suggest":
   {
-    "rougin/codeigniter": "A Composer-based Codeigniter 3.",
+    "rougin/codeigniter": "Packaged \"system\" of Codeigniter 3.",
     "rougin/combustor": "MVC code generator for Codeigniter 3.",
-    "rougin/credo": "A Doctrine ORM wrapper for Codeigniter 3.",
-    "rougin/ignite": "A Composer-based Codeigniter 3 project.",
-    "rougin/refinery": "\"Ready-to-eat\" migrations for Codeigniter 3.",
-    "rougin/spark-plug": "Codeigniter 3 in a single variable."
+    "rougin/credo": "Doctrine ORM wrapper for Codeigniter 3.",
+    "rougin/ignite": "Yet another Codeigniter 3 project template.",
+    "rougin/refinery": "\"Ready-to-eat\" Codeigniter 3 migrations.",
+    "rougin/spark-plug": "Codeigniter 3 projects as variables."
   }
 }
