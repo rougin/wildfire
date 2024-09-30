@@ -30,7 +30,7 @@ trait WritableTrait
 
         if ($this->timestamps)
         {
-            $input['created_at'] = date('Y-m-d H:i:s');
+            $input[static::CREATED_AT] = date('Y-m-d H:i:s');
         }
 
         $table = $this->table;
@@ -94,7 +94,7 @@ trait WritableTrait
 
         if ($this->timestamps)
         {
-            $input['updated_at'] = date('Y-m-d H:i:s');
+            $input[static::UPDATED_AT] = date('Y-m-d H:i:s');
         }
 
         $this->db->where($this->primary, $id);

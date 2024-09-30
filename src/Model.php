@@ -10,6 +10,20 @@ namespace Rougin\Wildfire;
 class Model extends \CI_Model
 {
     /**
+     * The name of the "created at" column.
+     *
+     * @var string
+     */
+    const CREATED_AT = 'created_at';
+
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'updated_at';
+
+    /**
      * Model's current attributes.
      *
      * @var array<string, mixed>
@@ -52,7 +66,7 @@ class Model extends \CI_Model
     protected $table = '';
 
     /**
-     * Allows usage of timestamp fields ("created_at", "updated_at").
+     * Allows usage of timestamp fields ("CREATED_AT", "UPDATED_AT").
      *
      * @var boolean
      */

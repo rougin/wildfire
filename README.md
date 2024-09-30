@@ -474,7 +474,7 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-When added to the model, the model can now perform actions such as `create`, `delete`, and `update`:
+If added, the model can now perform actions such as `create`, `delete`, and `update`:
 
 ``` php
 // application/controllers/Welcome.php
@@ -491,6 +491,9 @@ $this->user->delete($id);
 // Update the user details with its input
 $this->user->update($id, $input);
 ```
+
+> [!NOTE]
+> When using this trait, it will check the `$timestamps` property of `Model` if the `CREATED_AT` and `UPDATED_AT` constants will be used.
 
 ### `WildfireTrait`
 

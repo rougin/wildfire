@@ -7,12 +7,14 @@ All notable changes to `Wildfire` will be documented in this file.
 ### Added
 - `$pagee` for customizing pagination in `PaginateTrait`
 - `WritableTrait` for handling CRUD operations
+- Usage of timestamps (e.g., `CREATED_AT`, `UPDATED_AT`)
 
 ### Changed
-- `WildfireTrait::wildfire` returns the `Wildfire` instance
-- Code coverage from `Scrutinizer CI` to `Codecov`
-- Code documentation by `php-cs-fixer`, code quality by `phpstan`
-- Workflow from `Travis CI` to `Github Actions`
+- Code coverage to `Codecov`
+- Code documentation by `php-cs-fixer`
+- Improved code quality by `phpstan`
+- Simplified code structure
+- Workflow to `Github Actions`
 
 ### Fixed
 - Getting offset value in `PaginateTrait`
