@@ -96,6 +96,8 @@ $this->load->model('user');
 
 ### Using the `Wildfire` instance with `CI_DB_query_builder`
 
+After configuring the application, the `Wildfire` can now be used for returning results from the database as `Model` objects:
+
 ``` php
 // application/controllers/Welcome.php
 
@@ -112,6 +114,8 @@ $users = $wildfire->get('users')->result();
 ```
 
 ### Using the `Wildfire` instance with `CI_DB_result`
+
+Aside from using methods of `Wildfire`, raw SQL queries can also be converted to its `Model` counterpart:
 
 ``` php
 // application/controllers/Welcome.php
@@ -262,7 +266,7 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-From the example, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
+From the example, only the `gender` field was displayed in the result because it was the only field specified in the `$visible` property of the `User` model.
 
 ### Using timestamps
 
@@ -282,7 +286,7 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-When enabled, it will populate the fields of `CREATED_AT` and `UPDATED_AT` constants with timestamps. To modify the names specified in the specified timestamps, kindly create the specified constants to the model (e.g., `User`):
+When enabled, it will use the constants `CREATED_AT` and `UPDATED_AT` for auto-populating them with current timestamps. To modify the names specified in the specified timestamps, kindly create the specified constants to the model (e.g., `User`):
 
 ``` php
 // application/models/User.php
@@ -306,11 +310,11 @@ class User extends \Rougin\Wildfire\Model
 ```
 
 > [!NOTE]
-> Auto-populating of timestamps in the specified constants is also used in the `WritableTrait`.
+> Auto-populating of timestamps in the specified constants is used in `WritableTrait`.
 
 ## Using Traits
 
-`Wildfire` provides traits that are based from the libraries of `Codeigniter 3` such as `Form validation` and `Pagination`. They are used to easily extend the functionality of a model without writing repeatable code.
+`Wildfire` provides traits that are based from the libraries of `Codeigniter 3` such as `Form Validation` and `Pagination Class`. They are used to easily attach the specified functionalities of `Codeigniter 3` to the `Model` class.
 
 ### `PaginateTrait`
 
@@ -402,7 +406,7 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-When used, the `$rules` property of the model must be defined with validation rules that conforms to the `Form validation` specification:
+When used, the `$rules` property of the model must be defined with validation rules that conforms to the `Form Validation` specification:
 
 ``` php
 // application/models/User.php
@@ -430,7 +434,7 @@ class User extends \Rougin\Wildfire\Model
 ```
 
 > [!NOTE]
-> Kindly check [its documentation](https://codeigniter.com/userguide3/libraries/form_validation.html#setting-rules-using-an-array) for the available rules that can be used to the `Form Validation` class.
+> Kindly check [its documentation](https://codeigniter.com/userguide3/libraries/form_validation.html#setting-rules-using-an-array) for the available rules that can be used to the `$rules` property.
 
 To do a form validation, the `validate` method must be called from the model:
 
