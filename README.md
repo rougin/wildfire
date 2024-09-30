@@ -38,7 +38,7 @@ INSERT INTO users (name, age, gender) VALUES ('Royce', 18, 'male');
 INSERT INTO users (name, age, gender) VALUES ('Mei', 19, 'female');
 ```
 
-Then enable the `composer_autoload` option in `config.php`:
+Then configure the `composer_autoload` option in `config.php`:
 
 ``` php
 // application/config/config.php
@@ -63,10 +63,13 @@ Then enable the `composer_autoload` option in `config.php`:
 | Note: This will NOT disable or override the CodeIgniter-specific
 |   autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = TRUE;
+$config['composer_autoload'] = __DIR__ . '/../../vendor/autoload.php';
 ```
 
-Extend the specified model (e.g., `User`) to the `Model` class of `Wildfire`:
+> [!NOTE]
+> Its value should be the path of the `vendor` directory.
+
+Next is to extend the model (e.g., `User`) to the `Model` class of `Wildfire`:
 
 ``` php
 // application/models/User.php
@@ -130,9 +133,11 @@ $wildfire = new Wildfire($result);
 $users = $wildfire->result('User');
 ```
 
-### Properties for the `Model` instance
+## Properties of `Model` class
 
-#### Casting attributes to native types
+### Casting attributes
+
+Updating the `$casts` property allows the model to cast native types to the specified attributes:
 
 ``` php
 // application/models/User.php
@@ -174,7 +179,9 @@ class User extends \Rougin\Wildfire\Model
 
 Notice that the value of `accepted` was changed from string integer (`'0'`) into native boolean (`false`). If not specified (e.g. `age` field), all values will be returned as string except the `id` field (which will be automatically casted as native integer, also if the said column exists) by default.
 
-#### Hiding attributes for serialization
+### Hiding attributes
+
+To hide attributes for serialization, the `$hidden` property can be used:
 
 ``` php
 // application/models/User.php
@@ -213,9 +220,11 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-The `gender` field was not included in the result.
+In this example, the `gender` field was not included in the result.
 
-#### Visible attributes for serialization
+### Visible attributes
+
+Opposite of the `$hidden` property, the `$visible` property specifies the fields to be visible in the result:
 
 ``` php
 // application/models/User.php
@@ -251,7 +260,270 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-In contrast to the `hidden` attribute, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
+From the example, only the `gender` field was displayed in the result because it was the only field specified the in `visible` property of the `User` model.
+
+### Using timestamps
+
+Similar to `Eloquent ORM`, `Wildfire` enables the usage of timestamps by default:
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model
+{
+    /**
+     * Allows usage of timestamp fields ("CREATED_AT", "UPDATED_AT").
+     *
+     * @var boolean
+     */
+    protected $timestamps = true;
+}
+```
+
+When enabled, it will populate the fields of `CREATED_AT` and `UPDATED_AT` constants with timestamps. To modify the names specified in the specified timestamps, kindly create specified constants to the model (e.g., `User`):
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model
+{
+    /**
+     * The name of the "created at" column.
+     *
+     * @var string
+     */
+    const CREATED_AT = 'created_at';
+
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'updated_at';
+}
+```
+
+> [!NOTE]
+> Auto-populating of timestamps in the specified constants is only available when `WritableTrait` is used.
+
+## Using Traits
+
+`Wildfire` provides traits that are based from the libraries of `Codeigniter 3` such as `Form validation` and `Pagination`. They are used to easily extend the functionality of a model without writing repeatable code.
+
+### `PaginateTrait`
+
+The `PaginateTrait` is used to easily create pagination links within the model:
+
+``` php
+// application/models/User.php
+
+use Rougin\Wildfire\Traits\PaginateTrait;
+
+class User extends \Rougin\Wildfire\Model
+{
+    use PaginateTrait;
+
+    // ...
+}
+```
+
+``` php
+// application/controllers/Welcome.php
+
+// Create a pagination links with 10 as the limit and
+// 100 as the total number of items from the result.
+$result = $this->user->paginate(10, 100);
+
+$data = array('links' => $result[1]);
+
+$offset = $result[0];
+
+// The offset can now be used for filter results
+// from the specified table (e.g., "users").
+$items = $this->user->get(10, $offset);
+```
+
+The `$result[0]` returns the computed offset while `$result[1]` returns the generated pagination links:
+
+``` php
+// application/views/users/index.php
+
+<?php echo $links; ?>
+```
+
+To configure the pagination library, the `$page` property must be defined in the `Model`:
+
+``` php
+// application/models/User.php
+
+use Rougin\Wildfire\Traits\PaginateTrait;
+
+class User extends \Rougin\Wildfire\Model
+{
+    use PaginateTrait;
+
+    // ...
+
+    /**
+     * Additional configuration to Pagination Class.
+     *
+     * @link https://codeigniter.com/userguide3/libraries/pagination.html#customizing-the-pagination
+     *
+     * @var array<string, mixed>
+     */
+    protected $pagee = array(
+        'page_query_string' => true,
+        'use_page_numbers' => true,
+        'query_string_segment' => 'p',
+        'reuse_query_string' => true,
+    );
+}
+```
+
+### `ValidateTrait`
+
+This trait is used to simplify the specifying of validation rules to a model:
+
+``` php
+// application/models/User.php
+
+use Rougin\Wildfire\Traits\ValidateTrait;
+
+class User extends \Rougin\Wildfire\Model
+{
+    use ValidateTrait;
+
+    // ...
+}
+```
+
+When used, the `$rules` property of the model must be defined with validation rules that conforms to the `Form validation` specification:
+
+``` php
+// application/models/User.php
+
+use Rougin\Wildfire\Traits\ValidateTrait;
+
+class User extends \Rougin\Wildfire\Model
+{
+    use ValidateTrait;
+
+    // ...
+
+    /**
+     * List of validation rules.
+     *
+     * @link https://codeigniter.com/userguide3/libraries/form_validation.html#setting-rules-using-an-array
+     *
+     * @var array<string, string>[]
+     */
+    protected $rules = array(
+        array('field' => 'name', 'label' => 'Name', 'rules' => 'required'),
+        array('field' => 'email', 'label' => 'Email', 'rules' => 'required'),
+    );
+}
+```
+
+To do a form validation, the `validate` method must be called from the model:
+
+``` php
+// application/controllers/Welcome.php
+
+/** @var array<string, mixed> */
+$input = $this->input->post(null, true);
+
+$valid = $this->user->validate($input);
+```
+
+If executed from the controller, the validation errors can be automatically be returned to the view through `form_error`:
+
+``` php
+// application/views/users/create.php
+
+<?= form_open('users/create') ?>
+  <div>
+    <!-- ... -->
+
+    <?= form_error('name') ?>
+  </div>
+
+  <div>
+    <!-- ... -->
+
+    <?= form_error('email') ?>
+  </div>
+
+  <!-- ... -->
+<?= form_close() ?>
+```
+
+### `WritableTrait`
+
+The `WritableTrait` is a special trait that enables the model to perform CRUD operations:
+
+``` php
+// application/models/User.php
+
+use Rougin\Wildfire\Traits\WritableTrait;
+
+class User extends \Rougin\Wildfire\Model
+{
+    use WritableTrait;
+
+    // ...
+}
+```
+
+When added to the model, the model can now perform actions such as `create`, `delete`, and `update`:
+
+``` php
+// application/controllers/Welcome.php
+
+/** @var array<string, mixed> */
+$input = $this->input->post(null, true);
+
+// Create the user with the given input
+$this->user->create($input);
+
+// Delete the user based on its ID.
+$this->user->delete($id);
+
+// Update the user details with its input
+$this->user->update($id, $input);
+```
+
+### `WildfireTrait`
+
+Similar to `WritableTrait`, the `WildfireTrait` allows the model to use methods from the `Wildfire` class:
+
+``` php
+// application/models/User.php
+
+use Rougin\Wildfire\Traits\WildfireTrait;
+
+class User extends \Rougin\Wildfire\Model
+{
+    use WildfireTrait;
+
+    // ...
+}
+```
+
+Adding it to a model enables the methods such as `find` and `get` methods:
+
+``` php
+// application/controllers/Welcome.php
+
+/** @var array<string, mixed> */
+$input = $this->input->post(null, true);
+
+// Find the user based on the given ID
+$item = $this->user->find($id);
+
+// Return a filtered list of users based on
+// the specified limit and its given offset
+$items = $this->user->get($limit, $offset);
+```
 
 ## Migrating to the `v0.5.0` release
 
