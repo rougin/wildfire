@@ -135,6 +135,8 @@ $users = $wildfire->result('User');
 
 ## Properties of `Model` class
 
+The `Model` class provides the following properties that helps writing clean code and the said properties also conforms to the properties based on `Eloquent ORM`.
+
 ### Casting attributes
 
 Updating the `$casts` property allows the model to cast native types to the specified attributes:
@@ -280,7 +282,7 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-When enabled, it will populate the fields of `CREATED_AT` and `UPDATED_AT` constants with timestamps. To modify the names specified in the specified timestamps, kindly create specified constants to the model (e.g., `User`):
+When enabled, it will populate the fields of `CREATED_AT` and `UPDATED_AT` constants with timestamps. To modify the names specified in the specified timestamps, kindly create the specified constants to the model (e.g., `User`):
 
 ``` php
 // application/models/User.php
@@ -304,7 +306,7 @@ class User extends \Rougin\Wildfire\Model
 ```
 
 > [!NOTE]
-> Auto-populating of timestamps in the specified constants is only available when `WritableTrait` is used.
+> Auto-populating of timestamps in the specified constants is also used in the `WritableTrait`.
 
 ## Using Traits
 
@@ -351,7 +353,7 @@ The `$result[0]` returns the computed offset while `$result[1]` returns the gene
 <?php echo $links; ?>
 ```
 
-To configure the pagination library, the `$page` property must be defined in the `Model`:
+To configure the pagination library, the `$pagee` property must be defined in the `Model`:
 
 ``` php
 // application/models/User.php
@@ -379,6 +381,9 @@ class User extends \Rougin\Wildfire\Model
     );
 }
 ```
+
+> [!NOTE]
+> Please see the documentation of [Pagination Class](https://codeigniter.com/userguide3/libraries/pagination.html#customizing-the-pagination) to get the list of its available configuration.
 
 ### `ValidateTrait`
 
@@ -423,6 +428,9 @@ class User extends \Rougin\Wildfire\Model
     );
 }
 ```
+
+> [!NOTE]
+> Kindly check [its documentation](https://codeigniter.com/userguide3/libraries/form_validation.html#setting-rules-using-an-array) for the available rules that can be used to the `Form Validation` class.
 
 To do a form validation, the `validate` method must be called from the model:
 
