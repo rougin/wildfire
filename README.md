@@ -94,7 +94,9 @@ $this->load->helper('inflector');
 $this->load->model('user');
 ```
 
-### Using the `Wildfire` instance with `CI_DB_query_builder`
+### Using `Wildfire`
+
+### With `CI_DB_query_builder`
 
 After configuring the application, the `Wildfire` can now be used for returning results from the database as `Model` objects:
 
@@ -113,7 +115,7 @@ $wildfire->like('name', 'Royce', 'both');
 $users = $wildfire->get('users')->result();
 ```
 
-### Using the `Wildfire` instance with `CI_DB_result`
+### With `CI_DB_result`
 
 Aside from using methods of `Wildfire`, raw SQL queries can also be converted to its `Model` counterpart:
 
@@ -314,7 +316,7 @@ class User extends \Rougin\Wildfire\Model
 
 ## Using Traits
 
-`Wildfire` provides traits that are based from the libraries of `Codeigniter 3` such as `Form Validation` and `Pagination Class`. They are used to easily attach the specified functionalities of `Codeigniter 3` to the `Model` class.
+`Wildfire` provides traits that are based from the libraries of `Codeigniter 3` such as `Form Validation` and `Pagination Class`. They are used to easily attach the specified functionalities of `Codeigniter 3` to a model.
 
 ### `PaginateTrait`
 
@@ -447,7 +449,7 @@ $input = $this->input->post(null, true);
 $valid = $this->user->validate($input);
 ```
 
-If executed from the controller, the validation errors can be automatically be returned to the view through `form_error`:
+If executed with a view, the validation errors can be automatically be returned to the view using the `form_error` helper:
 
 ``` php
 // application/views/users/create.php
@@ -505,11 +507,11 @@ $this->user->update($id, $input);
 ```
 
 > [!NOTE]
-> When using this trait, it will check the `$timestamps` property of `Model` if the `CREATED_AT` and `UPDATED_AT` constants will be used.
+> When using this trait, the `CREATED_AT` and `UPDATED_AT` constants will be populated if the `$timestamps` property of a model is enabled.
 
 ### `WildfireTrait`
 
-Similar to `WritableTrait`, the `WildfireTrait` allows the model to use methods from the `Wildfire` class:
+Similar to `WritableTrait`, the `WildfireTrait` allows the model to use methods directly from the `Wildfire` class:
 
 ``` php
 // application/models/User.php
@@ -524,7 +526,7 @@ class User extends \Rougin\Wildfire\Model
 }
 ```
 
-Adding it to a model enables the methods such as `find` and `get` methods:
+Adding it to a model enables the methods such as `find` and `get` methods without specifying the database table:
 
 ``` php
 // application/controllers/Welcome.php
