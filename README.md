@@ -314,6 +314,27 @@ class User extends \Rougin\Wildfire\Model
 > [!NOTE]
 > Auto-populating of timestamps in the specified constants is used in `WritableTrait`.
 
+### Customizing attributes
+
+When accessing an attribute through the model, `Wildfire` uses the same mechanism as from `Eloquent ORM` to return the requested attribute from the `$attributes` property. To customize the output of an attribute (e.g., converting an attribute to a date format), add a method inside the `Model` with a name format `get_[ATTRIBUTE]_attribute`:
+
+``` php
+// application/models/User.php
+
+class User extends \Rougin\Wildfire\Model
+{
+    /**
+     * @return string
+     */
+    public function get_created_at_attribute()
+    {
+        return date('d F Y H:i:sA', strtotime($this->attributes['created_at']));
+    }
+}
+```
+
+After creating a method for the specified attribute, the `Model` class will call the said method (e.g., `get_created_at_attribute`) if the specified attribute is accessed (e.g., `$user->created_at`).
+
 ## Using Traits
 
 `Wildfire` provides traits that are based from the libraries of `Codeigniter 3` such as `Form Validation` and `Pagination Class`. They are used to easily attach the specified functionalities of `Codeigniter 3` to a model.
