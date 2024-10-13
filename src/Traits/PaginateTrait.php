@@ -100,6 +100,7 @@ trait PaginateTrait
         $this->load->helper('url');
 
         $items = array('uri_segment' => 3);
+        $items['base_url'] = current_url();
 
         $items['page_query_string'] = false;
         $items['query_string_segment'] = 'per_page';
