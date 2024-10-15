@@ -1,8 +1,11 @@
 <?php
 
-class Post extends Rougin\Wildfire\Model
+use Rougin\Wildfire\Model;
+use Rougin\Wildfire\Traits\PaginateTrait;
+
+class Post extends Model
 {
-    use Rougin\Wildfire\Traits\PaginateTrait;
+    use PaginateTrait;
 
     /**
      * The attributes that should be visible for serialization.

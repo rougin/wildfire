@@ -76,7 +76,7 @@ $query_builder = true;
 
 $db['default'] = array(
     'dsn'    => '',
-    'hostname' => 'sqlite:' . APPPATH . 'databases/weblog.db',
+    'hostname' => 'sqlite:' . APPPATH . 'storage/wildfire.db',
     'username' => '',
     'password' => '',
     'database' => '',

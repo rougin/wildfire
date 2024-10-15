@@ -11,6 +11,7 @@ parameters:
   ignoreErrors:
     - '#^Call to an undefined method Rougin\\Wildfire\\Wildfire\:\:test\(\)\.$#'
     - '#^Access to an undefined property CI_Controller\:\:\$db\.$#'
+    - '#^Access to an undefined property CI_Controller\:\:\$item\.$#'
     - '#^Access to an undefined property CI_Controller\:\:\$user\.$#'
     - '#^Constant APPPATH not found\.$#'
     - '#^Constant ENVIRONMENT not found\.$#'

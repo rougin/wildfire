@@ -3,10 +3,6 @@
 namespace Rougin\Wildfire\Traits;
 
 /**
- * @codeCoverageIgnore
- *
- * TODO: Write tests for this trait.
- *
  * @property \CI_DB_query_builder $db
  *
  * @method string table()
@@ -55,6 +51,8 @@ trait WritableTrait
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * Checks if the specified data exists in the database.
      *
      * @param array<string, mixed> $data
@@ -68,16 +66,6 @@ trait WritableTrait
         // ------------------------------------
 
         return false;
-    }
-
-    /**
-     * Returns the total rows from the specified table.
-     *
-     * @return integer
-     */
-    public function total()
-    {
-        return $this->db->from($this->table)->count_all_results();
     }
 
     /**

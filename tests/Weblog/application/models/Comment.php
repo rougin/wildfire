@@ -1,8 +1,11 @@
 <?php
 
-class Comment extends Rougin\Wildfire\Model
+use Rougin\Wildfire\Model;
+use Rougin\Wildfire\Traits\ValidateTrait;
+
+class Comment extends Model
 {
-    use Rougin\Wildfire\Traits\ValidateTrait;
+    use ValidateTrait;
 
     /**
      * An array of validation rules. This needs to be the same format

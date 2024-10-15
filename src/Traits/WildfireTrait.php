@@ -5,7 +5,7 @@ namespace Rougin\Wildfire\Traits;
 use Rougin\Wildfire\Wildfire;
 
 /**
- * @property \CI_DB_result $db
+ * @property \CI_DB_query_builder $db
  *
  * @method string table()
  *
@@ -65,6 +65,16 @@ trait WildfireTrait
     public function get($limit = null, $offset = null)
     {
         return $this->wildfire()->get($this->table(), $limit, $offset);
+    }
+
+    /**
+     * Returns the total rows from the specified table.
+     *
+     * @return integer
+     */
+    public function total()
+    {
+        return $this->db->from($this->table)->count_all_results();
     }
 
     /**

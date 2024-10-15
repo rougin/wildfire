@@ -141,4 +141,16 @@ class WildfireTraitTest extends Testcase
 
         $this->assertEquals($expected, $result);
     }
+
+    /**
+     * @return void
+     */
+    public function test_total_method()
+    {
+        $expected = 3;
+
+        $actual = $this->ci->user->total();
+
+        $this->assertEquals($expected, $actual);
+    }
 }
