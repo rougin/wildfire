@@ -568,7 +568,7 @@ $items = $this->user->get($limit, $offset);
 The new release for `v0.5.0` will be having a [backward compatibility](https://en.wikipedia.org/wiki/Backward_compatibility) break (BC break). With this, some functionalities from the earlier versions might not be working after upgrading. This was done to increase the maintainability of the project while also adhering to the functionalities for both `Codeigniter 3` and `Eloquent ORM`. Please see the [UPGRADING][link-upgrading] page for the said breaking changes.
 
 > [!TIP]
-> If still using the `v0.4` release, kindly click its documentation below:
+> If still using the `v0.4.0` release, kindly click its documentation below:
 > https://github.com/rougin/credo/blob/v0.4.0/README.md
 
 ## Changelog
