@@ -10,6 +10,7 @@ All notable changes to `Wildfire` will be documented in this file.
 - Usage of timestamps (e.g., `CREATED_AT`, `UPDATED_AT`)
 
 ### Changed
+- `WildfireTrait::wildfire` returns `Wildfire` instance
 - Code coverage to `Codecov`
 - Code documentation by `php-cs-fixer`
 - Improved code quality by `phpstan`
