@@ -41,7 +41,7 @@ INSERT INTO users (name, age, gender) VALUES ('Mei', 19, 'female');
 Then configure the `composer_autoload` option in `config.php`:
 
 ``` php
-// application/config/config.php
+// ciacme/application/config/config.php
 
 /*
 |--------------------------------------------------------------------------
@@ -67,12 +67,13 @@ $config['composer_autoload'] = __DIR__ . '/../../vendor/autoload.php';
 ```
 
 > [!NOTE]
-> Its value should be the path of the `vendor` directory.
+> The value of `composer_autoload` should be the `vendor` directory (e.g., `ciacme/vendor/autoload.php`).
 
 Next is to extend the model (e.g., `User`) to the `Model` class of `Wildfire`:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
+
 use Rougin\Wildfire\Model;
 
 class User extends Model
@@ -81,13 +82,14 @@ class User extends Model
 ```
 
 ``` php
-// application/controllers/Welcome.php
+// ciacme/application/controllers/Welcome.php
 
 // Loads the database connection 
 $this->load->database();
 
-// Enables the inflector helper. It is being used to determine the class or the
-// model name to use based from the given table name from the Wildfire.
+// Enables the inflector helper. It is being used to
+// determine the class or the model name to use based
+// from the given table name from the Wildfire.
 $this->load->helper('inflector');
 
 // Loads the required model/s
@@ -98,10 +100,10 @@ $this->load->model('user');
 
 ### With `CI_DB_query_builder`
 
-After configuring the application, the `Wildfire` can now be used for returning results from the database as `Model` objects:
+After configuring the application, the `Wildfire` class can now be used for returning results from the database as `Model` objects:
 
 ``` php
-// application/controllers/Welcome.php
+// ciacme/application/controllers/Welcome.php
 
 use Rougin\Wildfire\Wildfire;
 
@@ -120,7 +122,7 @@ $users = $wildfire->get('users')->result();
 Aside from using methods of `Wildfire`, raw SQL queries can also be converted to its `Model` counterpart:
 
 ``` php
-// application/controllers/Welcome.php
+// ciacme/application/controllers/Welcome.php
 
 use Rougin\Wildfire\Wildfire;
 
@@ -148,7 +150,7 @@ The `Model` class provides the following properties that helps writing clean cod
 Updating the `$casts` property allows the model to cast native types to the specified attributes:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 class User extends \Rougin\Wildfire\Model
 {
@@ -192,7 +194,7 @@ Notice that the value of `accepted` was changed from string integer (`'0'`) into
 To hide attributes for serialization, the `$hidden` property can be used:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 class User extends \Rougin\Wildfire\Model
 {
@@ -235,7 +237,7 @@ In this example, the `gender` field was not included in the result.
 Opposite of the `$hidden` property, the `$visible` property specifies the fields to be visible in the result:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 class User extends \Rougin\Wildfire\Model
 {
@@ -275,7 +277,7 @@ From the example, only the `gender` field was displayed in the result because it
 Similar to `Eloquent ORM`, `Wildfire` enables the usage of timestamps by default:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 class User extends \Rougin\Wildfire\Model
 {
@@ -291,7 +293,7 @@ class User extends \Rougin\Wildfire\Model
 When enabled, it will use the constants `CREATED_AT` and `UPDATED_AT` for auto-populating them with current timestamps. To modify the names specified in the specified timestamps, kindly create the specified constants to the model (e.g., `User`):
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 class User extends \Rougin\Wildfire\Model
 {
@@ -319,7 +321,7 @@ class User extends \Rougin\Wildfire\Model
 When accessing an attribute through the model, `Wildfire` uses the same mechanism as from `Eloquent ORM` to return the requested attribute from the `$attributes` property. To customize the output of an attribute (e.g., converting an attribute to a date format), add a method inside the `Model` with a name format `get_[ATTRIBUTE]_attribute`:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 class User extends \Rougin\Wildfire\Model
 {
@@ -344,7 +346,7 @@ After creating a method for the specified attribute, the `Model` class will call
 The `PaginateTrait` is used to easily create pagination links within the model:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 use Rougin\Wildfire\Traits\PaginateTrait;
 
@@ -357,7 +359,7 @@ class User extends \Rougin\Wildfire\Model
 ```
 
 ``` php
-// application/controllers/Welcome.php
+// ciacme/application/controllers/Welcome.php
 
 // Create a pagination links with 10 as the limit and
 // 100 as the total number of items from the result.
@@ -375,7 +377,7 @@ $items = $this->user->get(10, $offset);
 The `$result[0]` returns the computed offset while `$result[1]` returns the generated pagination links:
 
 ``` php
-// application/views/users/index.php
+// ciacme/application/views/users/index.php
 
 <?php echo $links; ?>
 ```
@@ -383,7 +385,7 @@ The `$result[0]` returns the computed offset while `$result[1]` returns the gene
 To configure the pagination library, the `$pagee` property must be defined in the `Model`:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 use Rougin\Wildfire\Traits\PaginateTrait;
 
@@ -417,7 +419,7 @@ class User extends \Rougin\Wildfire\Model
 This trait is used to simplify the specifying of validation rules to a model:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 use Rougin\Wildfire\Traits\ValidateTrait;
 
@@ -432,7 +434,7 @@ class User extends \Rougin\Wildfire\Model
 When used, the `$rules` property of the model must be defined with validation rules that conforms to the `Form Validation` specification:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 use Rougin\Wildfire\Traits\ValidateTrait;
 
@@ -462,7 +464,7 @@ class User extends \Rougin\Wildfire\Model
 To do a form validation, the `validate` method must be called from the model:
 
 ``` php
-// application/controllers/Welcome.php
+// ciacme/application/controllers/Welcome.php
 
 /** @var array<string, mixed> */
 $input = $this->input->post(null, true);
@@ -473,7 +475,7 @@ $valid = $this->user->validate($input);
 If executed with a view, the validation errors can be automatically be returned to the view using the `form_error` helper:
 
 ``` php
-// application/views/users/create.php
+// ciacme/application/views/users/create.php
 
 <?= form_open('users/create') ?>
   <div>
@@ -497,7 +499,7 @@ If executed with a view, the validation errors can be automatically be returned 
 The `WritableTrait` is a special trait that enables the model to perform CRUD operations:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 use Rougin\Wildfire\Traits\WritableTrait;
 
@@ -512,7 +514,7 @@ class User extends \Rougin\Wildfire\Model
 If added, the model can now perform actions such as `create`, `delete`, and `update`:
 
 ``` php
-// application/controllers/Welcome.php
+// ciacme/application/controllers/Welcome.php
 
 /** @var array<string, mixed> */
 $input = $this->input->post(null, true);
@@ -535,7 +537,7 @@ $this->user->update($id, $input);
 Similar to `WritableTrait`, the `WildfireTrait` allows the model to use methods directly from the `Wildfire` class:
 
 ``` php
-// application/models/User.php
+// ciacme/application/models/User.php
 
 use Rougin\Wildfire\Traits\WildfireTrait;
 
@@ -550,7 +552,7 @@ class User extends \Rougin\Wildfire\Model
 Adding it to a model enables the methods such as `find` and `get` methods without specifying the database table:
 
 ``` php
-// application/controllers/Welcome.php
+// ciacme/application/controllers/Welcome.php
 
 /** @var array<string, mixed> */
 $input = $this->input->post(null, true);
