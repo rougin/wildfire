@@ -2,7 +2,7 @@
 
 All notable changes to `Wildfire` will be documented in this file.
 
-## [0.6.0](https://github.com/rougin/wildfire/compare/v0.5.0...v0.6.0) - Unreleased
+## [0.6.0](https://github.com/rougin/wildfire/compare/v0.5.0...v0.6.0) - 2024-10-22
 
 ### Added
 - `$pagee` for customizing pagination in `PaginateTrait`
